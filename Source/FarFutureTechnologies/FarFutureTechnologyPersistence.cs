@@ -41,6 +41,7 @@ namespace FarFutureTechnologies
         {
             int factoryLevel = 0;
             double currentStorage = 0d;
+            double deferredConsumption = 0d;
             Utils.Log("x");
             if (node != null)
             {
@@ -52,12 +53,14 @@ namespace FarFutureTechnologies
                     {
                         factoryLevel = Utils.GetValue(k, "AMFactoryLevel", 0);
                         currentStorage = Utils.GetValue(k, "AMAmount", 0d);
+                        deferredConsumption = Utils.GetValue(k, "AMDeferred", 0d);
                         Utils.Log("1");
                     }
+                    Utils.Log(String.Format("Loaded with Level {0}, Stored {1}, Deferred {2}",factoryLevel,currentStorage,deferredConsumption));
                 }
             }
             
-            AntimatterFactory.Instance.Initialize(factoryLevel, currentStorage);
+            AntimatterFactory.Instance.Initialize(factoryLevel, currentStorage, deferredConsumption);
 
         }
 
@@ -73,7 +76,8 @@ namespace FarFutureTechnologies
             
             dbNode.SetValue("AMFactoryLevel",AntimatterFactory.Instance.FactoryLevel.ToString(), true);
             dbNode.SetValue("AMAmount", AntimatterFactory.Instance.Antimatter.ToString(), true);
-            
+            dbNode.SetValue("AMDeferred", AntimatterFactory.Instance.DeferredAntimatterAmount.ToString(), true);
+            Utils.Log(String.Format("Saved with Level {0}, Stored {1}, Deferred {2}", AntimatterFactory.Instance.FactoryLevel, AntimatterFactory.Instance.Antimatter, AntimatterFactory.Instance.DeferredAntimatterAmount));
         }
     }
 }

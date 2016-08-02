@@ -12,23 +12,46 @@ namespace FarFutureTechnologies
         public static AntimatterFactory Instance { get; private set; }
 
         public int FactoryLevel { get { return factoryLevel; } }
+        public bool Researched { get { return researched; } }
         public double Antimatter { get { return curAntimatter; } }
         public double AntimatterRate { get { return curAntimatterRate; } }
         public double AntimatterMax { get { return maxAntimatter; } }
+        public double DeferredAntimatterAmount { get { return deferredAntimatterAmount; } }
 
         private bool productionOn = false;
-        
+        private bool researched = false;
+
         private int factoryLevel = 0;
 
         private double curAntimatter = 0d;
         private double maxAntimatter = 0d;
         private double curAntimatterRate = 0d;
+        private double deferredAntimatterAmount = 0d;
 
         private AntimatterFactoryLevelData curLevelDat;
 
         private double lastUpdateTime = 0d;
 
-
+        public bool IsMaxLevel()
+        {
+            if (factoryLevel >= FarFutureTechnologySettings.factoryLevels.Count-1)
+                return true;
+            return false;
+        }
+        public float GetNextLevelCost()
+        {
+            if (factoryLevel >= FarFutureTechnologySettings.factoryLevels.Count - 1)
+                return 0f;
+            else
+                return (float)FarFutureTechnologySettings.GetAMFactoryLevelData(factoryLevel + 1).purchaseCost;
+        }
+        public string GetStatusString()
+        {
+            if (productionOn)
+                return "Fully Operational";
+            else
+                return "Not Functional";
+        }
         public void SetProductionStatus(bool status)
         {
             productionOn = status;
@@ -37,7 +60,13 @@ namespace FarFutureTechnologies
         {
             productionOn = !productionOn;
         }
-
+        public void Upgrade()
+        {
+            curLevelDat = FarFutureTechnologySettings.GetAMFactoryLevelData(factoryLevel+1);
+            factoryLevel = factoryLevel + 1;
+            maxAntimatter = curLevelDat.maxCapacity;
+            curAntimatterRate = curLevelDat.baseRate;
+        }
         void Awake()
         {
             Instance = this;
@@ -54,17 +83,20 @@ namespace FarFutureTechnologies
                 //CatchupProduction(worldTime - lastUpdateTime);
                 lastUpdateTime = worldTime;
             }
+            
         }
 
-        public void Initialize(int loadedLevel, double loadedStorage)
+        public void Initialize(int loadedLevel, double loadedStorage, double deferredConsumption)
         {
             factoryLevel = loadedLevel;
             curAntimatter = loadedStorage;
+            deferredAntimatterAmount = deferredConsumption;
 
             // If game mode is sandbox, set the level to max immediately and begin production
             if (HighLogic.CurrentGame.Mode == Game.Modes.SANDBOX)
             {
                 Utils.Log("Detected Sandbox, setting AM factory to max and activating");
+                researched = true;
                 factoryLevel = FarFutureTechnologySettings.factoryLevels.Count - 1;
                 SetProductionStatus(true);
             }
@@ -75,11 +107,13 @@ namespace FarFutureTechnologies
                 bool isResearched = Utils.CheckTechPresence(FarFutureTechnologySettings.antimatterFactoryUnlockTech);
                 if (isResearched)
                 {
+                    researched = true;
                     factoryLevel = FarFutureTechnologySettings.factoryLevels.Count - 1;
                     SetProductionStatus(true);
                 }
                 else
                 {
+                    researched = false;
                     SetProductionStatus(false);
                 }
 
@@ -90,11 +124,13 @@ namespace FarFutureTechnologies
                 bool isResearched = Utils.CheckTechPresence(FarFutureTechnologySettings.antimatterFactoryUnlockTech);
                 if (isResearched)
                 {
+                    researched = true;
                     factoryLevel = loadedLevel;
                     SetProductionStatus(true);
                 }
                 else
                 {
+                    researched = false;
                     SetProductionStatus(false);
                 }
             }
@@ -105,12 +141,22 @@ namespace FarFutureTechnologies
             maxAntimatter = curLevelDat.maxCapacity;
             curAntimatterRate = curLevelDat.baseRate;
 
-               if (curAntimatter > maxAntimatter)
-               {
-                   curAntimatter = maxAntimatter;
-               }
+            if (curAntimatter > maxAntimatter)
+            {
+                curAntimatter = maxAntimatter;
+            }
+
+            if (HighLogic.LoadedSceneIsFlight && DeferredAntimatterAmount > 0d)
+            {
+                ConsumeAntimatter(deferredAntimatterAmount);
+                deferredAntimatterAmount = 0d;
+            }
         }
 
+        public void ScheduleConsumeAntimatter(double amt)
+        {
+            deferredAntimatterAmount = amt;
+        }
 
         public void ConsumeAntimatter(double amt)
         {
@@ -119,7 +165,7 @@ namespace FarFutureTechnologies
             {
                 curAntimatter = 0d;
             }
-                
+             
         }
 
         void CatchupProduction(double elapsed)
@@ -133,9 +179,17 @@ namespace FarFutureTechnologies
 
         void FixedUpdate()
         {
+            bool isTechReady = Utils.CheckTechPresence(FarFutureTechnologySettings.antimatterFactoryUnlockTech);
+
+            if (isTechReady && !researched)
+            {
+                researched = true;
+                SetProductionStatus(true);
+            }
+
             if (productionOn)
             {
-                curAntimatter = curAntimatter + curAntimatterRate * TimeWarp.fixedDeltaTime;
+                curAntimatter = curAntimatter + ConvertRate( curAntimatterRate) * TimeWarp.fixedDeltaTime;
                 if (curAntimatter > maxAntimatter)
                 {
                     curAntimatter = maxAntimatter;
@@ -143,7 +197,19 @@ namespace FarFutureTechnologies
             }
         }
 
-
+        double ConvertRate(double rateDays)
+        {
+            double rateSeconds = 0d;
+            if (GameSettings.KERBIN_TIME)
+            {
+                rateSeconds = rateDays / 21600d;
+            }
+            else
+            {
+                rateSeconds = rateDays / 86400d;
+            }
+            return rateSeconds;
+        }
 
     }
 }

@@ -29,6 +29,12 @@ namespace PulsePropulsion
         public float MaxPulseInterval = 3.0f;
 
         [KSPField(isPersistant = false)]
+        public float PulseAnimationDecayRate = 3.0f;
+
+        [KSPField(isPersistant = false)]
+        public float PulseAnimationGrowRate = 2.0f;
+
+        [KSPField(isPersistant = false)]
         public string PulseTransformName = "";
 
         [KSPField(isPersistant = false)]
@@ -101,7 +107,7 @@ namespace PulsePropulsion
 
                 if (engineModule.EngineIgnited)
                 {
-                    if (engineModule.requestedThrottle > 0f)
+                    if (engineModule.requestedThrottle > 0f && !engineModule.flameout)
                     {
     
                         currentPulseInterval = Mathf.Clamp(PulseInterval * (1f/engineModule.normalizedThrustOutput), 0f, MaxPulseInterval);
@@ -117,7 +123,7 @@ namespace PulsePropulsion
                             foreach (AnimationState pulseState in pulseStates)
                             {
                                 pulseState.time = 0f;
-                                pulseState.speed = 2f;
+                                pulseState.speed = PulseAnimationGrowRate;
                             }
                             foreach (AnimationState throttleState in throttleStates)
                             {
@@ -152,7 +158,11 @@ namespace PulsePropulsion
                             pulseProgress = pulseProgress + TimeWarp.fixedDeltaTime;
                             foreach (AnimationState throttleState in throttleStates)
                             {
-                                throttleState.normalizedTime = Mathf.MoveTowards(throttleState.normalizedTime,0f,TimeWarp.fixedDeltaTime);
+                                throttleState.normalizedTime = Mathf.MoveTowards(throttleState.normalizedTime, 0f, TimeWarp.fixedDeltaTime * PulseAnimationDecayRate);
+                            }
+                            foreach (AnimationState pulseState in pulseStates)
+                            {
+                                pulseState.normalizedTime = Mathf.MoveTowards(pulseState.normalizedTime, 0f, TimeWarp.fixedDeltaTime * PulseAnimationDecayRate);
                             }
                         }
                     }
@@ -161,11 +171,11 @@ namespace PulsePropulsion
                     {
                         foreach (AnimationState throttleState in throttleStates)
                         {
-                            throttleState.normalizedTime = Mathf.Lerp(throttleState.normalizedTime, 0f, TimeWarp.fixedDeltaTime);
+                            throttleState.normalizedTime = Mathf.Lerp(throttleState.normalizedTime, 0f, TimeWarp.fixedDeltaTime*PulseAnimationDecayRate);
                         }
                         foreach (AnimationState pulseState in pulseStates)
                         {
-                            pulseState.time = Mathf.MoveTowards(pulseState.time, 0f, TimeWarp.fixedDeltaTime);
+                            pulseState.time = Mathf.MoveTowards(pulseState.time, 0f, TimeWarp.fixedDeltaTime*PulseAnimationDecayRate);
                             pulseState.speed = 0f;
                         }
                         if (PulseEffectName1 != "")

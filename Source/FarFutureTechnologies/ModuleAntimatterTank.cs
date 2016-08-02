@@ -32,8 +32,7 @@ namespace FarFutureTechnologies
 
         // PRIVATE
         private double fuelAmount = 0.0;
-        private double containmentCost = 0.0;
-        private double temperatureFo = 0.0;
+
 
         // UI FIELDS/ BUTTONS
         // Status string
@@ -41,7 +40,7 @@ namespace FarFutureTechnologies
         public string ContainmentStatus = "N/A";
 
 
-        [KSPEvent(guiActive = false, guiName = "Enable Containment", active = true)]
+        [KSPEvent(guiActive = true, guiName = "Enable Containment", active = true)]
         public void Enable()
         {
             ContainmentEnabled= true;
@@ -86,12 +85,12 @@ namespace FarFutureTechnologies
         {
           if (part.vessel.missionTime > 0.0)
           {
-              if (part.RequestResource("ElectricCharge", coolingCost * TimeWarp.fixedDeltaTime) < coolingCost * TimeWarp.fixedDeltaTime)
+              if (part.RequestResource("ElectricCharge", ContainmentCost * TimeWarp.fixedDeltaTime) < ContainmentCost * TimeWarp.fixedDeltaTime)
               {
-                  double elapsedTime = part.vessel.missionTime - LastUpdateTime;
-
-                  double toBoil = Math.Pow(1.0 - boiloffRateSeconds, elapsedTime);
-                  part.RequestResource(FuelName, (1.0 - toBoil) * fuelAmount,ResourceFlowMode.NO_FLOW);
+                  //double elapsedTime = part.vessel.missionTime - LastUpdateTime;
+                  //
+                  //double toBoil = Math.Pow(1.0 - boiloffRateSeconds, elapsedTime);
+                  //part.RequestResource(FuelName, (1.0 - toBoil) * fuelAmount,ResourceFlowMode.NO_FLOW);
               }
           }
         }
@@ -102,7 +101,7 @@ namespace FarFutureTechnologies
           {
 
             // Show the insulation status field if there is a cooling cost
-            if (CoolingCost > 0f)
+              if (ContainmentCost > 0f)
             {
               foreach (BaseField fld in base.Fields)
                 {
@@ -118,6 +117,9 @@ namespace FarFutureTechnologies
             }
           }
         }
+
+        bool DetonationOccuring = false;
+
         protected void FixedUpdate()
         {
             if (HighLogic.LoadedSceneIsFlight)
@@ -130,37 +132,59 @@ namespace FarFutureTechnologies
                   return;
                 }
 
-
-                if (CoolingEnabled)
+                if (ContainmentEnabled)
                 {
-                  double req = part.RequestResource("ElectricCharge", ContainmentCost * TimeWarp.fixedDeltaTime);
-                  if (req > ContainmentCost * TimeWarp.fixedDeltaTime)
-                  {
-                      ContainmentStatus = String.Format("Running");
-                  } else
-                  {
-                      DoDetonation();
-                      ContainmentStatus = String.Format("Leaking {0} u/s", TimeWarp.fixedDeltaTime* DetonationRate);
-
-                  }
+                    ConsumeCharge();
                 }
                 else
                 {
-                    DoDetonation();
+                    DetonationOccuring = true;
                     ContainmentStatus = String.Format("Leaking {0} u/s", TimeWarp.fixedDeltaTime* DetonationRate);
-
+                }
+                if (DetonationOccuring)
+                {
+                    DoDetonation();
                 }
 
                 if (part.vessel.missionTime > 0.0)
                 {
-                    LastUpdateTime = part.vessel.missionTime;
+                    //LastUpdateTime = part.vessel.missionTime;
+                }
+            }
+        }
+        protected void ConsumeCharge()
+        {
+            if (TimeWarp.CurrentRate >= 10000f)
+            {
+                if (DetonationOccuring)
+                {
+                    double Ec = GetResourceAmount("ElectricCharge");
+                    double req = part.RequestResource("ElectricCharge", Ec);
+                }
+            }
+            else
+            {
+                float clampedDeltaTime = Mathf.Clamp(TimeWarp.fixedDeltaTime, 0f, 10000f * 0.02f);
+
+                double chargeRequest = ContainmentCost * clampedDeltaTime;
+                double req = part.RequestResource("ElectricCharge", chargeRequest);
+                double tolerance = 0.0001;
+                if (req >= chargeRequest - tolerance)
+                {
+                    DetonationOccuring = false;
+                    ContainmentStatus = String.Format("Intact");
+                }
+                else
+                {
+                    DetonationOccuring = true;
+                    ContainmentStatus = String.Format("Leaking {0} u/s", TimeWarp.fixedDeltaTime * DetonationRate);
                 }
             }
         }
         protected void DoDetonation()
         {
-          double detonatedAmount = part.RequestResource(FuelName, TimeWarp.fixedDeltaTime* DetonationRate);
-          part.AddHeatFlux(detonatedAmount*DetonationKJPerUnit);
+            double detonatedAmount = part.RequestResource(FuelName, TimeWarp.fixedDeltaTime* DetonationRate);
+            part.AddThermalFlux(detonatedAmount*DetonationKJPerUnit);
         }
 
 
