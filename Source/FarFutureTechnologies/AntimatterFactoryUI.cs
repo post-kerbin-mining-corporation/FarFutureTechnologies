@@ -123,7 +123,7 @@ namespace FarFutureTechnologies
                 List<Part> parts = EditorLogic.fetch.ship.parts;
                 foreach (Part p in parts)
                 {
-                    List<PartResource> prl = p.Resources.list;
+                    List<PartResource> prl = p.Resources.ToList();
                     foreach (PartResource res in prl)
                     {
                         if (res.resourceName == "Antimatter")

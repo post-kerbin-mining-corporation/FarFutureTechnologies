@@ -192,7 +192,7 @@ namespace FarFutureTechnologies
         protected double GetResourceAmount(string nm)
        {
            PartResource res = this.part.Resources.Get(PartResourceLibrary.Instance.GetDefinition(nm).id);
-           if (res)
+           if (res != null)
                return res.amount;
            else
                return 0d;

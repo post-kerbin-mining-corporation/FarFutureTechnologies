@@ -38,9 +38,6 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\..\..\..\..\Games\Steam\SteamApps\common\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="KSPUtil">
-      <HintPath>..\..\..\..\..\Games\Steam\SteamApps\common\Kerbal Space Program\KSP_Data\Managed\KSPUtil.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
