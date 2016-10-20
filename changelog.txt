@@ -1,3 +1,16 @@
+0.1.1
+-----
+- KSP 1.2
+- Updated bundled MM
+- Updated bundled CRP
+- Updated bundled B9PartSwitch
+- A number of tweaks and improvements to part names and descriptions
+- Better tags for many parts
+- Normalized all fusion tech parts to use either D-D or D-He3 fusion
+- Removed tritium storage from fusion fuel tanks
+- Revised costs of fusion fuel tanks for new He3 cost from CRP 6.0.0
+- Antimatter containers now have enough builtin EC storage for 10s of unpoweredness
+
 0.1.0
 -----
 - Initial development release
