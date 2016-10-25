@@ -17,11 +17,15 @@ namespace FarFutureTechnologies
         List<PartResource> antimatterResources = new List<PartResource>();
 
         private bool showToolbarButton = false;
-        private bool uiShown = false;
-        private bool launchMode = false;
+        private bool showMiniWindow = false;
+
+        private bool showMainWindow = false;
+        private bool showLaunchMode = false;
+
         private bool initStyles = false;
 
-        private Rect mainWindowPos = new Rect(75, 100, 150, 120);
+        private Rect miniWindowPos = new Rect(75, 100, 250, 50);
+        private Rect mainWindowPos = new Rect(75, 100, 250, 50);
 
         private GUIStyle entryStyle;
         private GUIStyle scrollStyle;
@@ -31,6 +35,7 @@ namespace FarFutureTechnologies
         private GUIStyle guiAMLabelTextStyle;
 
         private GUIStyle windowStyle;
+        private GUIStyle miniWindowStyle;
         private GUIStyle buttonStyle;
 
         GUIStyle progressBarBG;
@@ -40,11 +45,14 @@ namespace FarFutureTechnologies
 
         System.Random randomizer;
         int windowIdentifier;
+        int windowIdentifier2;
         private static ApplicationLauncherButton stockToolbarButton = null;
+        public static AntimatterFactoryUI Instance { get; private set; }
 
         public void Awake()
         {
             Utils.Log("UI: Awake");
+            Instance = this;
             GameEvents.onGUIApplicationLauncherReady.Add(OnGUIAppLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Add(OnGUIAppLauncherDestroyed);
         }
@@ -82,6 +90,10 @@ namespace FarFutureTechnologies
             windowStyle = new GUIStyle(HighLogic.Skin.window);
             windowStyle.alignment = TextAnchor.UpperLeft;
 
+            miniWindowStyle = new GUIStyle(windowStyle);
+            miniWindowStyle.border = new RectOffset(0, 0,0,0);
+            miniWindowStyle.padding = new RectOffset(0, 0, 0, 0);
+
             // button
             buttonStyle = new GUIStyle(HighLogic.Skin.button);
 
@@ -102,127 +114,35 @@ namespace FarFutureTechnologies
 
             randomizer = new System.Random(335462);
             windowIdentifier = randomizer.Next();
+            windowIdentifier2 = randomizer.Next();
 
-            if (HighLogic.LoadedSceneIsEditor)
+            if (HighLogic.LoadedSceneIsFlight)
             {
-                EditorLogic.fetch.launchBtn.onClick.RemoveListener(new UnityEngine.Events.UnityAction(EditorLogic.fetch.launchVessel));
-                EditorLogic.fetch.launchBtn.onClick.AddListener(new UnityEngine.Events.UnityAction((AntimatterLaunchCheck)));
-            }
-        }
-
-
-        // Editor Logic
-        void AntimatterLaunchCheck()
-        {
-            antimatterTanks = new List<Part>();
-            antimatterResources = new List<PartResource>();
-            availableAM = AntimatterFactory.Instance.Antimatter;
-
-            if (EditorLogic.fetch.ship != null)
-            {
-                List<Part> parts = EditorLogic.fetch.ship.parts;
-                foreach (Part p in parts)
-                {
-                    List<PartResource> prl = p.Resources.ToList();
-                    foreach (PartResource res in prl)
-                    {
-                        if (res.resourceName == "Antimatter")
-                        {
-                            antimatterTanks.Add(p);
-                            antimatterResources.Add(res);
-                        }
-                    }
-                }
-            }
-            if (antimatterResources.Count > 0)
-            {
-                ShowLaunchAlert();
-            }
-            else
-            {
-                EditorLogic.fetch.launchVessel();
-            }
-        }
-
-        void ShowLaunchAlert()
-        {
-            uiShown = true;
-            launchMode = true;
-            mainWindowPos.x = Screen.width / 2f - mainWindowPos.width / 2f;
-            mainWindowPos.y = Screen.height / 2f - mainWindowPos.height / 2f;
-        
-            mainWindowPos.width = 400f;
-            
-            EditorLogic.fetch.Lock(true, true, true, "AMFactoryLock");
-        }
-        void ClearLaunchAlert()
-        {
-            uiShown = false;
-            launchMode = false;
-            mainWindowPos.width = 150f;
-            
-            EditorLogic.fetch.Unlock("AMFactoryLock");
-        }
-
-        // Launch the vessel
-        void LaunchVessel()
-        {
-            ClearLaunchAlert();
-            //ClearAntimatterFromVessel();
-            ConsumeAntimatter();
-            EditorLogic.fetch.launchVessel();
-        }
-        // Removes the antimatter from the current tanks
-        void ClearAntimatterFromVessel()
-        {
-            foreach (PartResource a in antimatterResources)
-            {
-                a.amount = 0d;
-            }
-            usedAM = 0d;
-        }
-        void ConsumeAntimatter()
-        {
-            double total = 0d;
-            foreach (PartResource res in antimatterResources)
-            {
-                total = total + res.amount;
-            }
-
-            AntimatterFactory.Instance.ScheduleConsumeAntimatter(total);
-        }
-        void EmptyAllTanks()
-        {
-            ClearAntimatterFromVessel();
-        }
-        void FillAllTanks()
-        {
-            double toUse = availableAM;
-            foreach (PartResource res in antimatterResources)
-            {
-                if (toUse >= res.maxAmount)
-                {
-                    res.amount = res.maxAmount;
-                    toUse -= res.maxAmount;
-                }
-                else
-                {
-                    res.amount = toUse;
-                    toUse = 0d;
-                }
-            }
-        }
-        void EvenAllTanks()
-        {
- 
-            double each = availableAM / (double)antimatterResources.Count;
-            foreach (PartResource res in antimatterResources)
-            {
-                res.amount = Math.Min(each, res.maxAmount);
                 
             }
         }
 
+     
+
+        void ShowLoading()
+        {
+            showMainWindow = true;
+            showLaunchMode = true;
+            mainWindowPos.width = 400f;
+            mainWindowPos.height = 400f;
+            mainWindowPos.x = Screen.width / 2f - mainWindowPos.width / 2f;
+            mainWindowPos.y = Screen.height / 2f - mainWindowPos.height / 2f;
+        }
+        void ShowFactory()
+        {
+            showMainWindow = true;
+            showLaunchMode = false;
+            mainWindowPos.width = 300f;
+            mainWindowPos.height = 300f;
+            mainWindowPos.x = Screen.width / 2f - mainWindowPos.width / 2f;
+            mainWindowPos.y = Screen.height / 2f - mainWindowPos.height / 2f;
+        }
+       
         void FixedUpdate()
         {
             if (!showToolbarButton)
@@ -231,6 +151,24 @@ namespace FarFutureTechnologies
                 {
                     showToolbarButton = true;
                     ResetAppLauncher();
+                }
+            }
+            else
+            {
+                if (showMiniWindow)
+                {
+                    Vector3 pos = stockToolbarButton.GetAnchor();
+                   
+
+                   
+                    if (ApplicationLauncher.Instance.IsPositionedAtTop)
+                    {
+                        miniWindowPos = new Rect(Screen.width-290f, 0f, 250f, 60f);
+                    }
+                    else {
+                        miniWindowPos = new Rect(Screen.width - 280f, Screen.height-150f, 250f, 60f);
+                    }
+                    
                 }
             }
         }
@@ -248,15 +186,59 @@ namespace FarFutureTechnologies
         {
             if (!initStyles)
                 InitStyles();
-            if (uiShown)
+
+            if (showMiniWindow)
             {
-                mainWindowPos = GUILayout.Window(windowIdentifier, mainWindowPos, DrawMainWindow, "Antimatter Factory", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+                miniWindowPos = GUI.Window(windowIdentifier, miniWindowPos, DrawMiniWindow, "Antimatter Factory", windowStyle);
             }
+
+            if (showMainWindow)
+            {
+                mainWindowPos = GUILayout.Window(windowIdentifier2, mainWindowPos, DrawMainWindow, "Antimatter Factory", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+            }
+        }
+
+        void DrawMiniWindow(int WindowID)
+        {
+            
+            
+            float curAM = (float)(AntimatterFactory.Instance.Antimatter);
+            float maxAM = (float)(AntimatterFactory.Instance.AntimatterMax);
+            float rateAM = (float)(AntimatterFactory.Instance.AntimatterRate);
+
+            float tempAreaWidth = 230f;
+            float tempBarWidth = 230f;
+            Rect tempArea = new Rect(10f, 0f, tempAreaWidth, 40f);
+            
+            float tempBarFGSize = Mathf.Clamp((tempBarWidth-6f) * (curAM / maxAM), 5f, tempBarWidth);
+
+            GUI.BeginGroup(tempArea);
+            GUI.Box(new Rect(0f, 10f, tempBarWidth, 20f), "", progressBarBG);
+            GUI.color = new Color(107f / 255f, 201f / 255f, 238f / 255f);
+            GUI.Box(new Rect(3f, 11f, tempBarFGSize, 18f), "", progressBarFG);
+            GUI.color = Color.white;
+            GUI.Label(new Rect(20f, 10f, 160f, 20f), String.Format("<color=#ffffff>{0:F2} / {1:F0}</color>", curAM, maxAM), guiBodyTextStyle);
+
+            GUI.Label(new Rect(tempBarWidth - 90f, 10f, 90f, 20f), String.Format("<color=#ffffff>({0:F2} u/day)</color>", rateAM), guiAMLabelTextStyle);
+            // GUI.Label(new Rect(20f+tempBarWidth, 30f, 40f, 20f), String.Format("{0:F0} K", meltdownTemp), gui_text);
+            GUI.EndGroup();
+            if (HighLogic.LoadedScene == GameScenes.SPACECENTER)
+                if(GUI.Button(new Rect(0f, 30f, 60, 20), "Enter Facility", buttonStyle))
+                {
+                    ShowFactory();
+                }
+            if (AntimatterLoader.Instance.loadingAllowed)
+                if (GUI.Button(new Rect(0f, 30f, 60, 20), "Load Antimatter", buttonStyle))
+                {
+                    ShowLoading();
+                }
+
+            //GUILayout.Label(String.Format("<color=#ffa500ff><b>Level {0}</b></color>", AntimatterFactory.Instance.FactoryLevel + 1), guiBodyTextStyle);
         }
 
         void DrawMainWindow(int WindowID)
         {
-            if (launchMode)
+            if (showLaunchMode)
             {
                 DrawLaunchMode();
             }
@@ -276,10 +258,10 @@ namespace FarFutureTechnologies
             scrollPosition = GUILayout.BeginScrollView(scrollPosition,scrollBarStyle, scrollBarStyle, GUILayout.MinWidth(370f), GUILayout.MinHeight(250f));
 
             
-            usedAM = 0d;
-            for (int i = 0; i < antimatterTanks.Count; i++)
+            AntimatterLoader.Instance.usedAM = 0d;
+            for (int i = 0; i < AntimatterLoader.Instance.antimatterTanks.Count; i++)
             {
-                 DrawAMContainer(antimatterTanks[i], antimatterResources[i]);
+                DrawAMContainer(AntimatterLoader.Instance.antimatterTanks[i], AntimatterLoader.Instance.antimatterResources[i]);
             }
             
             GUILayout.EndScrollView();
@@ -287,7 +269,7 @@ namespace FarFutureTechnologies
             GUILayout.Label(String.Format("<b><color=#66badb>Required Antimatter: {0:F2}</color></b>", usedAM), guiBodyTextStyle);
             
             
-            if (usedAM > availableAM)
+            if (AntimatterLoader.Instance.usedAM > AntimatterLoader.Instance.availableAM)
             {
                 GUILayout.Label(String.Format("<b><color=#f30802>Available Antimatter: {0:F2}</color></b>", availableAM), guiBodyTextStyle);
             } else 
@@ -298,24 +280,24 @@ namespace FarFutureTechnologies
             GUILayout.BeginHorizontal(entryStyle);
             if (GUILayout.Button("Fill All Tanks", buttonStyle))
             {
-                FillAllTanks();
+                AntimatterLoader.Instance.FillAllTanks();
             }
             if (GUILayout.Button("Empty All Tanks", buttonStyle))
             {
-                EmptyAllTanks();
+                AntimatterLoader.Instance.EmptyAllTanks();
             }
             if (GUILayout.Button("Even All Tanks", buttonStyle))
             {
-                EvenAllTanks();
+                AntimatterLoader.Instance.EvenAllTanks();
             }
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
 
-            if (GUILayout.Button("Abort Launch", buttonStyle))
+            if (GUILayout.Button("Close Loader", buttonStyle))
             {
-                ClearLaunchAlert();
+                showMainWindow = false;
             }
-            if (usedAM > availableAM)
+            if (AntimatterLoader.Instance.usedAM > AntimatterLoader.Instance.availableAM)
             {
                 GUI.enabled = false;
                 GUILayout.Button("<color=#f30802>Insufficient Antimatter</color>", buttonStyle);
@@ -324,10 +306,9 @@ namespace FarFutureTechnologies
             {
 
                 GUI.enabled = true;
-                if (GUILayout.Button("<color=#7fa542>Launch</color>", buttonStyle))
+                if (GUILayout.Button("<color=#7fa542>Fill Tanks</color>", buttonStyle))
                 {
-                    ClearLaunchAlert();
-                    LaunchVessel();
+                    AntimatterLoader.Instance.ConsumeAntimatter();
                 }
             }
             
@@ -477,9 +458,8 @@ namespace FarFutureTechnologies
 
         private void OnToolbarButtonToggle()
         {
-            uiShown = !uiShown;
-            stockToolbarButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(uiShown ? "FarFutureTechnologies/UI/toolbar_on" : "FarFutureTechnologies/UI/toolbar_off", false));
-
+            showMiniWindow = !showMiniWindow;
+            stockToolbarButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(showMiniWindow ? "FarFutureTechnologies/UI/toolbar_on" : "FarFutureTechnologies/UI/toolbar_off", false));
         }
 
 

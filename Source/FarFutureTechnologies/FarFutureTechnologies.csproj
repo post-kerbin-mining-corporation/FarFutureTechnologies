@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AntimatterFactory.cs" />
     <Compile Include="AntimatterFactoryUI.cs" />
+    <Compile Include="AntimatterLoader.cs" />
     <Compile Include="FarFutureTechnologyPersistence.cs" />
     <Compile Include="FarFutureTechnologySettings.cs" />
     <Compile Include="ModuleAntimatterTank.cs" />

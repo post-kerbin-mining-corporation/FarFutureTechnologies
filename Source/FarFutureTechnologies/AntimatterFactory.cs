@@ -167,7 +167,7 @@ namespace FarFutureTechnologies
             }
              
         }
-
+        
         void CatchupProduction(double elapsed)
         {
             curAntimatter = curAntimatter + curAntimatterRate * elapsed;
