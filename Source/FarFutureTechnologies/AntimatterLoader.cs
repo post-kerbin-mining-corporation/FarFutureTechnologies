@@ -6,6 +6,27 @@ using UnityEngine;
 
 namespace FarFutureTechnologies
 {
+
+    public class AntimatterContainer
+    {
+      public Part part;
+      public PartResource resource;
+      public double requestedAmount;
+      public double totalAmount;
+
+      public AntimatterContainer(Part tankPart, PartResource amResource)
+      {
+        part = tankPart;
+        resource = amResource;
+      }
+      public ClearRequest()
+      {
+        if (resource.amount > 0.0d)
+          requestedAmount = -resource.Amount
+        requestedAmount = 0d;
+      }
+    }
+
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class AntimatterLoader: MonoBehaviour
     {
@@ -13,8 +34,7 @@ namespace FarFutureTechnologies
 
         public double availableAM = 0d;
         public double usedAM = 0d;
-        public List<Part> antimatterTanks = new List<Part>();
-        public List<PartResource> antimatterResources = new List<PartResource>();
+        public List<AntimatterContainer> antimatterTanks = new List<AntimatterContainer>();
 
         public static AntimatterLoader Instance { get; private set; }
 
@@ -36,7 +56,6 @@ namespace FarFutureTechnologies
              antimatterResources = new List<PartResource>();
              availableAM = AntimatterFactory.Instance.Antimatter;
 
-             usedAM = 0d;
             List<Part> parts = vessel.parts;
             foreach (Part p in parts)
             {
@@ -45,13 +64,11 @@ namespace FarFutureTechnologies
                 {
                     if (res.resourceName == "Antimatter")
                     {
-                        antimatterTanks.Add(p);
-                        antimatterResources.Add(res);
-                        usedAM += res.amount;
+                        antimatterTanks.Add(new AntimatterContainer(p, res));
                     }
                 }
             }
-            if (antimatterResources.Count > 0)
+            if (antimatterTanks.Count > 0)
             {
                 if (vessel.LandedInKSC)
                 {
@@ -67,26 +84,32 @@ namespace FarFutureTechnologies
                 loadingAllowed = false;
             }
          }
-
+         // Loads and refunds antimatter
+         public void LoadAntimatter()
+         {
+           ConsumeAntimatter();
+         }
          // Removes the antimatter from the current tanks
          public void ClearAntimatterFromVessel()
          {
-             foreach (PartResource a in antimatterResources)
+             foreach (AntimatterContainer tank in antimatterContainers)
              {
-                 a.amount = 0d;
+
+                 tank.ClearRequest();
              }
              usedAM = 0d;
          }
          public void ConsumeAntimatter()
          {
              double total = 0d;
-             foreach (PartResource res in antimatterResources)
+             foreach (AntimatterContainer tank in antimatterContainers)
              {
-                 total = total + res.amount;
+                 total = total + tank.requestedAmount;
              }
 
              AntimatterFactory.Instance.ConsumeAntimatter(total);
          }
+
          public void EmptyAllTanks()
          {
              ClearAntimatterFromVessel();
@@ -94,16 +117,16 @@ namespace FarFutureTechnologies
          public void FillAllTanks()
          {
              double toUse = availableAM;
-             foreach (PartResource res in antimatterResources)
+             foreach (AntimatterContainer tank in antimatterContainers)
              {
-                 if (toUse >= res.maxAmount)
+                 if (toUse >= tank.resource.maxAmount)
                  {
-                     res.amount = res.maxAmount;
-                     toUse -= res.maxAmount;
+                     tank.requestedAmount = tank.resource.maxAmount - tank.resource.amount
+                     toUse -= tank.requestedAmount;
                  }
                  else
                  {
-                     res.amount = toUse;
+                     tank.requestedAmount = toUse;
                      toUse = 0d;
                  }
              }
@@ -111,10 +134,10 @@ namespace FarFutureTechnologies
          public void EvenAllTanks()
          {
 
-             double each = availableAM / (double)antimatterResources.Count;
-             foreach (PartResource res in antimatterResources)
+             double each = availableAM / (double)antimatterTanks.Count;
+             foreach (AntimatterContainer tank in antimatterContainers)
              {
-                 res.amount = Math.Min(each, res.maxAmount);
+                 tank.requestedAmount = Math.Min(each, tank.resource.maxAmount);
 
              }
          }

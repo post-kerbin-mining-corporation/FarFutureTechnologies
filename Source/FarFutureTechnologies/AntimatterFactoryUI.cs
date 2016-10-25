@@ -37,6 +37,7 @@ namespace FarFutureTechnologies
         private GUIStyle windowStyle;
         private GUIStyle miniWindowStyle;
         private GUIStyle buttonStyle;
+        private GUIStyle miniButtonStyle;
 
         GUIStyle progressBarBG;
         GUIStyle progressBarFG;
@@ -96,6 +97,8 @@ namespace FarFutureTechnologies
 
             // button
             buttonStyle = new GUIStyle(HighLogic.Skin.button);
+            miniButtonStyle = new GUIStyle(buttonStyle);
+            miniButtonStyle.fontSize = 12;
 
             slider = new GUIStyle(HighLogic.Skin.horizontalSlider);
             sliderThumb = new GUIStyle(HighLogic.Skin.horizontalSliderThumb);
@@ -108,7 +111,7 @@ namespace FarFutureTechnologies
         {
             Utils.Log("UI: Start");
 
-       
+
             if (ApplicationLauncher.Ready)
                 OnGUIAppLauncherReady();
 
@@ -118,11 +121,11 @@ namespace FarFutureTechnologies
 
             if (HighLogic.LoadedSceneIsFlight)
             {
-                
+
             }
         }
 
-     
+
 
         void ShowLoading()
         {
@@ -142,7 +145,7 @@ namespace FarFutureTechnologies
             mainWindowPos.x = Screen.width / 2f - mainWindowPos.width / 2f;
             mainWindowPos.y = Screen.height / 2f - mainWindowPos.height / 2f;
         }
-       
+
         void FixedUpdate()
         {
             if (!showToolbarButton)
@@ -158,9 +161,9 @@ namespace FarFutureTechnologies
                 if (showMiniWindow)
                 {
                     Vector3 pos = stockToolbarButton.GetAnchor();
-                   
 
-                   
+
+
                     if (ApplicationLauncher.Instance.IsPositionedAtTop)
                     {
                         miniWindowPos = new Rect(Screen.width-290f, 0f, 250f, 60f);
@@ -168,7 +171,7 @@ namespace FarFutureTechnologies
                     else {
                         miniWindowPos = new Rect(Screen.width - 280f, Screen.height-150f, 250f, 60f);
                     }
-                    
+
                 }
             }
         }
@@ -200,8 +203,8 @@ namespace FarFutureTechnologies
 
         void DrawMiniWindow(int WindowID)
         {
-            
-            
+
+
             float curAM = (float)(AntimatterFactory.Instance.Antimatter);
             float maxAM = (float)(AntimatterFactory.Instance.AntimatterMax);
             float rateAM = (float)(AntimatterFactory.Instance.AntimatterRate);
@@ -209,7 +212,7 @@ namespace FarFutureTechnologies
             float tempAreaWidth = 230f;
             float tempBarWidth = 230f;
             Rect tempArea = new Rect(10f, 0f, tempAreaWidth, 40f);
-            
+
             float tempBarFGSize = Mathf.Clamp((tempBarWidth-6f) * (curAM / maxAM), 5f, tempBarWidth);
 
             GUI.BeginGroup(tempArea);
@@ -223,12 +226,12 @@ namespace FarFutureTechnologies
             // GUI.Label(new Rect(20f+tempBarWidth, 30f, 40f, 20f), String.Format("{0:F0} K", meltdownTemp), gui_text);
             GUI.EndGroup();
             if (HighLogic.LoadedScene == GameScenes.SPACECENTER)
-                if(GUI.Button(new Rect(0f, 30f, 60, 20), "Enter Facility", buttonStyle))
+                if(GUI.Button(new Rect(75f, 30f, 100, 20), "Enter Facility", buttonStyle))
                 {
                     ShowFactory();
                 }
             if (AntimatterLoader.Instance.loadingAllowed)
-                if (GUI.Button(new Rect(0f, 30f, 60, 20), "Load Antimatter", buttonStyle))
+                if (GUI.Button(new Rect(75f, 30f, 100, 20), "Load Antimatter", buttonStyle))
                 {
                     ShowLoading();
                 }
@@ -246,74 +249,102 @@ namespace FarFutureTechnologies
             {
                 DrawFactoryMode();
             }
-           
+
             GUI.DragWindow();
         }
         public Vector2 scrollPosition = Vector2.zero;
         void DrawLaunchMode()
         {
-            availableAM = AntimatterFactory.Instance.Antimatter;
-            GUILayout.BeginVertical(entryStyle);
             GUI.skin = HighLogic.Skin;
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition,scrollBarStyle, scrollBarStyle, GUILayout.MinWidth(370f), GUILayout.MinHeight(250f));
 
-            
+            availableAM = AntimatterFactory.Instance.Antimatter;
             AntimatterLoader.Instance.usedAM = 0d;
-            for (int i = 0; i < AntimatterLoader.Instance.antimatterTanks.Count; i++)
-            {
-                DrawAMContainer(AntimatterLoader.Instance.antimatterTanks[i], AntimatterLoader.Instance.antimatterResources[i]);
-            }
-            
-            GUILayout.EndScrollView();
-            GUILayout.EndVertical();
-            GUILayout.Label(String.Format("<b><color=#66badb>Required Antimatter: {0:F2}</color></b>", usedAM), guiBodyTextStyle);
-            
-            
-            if (AntimatterLoader.Instance.usedAM > AntimatterLoader.Instance.availableAM)
-            {
-                GUILayout.Label(String.Format("<b><color=#f30802>Available Antimatter: {0:F2}</color></b>", availableAM), guiBodyTextStyle);
-            } else 
-            {
-                GUILayout.Label(String.Format("<b><color=#7fa542>Available Antimatter: {0:F2}</color></b>", availableAM), guiBodyTextStyle);
-            }
-         
-            GUILayout.BeginHorizontal(entryStyle);
-            if (GUILayout.Button("Fill All Tanks", buttonStyle))
+
+            // Fuelling helper buttons
+            GUILayout.BeginVertical(entryStyle);
+            GUILayout.Label("Fuelling Helpers", guiAMLabelTextStyle)
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Fill All Tanks", miniButtonStyle))
             {
                 AntimatterLoader.Instance.FillAllTanks();
             }
-            if (GUILayout.Button("Empty All Tanks", buttonStyle))
+            if (GUILayout.Button("Empty All Tanks", miniButtonStyle))
             {
                 AntimatterLoader.Instance.EmptyAllTanks();
             }
-            if (GUILayout.Button("Even All Tanks", buttonStyle))
+            if (GUILayout.Button("Even All Tanks", miniButtonStyle))
             {
                 AntimatterLoader.Instance.EvenAllTanks();
             }
             GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
+            GUILayout.EndVertical();
 
-            if (GUILayout.Button("Close Loader", buttonStyle))
+            // Tank display
+            GUILayout.BeginVertical(entryStyle);
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition,scrollBarStyle, scrollBarStyle, GUILayout.MinWidth(370f), GUILayout.MinHeight(250f));
+            for (int i = 0; i < AntimatterLoader.Instance.antimatterTanks.Count; i++)
+            {
+                DrawAMContainer(AntimatterLoader.Instance.antimatterTanks[i]);
+            }
+            GUILayout.EndScrollView();
+            GUILayout.EndVertical();
+
+            // Results
+
+
+            GUILayout.BeginHorizontal(entryStyle);
+            GUILayout.Label(String.Format("<b><Available Antimatter: {0:F2}</b>", availableAM), guiBodyTextStyle);
+
+            GUILayout.BeginVertical();
+
+            if (AntimatterLoader.Instance.usedAM <= 0d)
+            {
+
+                GUILayout.Label(String.Format("<b><color=#66badb>This operation will return some antimatter\nRefunded Antimatter: {0:F2}</color></b>", -AntimatterLoader.Instance.usedAM), guiBodyTextStyle);
+            } else if (AntimatterLoader.Instance.usedAM > AntimatterLoader.Instance.availableAM)
+            {
+                GUILayout.Label(String.Format("<b><color=#f30802>There is not enough Antimatter in storage\nRequired Antimatter: {0:F2}</color></b>", AntimatterLoader.Instance.usedAM), guiBodyTextStyle);
+            } else
+            {
+                GUILayout.Label(String.Format("<b><color=#7fa542>Ready for fuelling\nRequired Antimatter: {0:F2}</color></b>",  AntimatterLoader.Instance.usedAM), guiBodyTextStyle);
+            }
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+
+            // Actions
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Close", buttonStyle))
             {
                 showMainWindow = false;
             }
-            if (AntimatterLoader.Instance.usedAM > AntimatterLoader.Instance.availableAM)
+            GUILayout.FlexibleSpace(25f);
+            // If antimatter used is negative, we will be unloading
+            // If positive but greater than capacity, we cannot do anything
+            // else just consume
+            if (AntimatterLoader.Instance.usedAM < 0d)
+            {
+              GUI.enabled = true;
+              if (GUILayout.Button("<color=#7fa542>Unload Antimatter</color>", buttonStyle))
+              {
+                  AntimatterLoader.Instance.ConsumeAntimatter();
+              }
+            }
+            else if (AntimatterLoader.Instance.usedAM > AntimatterLoader.Instance.availableAM)
             {
                 GUI.enabled = false;
                 GUILayout.Button("<color=#f30802>Insufficient Antimatter</color>", buttonStyle);
             }
             else
             {
-
                 GUI.enabled = true;
-                if (GUILayout.Button("<color=#7fa542>Fill Tanks</color>", buttonStyle))
+                if (GUILayout.Button("<color=#7fa542>Load Antimatter</color>", buttonStyle))
                 {
                     AntimatterLoader.Instance.ConsumeAntimatter();
                 }
             }
-            
+
             GUI.enabled = true;
-            
+
             GUILayout.EndHorizontal();
         }
 
@@ -388,15 +419,23 @@ namespace FarFutureTechnologies
             }
         }
 
-        void DrawAMContainer(Part p, PartResource res)
+        void DrawAMContainer(AntimatterContainer tank)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label("<b>" + p.partInfo.title +"</b>", guiBodyTextStyle);
+            GUILayout.Label("<b>" + tank.part.partInfo.title +"</b>", guiBodyTextStyle, GUILayout.MaxWidth(100f));
 
-            res.amount = (double)GUILayout.HorizontalSlider((float)res.amount, 0f, (float)res.maxAmount, slider, sliderThumb, GUILayout.MinWidth(110f), GUILayout.MaxWidth(110f));
-            GUILayout.Label(String.Format("{0:F2} / {1:F2}", res.amount, res.maxAmount), guiAMLabelTextStyle);
+            GUILayout.BeginVertical()
+            tank.totalAmount = (double)GUILayout.HorizontalSlider((float)tank.totalAmount, 0f, (float)tank.resource.maxAmount, slider, sliderThumb, GUILayout.MinWidth(110f), GUILayout.MaxWidth(110f));
+            tank.requestedAmount = tank.totalAmount - tank.resource.amount;
+            GUILayout.Label(String.Format("{0:F2} / {1:F2}", tank.totalAmount, tank.resource.maxAmount), guiAMLabelTextStyle);
+            GUILayout.EndVertical()
+            if (tank.requestedAmount >= 0d)
+              GUILayout.Label(String.Format("+{0:F2}", tank.requestedAmount), guiAMLabelTextStyle);
+            else
+              GUILayout.Label(String.Format("-{0:F2}", tank.requestedAmount), guiAMLabelTextStyle);
             GUILayout.EndHorizontal();
-            usedAM += res.amount;
+
+            AntimatterLoader.Instance.usedAM += tank.requestedAmount;
         }
 
 
@@ -436,7 +475,7 @@ namespace FarFutureTechnologies
                 }
                 else
                 {
-                   
+
                     GameEvents.onGUIApplicationLauncherReady.Remove(OnGUIAppLauncherReady);
                     ApplicationLauncher.Instance.RemoveModApplication(stockToolbarButton);
                 }
