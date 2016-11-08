@@ -1,6 +1,7 @@
 0.1.1
 -----
 - KSP 1.2
+- Added AVC
 - Updated bundled MM
 - Updated bundled CRP
 - Updated bundled B9PartSwitch
