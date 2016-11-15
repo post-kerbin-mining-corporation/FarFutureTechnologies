@@ -1,12 +1,12 @@
 {
     "NAME":"FarFutureTechnologies",
-    "URL":"https://github.com/ChrisAdderley/NearFutureSpacecraft/blob/master/GameData/NearFutureSpacecraft/Versioning/NearFutureSpacecraft.version",
+    "URL":"https://raw.githubusercontent.com/ChrisAdderley/FarFutureTechnologies/master/GameData/FarFutureTechnologies/Versioning/FarFutureTechnologies.version",
     "DOWNLOAD":"http://forum.kerbalspaceprogram.com/threads/52042",
     "VERSION":
     {
         "MAJOR":0,
-        "MINOR":5,
-        "PATCH":4,
+        "MINOR":1,
+        "PATCH":1,
         "BUILD":0
     },
     "KSP_VERSION":

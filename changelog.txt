@@ -11,6 +11,11 @@
 - Removed tritium storage from fusion fuel tanks
 - Revised costs of fusion fuel tanks for new He3 cost from CRP 6.0.0
 - Antimatter containers now have enough builtin EC storage for 10s of unpoweredness
+- Added KV-1 Nuclear Smelter: processes EnrichedUranium -> FissionTargets, LqdDeuterium+LqHe3 -> FusionTargets, EnrichedUranium+Water -> NuclearSaltWater
+- Added Particle Scoop: extracts LqdHydrogen, Antimatter from exoplanetary locations
+- Added Atmospheric Scoop: extracts LqdHydrogen, LqdDeuterium, LqdHe3 from atmospheres
+- Added ZAP Particle Detector: detects exoplanetary Antimatter, LqdHydrogen
+- Added patch to add atmospheric LqdHydrogen, LqdHe3, LqdDeuterium detection to NFP AiRES spectrometer
 
 0.1.0
 -----
