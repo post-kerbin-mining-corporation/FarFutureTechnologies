@@ -2,7 +2,7 @@
 FAR FUTURE TECHNOLOGIES 0.1.1
 =============================
 
-This is a pack containing far-future but possible propulsion technologies. These might not be possible today, but the physics works out, and might be feasible within the next 100 years. 
+This is a pack containing far-future but possible propulsion technologies. These might not be possible today, but the physics works out, and might be feasible within the next 100 years.
 
 ============
 DEPENDENCIES
@@ -36,9 +36,8 @@ For a more comprehensive version checking experience, please download the KSP-AV
 LICENSING
 =========
 
-The contents of this pack are distributed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (http://creativecommons.org/licenses/by-nc-sa/4.0/).
-
-You are free to share and adapt the materials only for non-commercial purposes and when providing appropriate attribution. Any derivatives must be distributed under the same license.
+The cfgs and code in this pack are distributed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode). You are free to share and adapt the materials only for non-commercial purposes and when providing appropriate attribution. Any derivatives must be distributed under the same license.
+The art assets in this pack (all models and textures) are distributed under an All Rights Reserved License. You may not redistribute or re-use these assets without express permission from me.
 
 Module Manager (v2.6.25) is distributed under its own licence (CC-SA). Please find source code and more details at https://github.com/sarbian/ModuleManager
 
