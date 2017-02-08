@@ -18,12 +18,17 @@ namespace FarFutureTechnologies
       {
         part = tankPart;
         resource = amResource;
-      }
-      public ClearRequest()
-      {
-        if (resource.amount > 0.0d)
-          requestedAmount = -resource.Amount
         requestedAmount = 0d;
+        totalAmount = resource.amount;
+      }
+      public void ClearRequest()
+      {
+          if (resource.amount > 0.0d)
+              requestedAmount = -resource.amount;
+          else 
+              requestedAmount = 0d;
+
+          totalAmount = 0d;
       }
     }
 
@@ -52,8 +57,8 @@ namespace FarFutureTechnologies
 
          void RefreshAntimatterData(Vessel vessel)
          {
-             antimatterTanks = new List<Part>();
-             antimatterResources = new List<PartResource>();
+             antimatterTanks = new List<AntimatterContainer>();
+             
              availableAM = AntimatterFactory.Instance.Antimatter;
 
             List<Part> parts = vessel.parts;
@@ -92,22 +97,24 @@ namespace FarFutureTechnologies
          // Removes the antimatter from the current tanks
          public void ClearAntimatterFromVessel()
          {
-             foreach (AntimatterContainer tank in antimatterContainers)
+             foreach (AntimatterContainer tank in antimatterTanks)
              {
 
                  tank.ClearRequest();
              }
-             usedAM = 0d;
+            
          }
          public void ConsumeAntimatter()
          {
              double total = 0d;
-             foreach (AntimatterContainer tank in antimatterContainers)
+             foreach (AntimatterContainer tank in antimatterTanks)
              {
                  total = total + tank.requestedAmount;
+                 tank.resource.amount = tank.resource.amount + tank.requestedAmount;
              }
 
              AntimatterFactory.Instance.ConsumeAntimatter(total);
+             RefreshAntimatterData(FlightGlobals.ActiveVessel);
          }
 
          public void EmptyAllTanks()
@@ -117,11 +124,11 @@ namespace FarFutureTechnologies
          public void FillAllTanks()
          {
              double toUse = availableAM;
-             foreach (AntimatterContainer tank in antimatterContainers)
+             foreach (AntimatterContainer tank in antimatterTanks)
              {
-                 if (toUse >= tank.resource.maxAmount)
+                 if (toUse >= tank.resource.maxAmount - tank.resource.amount)
                  {
-                     tank.requestedAmount = tank.resource.maxAmount - tank.resource.amount
+                     tank.requestedAmount = tank.resource.maxAmount - tank.resource.amount;
                      toUse -= tank.requestedAmount;
                  }
                  else
@@ -129,16 +136,18 @@ namespace FarFutureTechnologies
                      tank.requestedAmount = toUse;
                      toUse = 0d;
                  }
+                 tank.totalAmount = tank.requestedAmount + tank.resource.amount;
              }
          }
          public void EvenAllTanks()
          {
 
              double each = availableAM / (double)antimatterTanks.Count;
-             foreach (AntimatterContainer tank in antimatterContainers)
-             {
-                 tank.requestedAmount = Math.Min(each, tank.resource.maxAmount);
 
+             foreach (AntimatterContainer tank in antimatterTanks)
+             {
+                 tank.totalAmount = Math.Min(each, tank.resource.maxAmount);
+                 tank.requestedAmount = tank.totalAmount - tank.resource.amount;
              }
          }
     }

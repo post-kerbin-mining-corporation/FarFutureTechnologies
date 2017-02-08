@@ -226,12 +226,12 @@ namespace FarFutureTechnologies
             // GUI.Label(new Rect(20f+tempBarWidth, 30f, 40f, 20f), String.Format("{0:F0} K", meltdownTemp), gui_text);
             GUI.EndGroup();
             if (HighLogic.LoadedScene == GameScenes.SPACECENTER)
-                if(GUI.Button(new Rect(75f, 30f, 100, 20), "Enter Facility", buttonStyle))
+                if(GUI.Button(new Rect(50f, 35f, 150, 20), "Enter Facility", buttonStyle))
                 {
                     ShowFactory();
                 }
             if (AntimatterLoader.Instance.loadingAllowed)
-                if (GUI.Button(new Rect(75f, 30f, 100, 20), "Load Antimatter", buttonStyle))
+                if (GUI.Button(new Rect(50f, 35f, 150, 20), "Load Antimatter", buttonStyle))
                 {
                     ShowLoading();
                 }
@@ -257,12 +257,12 @@ namespace FarFutureTechnologies
         {
             GUI.skin = HighLogic.Skin;
 
-            availableAM = AntimatterFactory.Instance.Antimatter;
+            AntimatterLoader.Instance.availableAM = AntimatterFactory.Instance.Antimatter;
             AntimatterLoader.Instance.usedAM = 0d;
 
             // Fuelling helper buttons
             GUILayout.BeginVertical(entryStyle);
-            GUILayout.Label("Fuelling Helpers", guiAMLabelTextStyle)
+            //GUILayout.Label("Fuelling Helpers", guiAMLabelTextStyle);
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Fill All Tanks", miniButtonStyle))
             {
@@ -293,38 +293,37 @@ namespace FarFutureTechnologies
 
 
             GUILayout.BeginHorizontal(entryStyle);
-            GUILayout.Label(String.Format("<b><Available Antimatter: {0:F2}</b>", availableAM), guiBodyTextStyle);
-
+            GUILayout.Label(String.Format("<b>Available Antimatter: {0:F2}</b>", availableAM), guiBodyTextStyle);
+            GUILayout.FlexibleSpace();
             GUILayout.BeginVertical();
 
-            if (AntimatterLoader.Instance.usedAM <= 0d)
+            if (AntimatterLoader.Instance.usedAM < 0d)
             {
-
-                GUILayout.Label(String.Format("<b><color=#66badb>This operation will return some antimatter\nRefunded Antimatter: {0:F2}</color></b>", -AntimatterLoader.Instance.usedAM), guiBodyTextStyle);
+                GUILayout.Label(String.Format("<b><color=#66badb>This operation will return some antimatter\nRefunded Antimatter: {0:F2}</color></b>", -AntimatterLoader.Instance.usedAM), guiAMLabelTextStyle);
             } else if (AntimatterLoader.Instance.usedAM > AntimatterLoader.Instance.availableAM)
             {
-                GUILayout.Label(String.Format("<b><color=#f30802>There is not enough Antimatter in storage\nRequired Antimatter: {0:F2}</color></b>", AntimatterLoader.Instance.usedAM), guiBodyTextStyle);
+                GUILayout.Label(String.Format("<b><color=#f30802>There is not enough Antimatter in storage\nRequired Antimatter: {0:F2}</color></b>", AntimatterLoader.Instance.usedAM), guiAMLabelTextStyle);
             } else
             {
-                GUILayout.Label(String.Format("<b><color=#7fa542>Ready for fuelling\nRequired Antimatter: {0:F2}</color></b>",  AntimatterLoader.Instance.usedAM), guiBodyTextStyle);
+                GUILayout.Label(String.Format("<b><color=#7fa542>Ready for fuelling\nRequired Antimatter: {0:F2}</color></b>", AntimatterLoader.Instance.usedAM), guiAMLabelTextStyle);
             }
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
 
             // Actions
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Close", buttonStyle))
+            if (GUILayout.Button("Close", buttonStyle, GUILayout.Width(60f)))
             {
                 showMainWindow = false;
             }
-            GUILayout.FlexibleSpace(25f);
+            GUILayout.FlexibleSpace();
             // If antimatter used is negative, we will be unloading
             // If positive but greater than capacity, we cannot do anything
             // else just consume
             if (AntimatterLoader.Instance.usedAM < 0d)
             {
               GUI.enabled = true;
-              if (GUILayout.Button("<color=#7fa542>Unload Antimatter</color>", buttonStyle))
+              if (GUILayout.Button("<color=#7fa542>Unload Antimatter</color>", buttonStyle, GUILayout.Width(180f)))
               {
                   AntimatterLoader.Instance.ConsumeAntimatter();
               }
@@ -332,12 +331,12 @@ namespace FarFutureTechnologies
             else if (AntimatterLoader.Instance.usedAM > AntimatterLoader.Instance.availableAM)
             {
                 GUI.enabled = false;
-                GUILayout.Button("<color=#f30802>Insufficient Antimatter</color>", buttonStyle);
+                GUILayout.Button("<color=#f30802>Insufficient Antimatter</color>", buttonStyle, GUILayout.Width(180f));
             }
             else
             {
                 GUI.enabled = true;
-                if (GUILayout.Button("<color=#7fa542>Load Antimatter</color>", buttonStyle))
+                if (GUILayout.Button("<color=#7fa542>Load Antimatter</color>", buttonStyle, GUILayout.Width(180f)))
                 {
                     AntimatterLoader.Instance.ConsumeAntimatter();
                 }
@@ -402,7 +401,10 @@ namespace FarFutureTechnologies
             GUI.EndGroup();
 
             GUILayout.EndHorizontal();
-
+            if (GUILayout.Button("Close", buttonStyle, GUILayout.Width(60f)))
+            {
+                showMainWindow = false;
+            }
 
             GUILayout.EndVertical();
         }
@@ -422,17 +424,17 @@ namespace FarFutureTechnologies
         void DrawAMContainer(AntimatterContainer tank)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label("<b>" + tank.part.partInfo.title +"</b>", guiBodyTextStyle, GUILayout.MaxWidth(100f));
+            GUILayout.Label("<b>" + tank.part.partInfo.title +"</b>", guiBodyTextStyle, GUILayout.MaxWidth(180f));
 
-            GUILayout.BeginVertical()
+            GUILayout.BeginVertical();
             tank.totalAmount = (double)GUILayout.HorizontalSlider((float)tank.totalAmount, 0f, (float)tank.resource.maxAmount, slider, sliderThumb, GUILayout.MinWidth(110f), GUILayout.MaxWidth(110f));
             tank.requestedAmount = tank.totalAmount - tank.resource.amount;
             GUILayout.Label(String.Format("{0:F2} / {1:F2}", tank.totalAmount, tank.resource.maxAmount), guiAMLabelTextStyle);
-            GUILayout.EndVertical()
+            GUILayout.EndVertical();
             if (tank.requestedAmount >= 0d)
               GUILayout.Label(String.Format("+{0:F2}", tank.requestedAmount), guiAMLabelTextStyle);
             else
-              GUILayout.Label(String.Format("-{0:F2}", tank.requestedAmount), guiAMLabelTextStyle);
+              GUILayout.Label(String.Format("{0:F2}", tank.requestedAmount), guiAMLabelTextStyle);
             GUILayout.EndHorizontal();
 
             AntimatterLoader.Instance.usedAM += tank.requestedAmount;
