@@ -39,8 +39,8 @@ LICENSING
 The cfgs and code in this pack are distributed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode). You are free to share and adapt the materials only for non-commercial purposes and when providing appropriate attribution. Any derivatives must be distributed under the same license.
 The art assets in this pack (all models and textures) are distributed under an All Rights Reserved License. You may not redistribute or re-use these assets without express permission from me.
 
-Module Manager (v2.6.25) is distributed under its own licence (CC-SA). Please find source code and more details at https://github.com/sarbian/ModuleManager
+Module Manager is distributed under its own licence (CC-SA). Please find source code and more details at https://github.com/sarbian/ModuleManager
 
-The Community Resource pack (v0.45.4) by RoverDude is also distributed under its own license.
+The Community Resource pack by RoverDude is also distributed under its own license.
 
-B9PartSwitch (v1.1.4) by blowfish is also distributed under its own license.
+B9PartSwitch by blowfish is also distributed under its own license.

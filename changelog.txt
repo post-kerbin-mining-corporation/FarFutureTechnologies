@@ -1,12 +1,13 @@
 0.1.1
 -----
 - KSP 1.2.2
-- Added AVC
+- Added AVC support
 - Updated bundled MM
-- Updated bundled CRP
-- Updated bundled B9PartSwitch
+- Updated bundled CRP to 0.6.6
+- Updated bundled B9PartSwitch to 1.7.1
 - A number of tweaks and improvements to part names and descriptions
 - Better tags for many parts
+- FusionPellets and FissionPellets have replaced FusionTargets and FissionTargets for compatibility
 - Normalized all fusion tech parts to use either D-D or D-He3 fusion
 - Removed tritium storage from fusion fuel tanks
 - Revised costs of fusion fuel tanks for new He3 cost from CRP 6.0.0
