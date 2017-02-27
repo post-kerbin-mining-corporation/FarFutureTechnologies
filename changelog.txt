@@ -2,21 +2,20 @@
 -----
 - KSP 1.2.2
 - Added AVC support
-- Updated bundled MM
+- Updated bundled MM to 2.7.5
 - Updated bundled CRP to 0.6.6
 - Updated bundled B9PartSwitch to 1.7.1
 - A number of tweaks and improvements to part names and descriptions
 - Better tags for many parts
-- FusionPellets and FissionPellets have replaced FusionTargets and FissionTargets for compatibility
+- FusionPellets and FissionPellets have replaced FusionTargets and FissionTargets for compatibility with DSEV
 - Normalized all fusion tech parts to use either D-D or D-He3 fusion
 - Removed tritium storage from fusion fuel tanks
-- Revised costs of fusion fuel tanks for new He3 cost from CRP 6.0.0
 - Antimatter containers now have enough builtin EC storage for 10s of unpoweredness
-- Added KV-1 Nuclear Smelter: processes EnrichedUranium -> FissionTargets, LqdDeuterium+LqHe3 -> FusionTargets, EnrichedUranium+Water -> NuclearSaltWater
-- Added Particle Scoop: extracts LqdHydrogen, Antimatter from exoplanetary locations
-- Added Atmospheric Scoop: extracts LqdHydrogen, LqdDeuterium, LqdHe3 from atmospheres
-- Added ZAP Particle Detector: detects exoplanetary Antimatter, LqdHydrogen
-- Added patch to add atmospheric LqdHydrogen, LqdHe3, LqdDeuterium detection to NFP AiRES spectrometer
+- Added KV-1 'Vulcan' Nuclear Smelter: processes EnrichedUranium -> FissionPellets, LqdDeuterium+LqHe3 -> FusionPellets, EnrichedUranium+Water -> NuclearSaltWater
+- Added CX-A Particle Scoop: extracts LqdHydrogen, Antimatter from exoplanetary locations
+- Added 'Hoover' Atmospheric Ramscoop: extracts LqdHydrogen, LqdDeuterium, LqdHe3 from atmospheres
+- Added ZAP Gamma Spectrometer: detects exoplanetary Antimatter
+- Added ALICE Imaging Spectrometer: Detects LqdHydrogen, LqdHe3, LqdDeuterium
 
 0.1.0
 -----
