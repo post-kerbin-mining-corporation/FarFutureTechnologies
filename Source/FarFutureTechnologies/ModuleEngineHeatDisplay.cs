@@ -21,7 +21,7 @@ namespace FarFutureTechnologies
           engines = part.GetComponents<ModuleEnginesFX>();
           for (ModuleEnginesFX engine in engines)
           {
-            msg += String.Format("{0}\n", engine.engineID);
+            msg += String.Format("<b>{0}</b>\n", engine.engineID);
             msg+= String.Format("Heat production (full throttle): {0:F2} kW\n\n", engine.heatProduction*800.0*0.025*0.4975);
           }
           return msg;
@@ -39,6 +39,7 @@ namespace FarFutureTechnologies
         {
             if (HighLogic.LoadedSceneIsFlight)
             {
+              HeatProductionStatus = "No engines active";
               for (ModuleEnginesFX engine in engines)
               {
                 if (engine.EngineIgnited)
