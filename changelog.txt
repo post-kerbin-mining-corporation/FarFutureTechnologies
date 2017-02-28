@@ -5,21 +5,26 @@
 - Updated bundled MM to 2.7.5
 - Updated bundled CRP to 0.6.6
 - Updated bundled B9PartSwitch to 1.7.1
-- A number of tweaks and improvements to part names and descriptions
-- Better tags for many parts
+- Added a new ModuleEngineHeatDisplay component to all FFT engines to show engine heat outputs in VAB tooltips and as a right click option in flight
+- Reworked entirety of FFT antimatter handling plugin
+-- Antimatter is now loaded in the flight scene, provided the selected vessel is at the KSC
+-- Loading interface allows loading and unloading of antimatter tanks back into the KSC reserve
+- Completed a number of tweaks and improvements to part names and descriptions
+- Added better part search tags for many parts
 - FusionPellets and FissionPellets have replaced FusionTargets and FissionTargets for compatibility with DSEV
 - NuclearSaltWater has replaced NukeSaltWater for clarity
 - Normalized all fusion tech parts to use either D-D or D-He3 fusion
 - Removed tritium storage from fusion fuel tanks
 - Normalized all nuclear fuel tanks (NuclearSaltWater, FusionPellets, FissionPellets) to have mass ratio of 4.0
 - Normalized all cryogenic fuel tanks (LqdHe3, LqdDeuterium) to have mass ratio of 5.0
-- Antimatter containers now have enough builtin EC storage for 10s of unpoweredness
-- NuclearSaltWater tanks have been respecced to be tougher and more thermally resistant
+- Antimatter containers now have enough builtin EC storage for 10s of power loss
+- NuclearSaltWater tanks have been respecced to be tougher and more thermally resistant instead of having cryogenic values]
+- Converted more
 - Added KV-1 'Vulcan' Nuclear Smelter: processes EnrichedUranium -> FissionPellets, LqdDeuterium+LqHe3 -> FusionPellets, EnrichedUranium+Water -> NuclearSaltWater
 - Added CX-A Particle Scoop: extracts LqdHydrogen, Antimatter from exoplanetary locations
 - Added 'Hoover' Atmospheric Ramscoop: extracts LqdHydrogen, LqdDeuterium, LqdHe3 from atmospheres
 - Added ZAP Gamma Spectrometer: detects exoplanetary Antimatter
-- Added ALICE Imaging Spectrometer: Detects LqdHydrogen, LqdHe3, LqdDeuterium
+- Added ALICE Imaging Spectrometer: Detects LqdHydrogen (atmo and exo), LqdHe3, LqdDeuterium
 
 0.1.0
 -----
