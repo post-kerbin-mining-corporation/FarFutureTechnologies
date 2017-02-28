@@ -8,9 +8,13 @@
 - A number of tweaks and improvements to part names and descriptions
 - Better tags for many parts
 - FusionPellets and FissionPellets have replaced FusionTargets and FissionTargets for compatibility with DSEV
+- NuclearSaltWater has replaced NukeSaltWater for clarity
 - Normalized all fusion tech parts to use either D-D or D-He3 fusion
 - Removed tritium storage from fusion fuel tanks
+- Normalized all nuclear fuel tanks (NuclearSaltWater, FusionPellets, FissionPellets) to have mass ratio of 4.0
+- Normalized all cryogenic fuel tanks (LqdHe3, LqdDeuterium) to have mass ratio of 5.0
 - Antimatter containers now have enough builtin EC storage for 10s of unpoweredness
+- NuclearSaltWater tanks have been respecced to be tougher and more thermally resistant
 - Added KV-1 'Vulcan' Nuclear Smelter: processes EnrichedUranium -> FissionPellets, LqdDeuterium+LqHe3 -> FusionPellets, EnrichedUranium+Water -> NuclearSaltWater
 - Added CX-A Particle Scoop: extracts LqdHydrogen, Antimatter from exoplanetary locations
 - Added 'Hoover' Atmospheric Ramscoop: extracts LqdHydrogen, LqdDeuterium, LqdHe3 from atmospheres
