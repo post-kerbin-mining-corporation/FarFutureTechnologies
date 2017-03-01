@@ -72,8 +72,9 @@ namespace FarFutureTechnologies
                 dbNode = node.GetNode(FarFutureTechnologySettings.amFactoryConfigNodeName);
             else
                 dbNode = node.AddNode(FarFutureTechnologySettings.amFactoryConfigNodeName);
-
             
+            Utils.Log( AntimatterFactory.Instance.Antimatter.ToString());
+
             dbNode.SetValue("AMFactoryLevel",AntimatterFactory.Instance.FactoryLevel.ToString(), true);
             dbNode.SetValue("AMAmount", AntimatterFactory.Instance.Antimatter.ToString(), true);
             dbNode.SetValue("AMDeferred", AntimatterFactory.Instance.DeferredAntimatterAmount.ToString(), true);

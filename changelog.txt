@@ -19,7 +19,9 @@
 - Normalized all cryogenic fuel tanks (LqdHe3, LqdDeuterium) to have mass ratio of 5.0
 - Antimatter containers now have enough builtin EC storage for 10s of power loss
 - NuclearSaltWater tanks have been respecced to be tougher and more thermally resistant instead of having cryogenic values]
-- Converted more
+- Converted a number of completed textures to dds
+- Reworked fusion fuel tank models to look better and obey isotank design language
+- Added textures to the inline antimatter tank
 - Added KV-1 'Vulcan' Nuclear Smelter: processes EnrichedUranium -> FissionPellets, LqdDeuterium+LqHe3 -> FusionPellets, EnrichedUranium+Water -> NuclearSaltWater
 - Added CX-A Particle Scoop: extracts LqdHydrogen, Antimatter from exoplanetary locations
 - Added 'Hoover' Atmospheric Ramscoop: extracts LqdHydrogen, LqdDeuterium, LqdHe3 from atmospheres

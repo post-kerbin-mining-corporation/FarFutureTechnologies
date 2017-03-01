@@ -36,14 +36,13 @@ namespace FarFutureTechnologies
 
                 foreach (ConfigNode k in levelNodes)
                 {
-                    Debug.Log("Loading AM factory level");
                     int lvl = Utils.GetValue(k, "Level", 0);
                     double cost = Utils.GetValue(k, "PurchaseCost", 0d);
                     double rate = Utils.GetValue(k, "ProductionRate", 0d);
                     double max = Utils.GetValue(k, "ProductionCapacity", 0d);
 
                     factoryLevels.Add(new AntimatterFactoryLevelData(lvl, max, rate, cost));
-                    Utils.Log("New AM factory level found");
+                    Utils.Log(String.Format("AM factory level {0} found, cost {1}, rate {2}, capacity {3}", lvl, cost, rate, max));
                 }
 
             }

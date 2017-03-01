@@ -166,7 +166,7 @@ namespace FarFutureTechnologies
 
                     if (ApplicationLauncher.Instance.IsPositionedAtTop)
                     {
-                        miniWindowPos = new Rect(Screen.width-290f, 0f, 250f, 60f);
+                        miniWindowPos = new Rect(Screen.width-280f, 0f, 250f, 60f);
                     }
                     else {
                         miniWindowPos = new Rect(Screen.width - 280f, Screen.height-150f, 250f, 60f);
@@ -190,27 +190,29 @@ namespace FarFutureTechnologies
             if (!initStyles)
                 InitStyles();
 
-            if (showMiniWindow)
+            if (AntimatterFactory.Instance != null)
             {
-                miniWindowPos = GUI.Window(windowIdentifier, miniWindowPos, DrawMiniWindow, "Antimatter Factory", windowStyle);
-            }
+                if (showMiniWindow)
+                {
+                    miniWindowPos = GUI.Window(windowIdentifier, miniWindowPos, DrawMiniWindow, "", windowStyle);
+                }
 
-            if (showMainWindow)
-            {
-                mainWindowPos = GUILayout.Window(windowIdentifier2, mainWindowPos, DrawMainWindow, "Antimatter Factory", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+                if (showMainWindow)
+                {
+                    mainWindowPos = GUILayout.Window(windowIdentifier2, mainWindowPos, DrawMainWindow, "Antimatter Factory", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+                }
             }
         }
 
         void DrawMiniWindow(int WindowID)
         {
-
-
+            
             float curAM = (float)(AntimatterFactory.Instance.Antimatter);
             float maxAM = (float)(AntimatterFactory.Instance.AntimatterMax);
             float rateAM = (float)(AntimatterFactory.Instance.AntimatterRate);
-
-            float tempAreaWidth = 230f;
-            float tempBarWidth = 230f;
+            
+            float tempAreaWidth = 200f;
+            float tempBarWidth = 200f;
             Rect tempArea = new Rect(10f, 0f, tempAreaWidth, 40f);
 
             float tempBarFGSize = Mathf.Clamp((tempBarWidth-6f) * (curAM / maxAM), 5f, tempBarWidth);
@@ -226,11 +228,14 @@ namespace FarFutureTechnologies
             // GUI.Label(new Rect(20f+tempBarWidth, 30f, 40f, 20f), String.Format("{0:F0} K", meltdownTemp), gui_text);
             GUI.EndGroup();
             if (HighLogic.LoadedScene == GameScenes.SPACECENTER)
-                if(GUI.Button(new Rect(50f, 35f, 150, 20), "Enter Facility", buttonStyle))
+            {
+                if (GUI.Button(new Rect(50f, 35f, 150, 20), "Enter Facility", buttonStyle))
                 {
                     ShowFactory();
                 }
-            if (AntimatterLoader.Instance.loadingAllowed)
+            }  
+
+            if (HighLogic.LoadedSceneIsFlight && AntimatterLoader.Instance != null && AntimatterLoader.Instance.loadingAllowed)
                 if (GUI.Button(new Rect(50f, 35f, 150, 20), "Load Antimatter", buttonStyle))
                 {
                     ShowLoading();

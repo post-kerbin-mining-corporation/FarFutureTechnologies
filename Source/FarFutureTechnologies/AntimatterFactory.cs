@@ -9,11 +9,29 @@ namespace FarFutureTechnologies
     [KSPAddon(KSPAddon.Startup.EveryScene, false)]
     public class AntimatterFactory : MonoBehaviour
     {
-        public static AntimatterFactory Instance { get; private set; }
+        private static AntimatterFactory instance;
+        public static AntimatterFactory Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = FindObjectOfType<AntimatterFactory>();
+                    if (instance == null)
+                    {
+                        GameObject obj = new GameObject();
+                        instance = obj.AddComponent<AntimatterFactory>();
+                    }
+                }
+                return instance;
+            }
+        }
 
         public int FactoryLevel { get { return factoryLevel; } }
         public bool Researched { get { return researched; } }
-        public double Antimatter { get { return curAntimatter; } }
+        public double Antimatter { get {
+            Utils.Log(curAntimatter.ToString());
+            return curAntimatter; } }
         public double AntimatterRate { get { return curAntimatterRate; } }
         public double AntimatterMax { get { return maxAntimatter; } }
         public double DeferredAntimatterAmount { get { return deferredAntimatterAmount; } }
@@ -69,7 +87,10 @@ namespace FarFutureTechnologies
         }
         void Awake()
         {
-            Instance = this;
+            if (instance == null)
+            {
+                instance = this;
+            }
         }
 
         private void Start()
@@ -137,6 +158,7 @@ namespace FarFutureTechnologies
 
             Utils.Log("Completed data load, setting up factory for level "+ factoryLevel.ToString());
             curLevelDat =  FarFutureTechnologySettings.GetAMFactoryLevelData(factoryLevel);
+            
 
             maxAntimatter = curLevelDat.maxCapacity;
             curAntimatterRate = curLevelDat.baseRate;
@@ -146,11 +168,9 @@ namespace FarFutureTechnologies
                 curAntimatter = maxAntimatter;
             }
 
-            if (HighLogic.LoadedSceneIsFlight && DeferredAntimatterAmount > 0d)
-            {
-                ConsumeAntimatter(deferredAntimatterAmount);
-                deferredAntimatterAmount = 0d;
-            }
+           
+
+           
         }
 
         public void ScheduleConsumeAntimatter(double amt)
@@ -170,6 +190,7 @@ namespace FarFutureTechnologies
         
         void CatchupProduction(double elapsed)
         {
+
             curAntimatter = curAntimatter + curAntimatterRate * elapsed;
             if (curAntimatter > maxAntimatter)
             {
@@ -189,11 +210,14 @@ namespace FarFutureTechnologies
 
             if (productionOn)
             {
+              
                 curAntimatter = curAntimatter + ConvertRate( curAntimatterRate) * TimeWarp.fixedDeltaTime;
+                
                 if (curAntimatter > maxAntimatter)
                 {
                     curAntimatter = maxAntimatter;
                 }
+               
             }
         }
 
