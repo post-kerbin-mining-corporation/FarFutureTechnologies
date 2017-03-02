@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-
+using PowerMonitor;
 
 namespace FarFutureTechnologies
 {
-    public class ModuleAntimatterTank: PartModule
+    public class ModuleAntimatterTank: PartModule, IPowerConsumingPart
     {
         // Name of the fuel to boil off
         [KSPField(isPersistant = false)]
@@ -30,15 +30,25 @@ namespace FarFutureTechnologies
         [KSPField(isPersistant = true)]
         public bool ContainmentEnabled = true;
 
+        // Whether detonation is occurring
+        [KSPField(isPersistant = true)]
+        public bool DetonationOccuring = false;
+
+        [KSPField(isPersistant = true)]
+        public int PowerUsePriority = 0;
+
         // PRIVATE
         private double fuelAmount = 0.0;
-
+        private double maxFuelAmount = 0.0;
+        private double totalPowerCost = 0.0;
 
         // UI FIELDS/ BUTTONS
         // Status string
+        [KSPField(isPersistant = false, guiActive = true, guiName = "Stability")]
+        public string DetonationStatus = "N/A";
+
         [KSPField(isPersistant = false, guiActive = true, guiName = "Containment")]
         public string ContainmentStatus = "N/A";
-
 
         [KSPEvent(guiActive = true, guiName = "Enable Containment", active = true)]
         public void Enable()
@@ -64,10 +74,64 @@ namespace FarFutureTechnologies
             ContainmentEnabled = !ContainmentEnabled;
         }
 
+        // VAB UI
         public override string GetInfo()
         {
           string msg = String.Format("Containment Cost: {0:F2} Ec/s", ContainmentCost);
           return msg;
+        }
+
+        // INTERFACE METHODS
+        // Sets the powered/unpowered state
+        public void SetPoweredState(bool state)
+        {
+          if (ContainmentEnabled && ContainmentCost > 0f)
+          {
+            if (state)
+            {
+              DetonationOccuring = false;
+              DetonationStatus = String.Format("Contained");
+              ContainmentStatus = String.Format("Using {0:F2} Ec/s", coolingCost);
+            } else
+            {
+              DetonationOccuring = true;
+              DetonationStatus = String.Format("Losing {0:F2} u/s", DetonationRate);
+              ContainmentStatus = "Uncontained!";
+            }
+        }
+
+        // All AM
+        public int GetPriority()
+        {
+          return PowerUsePriority;
+        }
+
+        // Gets the canonical power usage
+        public double GetPowerUsage()
+        {
+            return totalPowerCost;
+        }
+
+        // Gets the current power usage
+        public double CalculatePowerUsage()
+        {
+          if (ContainmentEnabled)
+          {
+            return totalPowerCost;
+          }
+          return 0d;
+        }
+
+        // Does processing at "low" warp
+        public void ProcessLowWarp()
+        {
+          ConsumeCharge();
+        }
+
+        // Does processing at "high" warp
+        public void ProcessHighWarp()
+        {
+          ConsumeCharge();
         }
 
         public override void OnStart(PartModule.StartState state)
@@ -75,6 +139,8 @@ namespace FarFutureTechnologies
             if (HighLogic.LoadedSceneIsFlight)
             {
               fuelAmount = GetResourceAmount(FuelName);
+              maxFuelAmount = GetMaxResourceAmount(FuelName);
+              totalPowerCost = maxFuelAmount*ContainmentCost;
 
               // Catchup
               DoCatchup();
@@ -100,12 +166,12 @@ namespace FarFutureTechnologies
           if (HighLogic.LoadedSceneIsFlight)
           {
 
-            // Show the insulation status field if there is a cooling cost
+            // Show the containment status field if there is a cooling cost
               if (ContainmentCost > 0f)
             {
               foreach (BaseField fld in base.Fields)
                 {
-                    if (fld.guiName == "Insulation")
+                    if (fld.guiName == "Containment")
                         fld.guiActive = true;
                 }
 
@@ -116,9 +182,19 @@ namespace FarFutureTechnologies
                }
             }
           }
+          if (HighLogic.LoadedSceneIsEditor)
+          {
+                foreach (BaseField fld in base.Fields)
+                {
+                    if (fld.guiName == "Containment")
+                        fld.guiActiveEditor = true;
+                }
+                double max = GetMaxResourceAmount(FuelName);
+                ContainmentStatus = String.Format("Cost {0:F2} Ec/s", ContainmentCost * (float)(max));
+          }
         }
 
-        bool DetonationOccuring = false;
+
 
         protected void FixedUpdate()
         {
@@ -132,54 +208,54 @@ namespace FarFutureTechnologies
                   return;
                 }
 
-                if (ContainmentEnabled)
-                {
-                    ConsumeCharge();
-                }
-                else
+                // If the cooling cost is zero, we must boil off
+                if (ContainmentCost == 0f)
                 {
                     DetonationOccuring = true;
-                    ContainmentStatus = String.Format("Leaking {0} u/s", TimeWarp.fixedDeltaTime* DetonationRate);
+                    DetonationStatus = String.Format("Losing {0:F2} u/s", DetonationRate);
                 }
+                // else check for available power
+                else
+                {
+                    if (!ContainmentEnabled)
+                    {
+                        DetonationOccuring = true;
+                        DetonationStatus = String.Format("Losing {0:F2} u/s", DetonationRate);
+                        ContainmentStatus = "Disabled";
+                    }
+                  }
+
                 if (DetonationOccuring)
                 {
-                    DoDetonation();
+                    DoDetonation(1d);
                 }
-
                 if (part.vessel.missionTime > 0.0)
                 {
-                    //LastUpdateTime = part.vessel.missionTime;
+                    LastUpdateTime = part.vessel.missionTime;
                 }
             }
         }
         protected void ConsumeCharge()
         {
-            if (TimeWarp.CurrentRate >= 10000f)
-            {
-                if (DetonationOccuring)
-                {
-                    double Ec = GetResourceAmount("ElectricCharge");
-                    double req = part.RequestResource("ElectricCharge", Ec);
-                }
-            }
-            else
-            {
-                float clampedDeltaTime = Mathf.Clamp(TimeWarp.fixedDeltaTime, 0f, 10000f * 0.02f);
 
-                double chargeRequest = ContainmentCost * clampedDeltaTime;
-                double req = part.RequestResource("ElectricCharge", chargeRequest);
-                double tolerance = 0.0001;
-                if (req >= chargeRequest - tolerance)
-                {
-                    DetonationOccuring = false;
-                    ContainmentStatus = String.Format("Intact");
-                }
-                else
-                {
-                    DetonationOccuring = true;
-                    ContainmentStatus = String.Format("Leaking {0} u/s", TimeWarp.fixedDeltaTime * DetonationRate);
-                }
-            }
+          if (ContainmentEnabled && ContainmentCost > 0f)
+          {
+              double chargeRequest = totalPowerCost * TimeWarp.fixedDeltaTime;
+
+              double req = part.RequestResource("ElectricCharge", chargeRequest);
+              //Debug.Log(req.ToString() + " rec, wanted "+ chargeRequest.ToString());
+              // Fully cooled
+              double tolerance = 0.0001;
+              if (req >= chargeRequest - tolerance)
+              {
+                  SetPoweredState(true);
+              }
+              else
+              {
+                  SetPoweredState(false);
+              }
+          }
+
         }
         protected void DoDetonation()
         {
@@ -189,14 +265,31 @@ namespace FarFutureTechnologies
 
 
 
-        protected double GetResourceAmount(string nm)
-       {
-           PartResource res = this.part.Resources.Get(PartResourceLibrary.Instance.GetDefinition(nm).id);
-           if (res != null)
-               return res.amount;
-           else
-               return 0d;
-       }
+        public bool isResourcePresent(string nm)
+          {
+              int id = PartResourceLibrary.Instance.GetDefinition(nm).id;
+              PartResource res = this.part.Resources.Get(id);
+              if (res == null)
+                  return false;
+              return true;
+          }
+          protected double GetResourceAmount(string nm)
+          {
+
+
+              PartResource res = this.part.Resources.Get(PartResourceLibrary.Instance.GetDefinition(nm).id);
+              return res.amount;
+          }
+          protected double GetMaxResourceAmount(string nm)
+          {
+
+              int id = PartResourceLibrary.Instance.GetDefinition(nm).id;
+
+              PartResource res = this.part.Resources.Get(id);
+
+              return res.maxAmount;
+          }
+
 
     }
 }
