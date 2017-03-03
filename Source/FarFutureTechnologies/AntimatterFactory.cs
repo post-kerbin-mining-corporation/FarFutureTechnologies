@@ -29,9 +29,7 @@ namespace FarFutureTechnologies
 
         public int FactoryLevel { get { return factoryLevel; } }
         public bool Researched { get { return researched; } }
-        public double Antimatter { get {
-            Utils.Log(curAntimatter.ToString());
-            return curAntimatter; } }
+        public double Antimatter { get {return curAntimatter; } }
         public double AntimatterRate { get { return curAntimatterRate; } }
         public double AntimatterMax { get { return maxAntimatter; } }
         public double DeferredAntimatterAmount { get { return deferredAntimatterAmount; } }

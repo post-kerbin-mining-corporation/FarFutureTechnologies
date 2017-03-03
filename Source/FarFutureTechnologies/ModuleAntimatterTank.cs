@@ -91,7 +91,7 @@ namespace FarFutureTechnologies
             {
               DetonationOccuring = false;
               DetonationStatus = String.Format("Contained");
-              ContainmentStatus = String.Format("Using {0:F2} Ec/s", coolingCost);
+              ContainmentStatus = String.Format("Using {0:F2} Ec/s", ContainmentCost);
             } else
             {
               DetonationOccuring = true;
@@ -227,11 +227,11 @@ namespace FarFutureTechnologies
 
                 if (DetonationOccuring)
                 {
-                    DoDetonation(1d);
+                    DoDetonation();
                 }
                 if (part.vessel.missionTime > 0.0)
                 {
-                    LastUpdateTime = part.vessel.missionTime;
+                    //LastUpdateTime = part.vessel.missionTime;
                 }
             }
         }
