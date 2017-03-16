@@ -1,3 +1,9 @@
+0.1.2
+-----
+- Fixed small nuclear target tank containing 4000 pellets (reduced to 1800)
+- Increased visual pulse rate of Z-pinch engines by 25-33%
+
+
 0.1.1
 -----
 - KSP 1.2.2
