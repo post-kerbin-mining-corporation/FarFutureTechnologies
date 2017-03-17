@@ -2,7 +2,9 @@
 -----
 - Fixed small nuclear target tank containing 4000 pellets (reduced to 1800)
 - Increased visual pulse rate of Z-pinch engines by 25-33%
-
+- Antimatter tanks now have "virtual" contents in the VAB, which are not carried to the pad, for compatibility with KER/MJ DV displays
+- Antimatter loader interface now reloads the antimatter count periodically
+- Added infinite mode to antimatter factory which sets factory capacity to the maximum (activate with CTRL+SHIFT+A)
 
 0.1.1
 -----

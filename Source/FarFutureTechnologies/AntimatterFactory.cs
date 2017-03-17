@@ -29,13 +29,20 @@ namespace FarFutureTechnologies
 
         public int FactoryLevel { get { return factoryLevel; } }
         public bool Researched { get { return researched; } }
-        public double Antimatter { get {return curAntimatter; } }
+        public bool Infinite { get { return infinite; } set {infinite = value;}}
+        public double Antimatter {
+          get {
+            if (Infinite)
+              return AntimatterMax;
+            return curAntimatter;
+            } }
         public double AntimatterRate { get { return curAntimatterRate; } }
         public double AntimatterMax { get { return maxAntimatter; } }
         public double DeferredAntimatterAmount { get { return deferredAntimatterAmount; } }
 
         private bool productionOn = false;
         private bool researched = false;
+        private bool infinite = false;
 
         private int factoryLevel = 0;
 
@@ -94,7 +101,7 @@ namespace FarFutureTechnologies
         private void Start()
         {
             double worldTime = Planetarium.GetUniversalTime();
-
+            GameEvents.OnVesselRollout.Add(new EventData<ShipConstruct>.OnEvent(OnVesselRollout));
             if (worldTime - lastUpdateTime > 0d)
             {
                 Utils.Log(String.Format("Delta time of {0} detected, catching up", worldTime-lastUpdateTime));
@@ -102,7 +109,21 @@ namespace FarFutureTechnologies
                 //CatchupProduction(worldTime - lastUpdateTime);
                 lastUpdateTime = worldTime;
             }
-            
+
+        }
+
+        void OnVesselRollout(ShipConstruct ship)
+        {
+          int id = PartResourceLibrary.Instance.GetDefinition("Antimatter").id;
+          for (int i = 0; i < ship.Parts.Count; i++)
+          {
+            PartResource res =  ship.Parts[i].Resources.Get(id);
+            res.maxAmount = 0d;
+
+          }
+
+
+
         }
 
         public void Initialize(int loadedLevel, double loadedStorage, double deferredConsumption)
@@ -156,7 +177,7 @@ namespace FarFutureTechnologies
 
             Utils.Log("Completed data load, setting up factory for level "+ factoryLevel.ToString());
             curLevelDat =  FarFutureTechnologySettings.GetAMFactoryLevelData(factoryLevel);
-            
+
 
             maxAntimatter = curLevelDat.maxCapacity;
             curAntimatterRate = curLevelDat.baseRate;
@@ -166,9 +187,9 @@ namespace FarFutureTechnologies
                 curAntimatter = maxAntimatter;
             }
 
-           
 
-           
+
+
         }
 
         public void ScheduleConsumeAntimatter(double amt)
@@ -183,9 +204,9 @@ namespace FarFutureTechnologies
             {
                 curAntimatter = 0d;
             }
-             
+
         }
-        
+
         void CatchupProduction(double elapsed)
         {
 
@@ -208,17 +229,29 @@ namespace FarFutureTechnologies
 
             if (productionOn)
             {
-              
+
                 curAntimatter = curAntimatter + ConvertRate( curAntimatterRate) * TimeWarp.fixedDeltaTime;
-                
+
                 if (curAntimatter > maxAntimatter)
                 {
                     curAntimatter = maxAntimatter;
                 }
-               
+
             }
         }
-
+        void Update()
+        {
+          if (productionOn)
+          {
+            if ((Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftControl)) &&
+              (Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift)) &&
+              Input.GetKeyDown(KeyCode.A) )
+              {
+                Infinite = !Infinite;
+              // CTRL + Z
+            }
+          }
+        }
         double ConvertRate(double rateDays)
         {
             double rateSeconds = 0d;

@@ -147,6 +147,8 @@ namespace FarFutureTechnologies
             }
         }
 
+
+
         public void DoCatchup()
         {
           if (part.vessel.missionTime > 0.0)

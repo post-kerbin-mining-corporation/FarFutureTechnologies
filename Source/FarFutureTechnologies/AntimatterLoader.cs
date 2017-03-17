@@ -25,7 +25,7 @@ namespace FarFutureTechnologies
       {
           if (resource.amount > 0.0d)
               requestedAmount = -resource.amount;
-          else 
+          else
               requestedAmount = 0d;
 
           totalAmount = 0d;
@@ -51,14 +51,21 @@ namespace FarFutureTechnologies
          {
              if (HighLogic.LoadedSceneIsFlight && FlightGlobals.ActiveVessel != null)
              {
+
                  RefreshAntimatterData(FlightGlobals.ActiveVessel);
              }
          }
+         void FixedUpdate()
+         {
+            availableAM = AntimatterFactory.Instance.Antimatter;
+         }
+
+         
 
          void RefreshAntimatterData(Vessel vessel)
          {
              antimatterTanks = new List<AntimatterContainer>();
-             
+
              availableAM = AntimatterFactory.Instance.Antimatter;
 
             List<Part> parts = vessel.parts;
@@ -102,7 +109,7 @@ namespace FarFutureTechnologies
 
                  tank.ClearRequest();
              }
-            
+
          }
          public void ConsumeAntimatter()
          {
