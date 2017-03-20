@@ -69,7 +69,7 @@ namespace FarFutureTechnologies
         // VAB UI
         public override string GetInfo()
         {
-          string msg = String.Format("Containment Cost: {0:F2} Ec/s", ContainmentCost);
+          string msg = String.Format("Containment Cost:  Ec/s");
           return msg;
         }
 
@@ -130,7 +130,7 @@ namespace FarFutureTechnologies
         void DoRecharge()
         {
           double req = part.RequestResource("ElectricCharge", ChargeRate * TimeWarp.fixedDeltaTime);
-          CurrentCharge = Mathf.MoveTowards(CurrentCharge, ChargeGoal, req);
+          CurrentCharge = Mathf.MoveTowards(CurrentCharge, ChargeGoal, (float)req);
 
           if (req > 0.0d)
             RechargeStatus = String.Format("{{0} EC/s", ChargeRate);

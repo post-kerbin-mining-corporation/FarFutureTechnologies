@@ -85,18 +85,20 @@ namespace FarFutureTechnologies
         // Sets the powered/unpowered state
         public void SetPoweredState(bool state)
         {
-          if (ContainmentEnabled && ContainmentCost > 0f)
-          {
-            if (state)
+            if (ContainmentEnabled && ContainmentCost > 0f)
             {
-              DetonationOccuring = false;
-              DetonationStatus = String.Format("Contained");
-              ContainmentStatus = String.Format("Using {0:F2} Ec/s", ContainmentCost);
-            } else
-            {
-              DetonationOccuring = true;
-              DetonationStatus = String.Format("Losing {0:F2} u/s", DetonationRate);
-              ContainmentStatus = "Uncontained!";
+                if (state)
+                {
+                    DetonationOccuring = false;
+                    DetonationStatus = String.Format("Contained");
+                    ContainmentStatus = String.Format("Using {0:F2} Ec/s", ContainmentCost);
+                }
+                else
+                {
+                    DetonationOccuring = true;
+                    DetonationStatus = String.Format("Losing {0:F2} u/s", DetonationRate);
+                    ContainmentStatus = "Uncontained!";
+                }
             }
         }
 
