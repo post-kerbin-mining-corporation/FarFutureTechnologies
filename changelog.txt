@@ -1,5 +1,7 @@
-0.1.2
+0.2.0
 -----
+- KSP 1.3
+- KSP 1.3 localization support
 - Z-Pinch engines received names
 - Fixed small nuclear target tank containing 4000 pellets (reduced to 1800)
 - Increased visual pulse rate of Z-pinch engines by 25-33%

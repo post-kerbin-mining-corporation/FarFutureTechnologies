@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using PowerMonitor;
+using KSP.Localization;
 
 namespace FarFutureTechnologies
 {
-    public class ModuleAntimatterTank: PartModule, IPowerConsumingPart
+    public class ModuleAntimatterTank: PartModule
     {
         // Name of the fuel to boil off
         [KSPField(isPersistant = false)]
@@ -75,11 +76,20 @@ namespace FarFutureTechnologies
         }
 
         // VAB UI
+        public string GetModuleTitle()
+        {
+            return "AntimatterTank";
+        }
+        public override string GetModuleDisplayName()
+        {
+            return Localizer.Format("#LOC_FFT_ModuleAntimatterTank_ModuleName");
+        }
+
         public override string GetInfo()
         {
-          string msg = String.Format("Containment Cost: {0:F2} Ec/s", ContainmentCost);
-          return msg;
+          return Localizer.Format("#LOC_FFT_ModuleAntimatterTank_PartInfo", ContainmentCost.ToString("F1"), (DetonationKJPerUnit/1000f).ToString("F2"));
         }
+
 
         // INTERFACE METHODS
         // Sets the powered/unpowered state
@@ -90,14 +100,14 @@ namespace FarFutureTechnologies
                 if (state)
                 {
                     DetonationOccuring = false;
-                    DetonationStatus = String.Format("Contained");
-                    ContainmentStatus = String.Format("Using {0:F2} Ec/s", ContainmentCost);
+                    DetonationStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Contained");
+                    ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Contained", ContainmentCost.ToString("F2"));
                 }
                 else
                 {
                     DetonationOccuring = true;
-                    DetonationStatus = String.Format("Losing {0:F2} u/s", DetonationRate);
-                    ContainmentStatus = "Uncontained!";
+                    DetonationStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Uncontained", DetonationRate.ToString("F2"));
+                    ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Uncontained");
                 }
             }
         }
@@ -136,10 +146,20 @@ namespace FarFutureTechnologies
           ConsumeCharge();
         }
 
-        public override void OnStart(PartModule.StartState state)
+        public void Start()
         {
             if (HighLogic.LoadedSceneIsFlight)
             {
+              Fields["DetonationStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Title");
+              Fields["ContainmentStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Title");
+
+              Events["Enable"].guiName = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Event_Enable_Title");
+              Events["Disable"].guiName = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Event_Disable_Title");
+
+              Actions["EnableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Action_EnableAction_Title");
+              Actions["DisableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Action_DisableAction_Title");
+              Actions["ToggleAction"].guiName = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Action_ToggleAction_Title");
+
               fuelAmount = GetResourceAmount(FuelName);
               maxFuelAmount = GetMaxResourceAmount(FuelName);
               totalPowerCost = maxFuelAmount*ContainmentCost;
@@ -175,8 +195,8 @@ namespace FarFutureTechnologies
             {
               foreach (BaseField fld in base.Fields)
                 {
-                    if (fld.guiName == "Containment")
-                        fld.guiActive = true;
+                  Events["ContainmentStatus"].guiActive = true;
+
                 }
 
               if (Events["Enable"].active == ContainmentEnabled || Events["Disable"].active != ContainmentEnabled)
@@ -190,11 +210,10 @@ namespace FarFutureTechnologies
           {
                 foreach (BaseField fld in base.Fields)
                 {
-                    if (fld.guiName == "Containment")
-                        fld.guiActiveEditor = true;
+                    Events["ContainmentStatus"].guiActive = true;
                 }
                 double max = GetMaxResourceAmount(FuelName);
-                ContainmentStatus = String.Format("Cost {0:F2} Ec/s", ContainmentCost * (float)(max));
+                ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Editor", (ContainmentCost * (float)(max)).ToString("F2"));
           }
         }
 
@@ -208,7 +227,7 @@ namespace FarFutureTechnologies
                 // If we have no fuel, no need to do any calculations
                 if (fuelAmount == 0.0)
                 {
-                  ContainmentStatus = "No Antimatter";
+                  ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_None");
                   return;
                 }
 
@@ -216,7 +235,7 @@ namespace FarFutureTechnologies
                 if (ContainmentCost == 0f)
                 {
                     DetonationOccuring = true;
-                    DetonationStatus = String.Format("Losing {0:F2} u/s", DetonationRate);
+                    DetonationStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Uncontained", DetonationRate.ToString("F2"));
                 }
                 // else check for available power
                 else
@@ -224,8 +243,8 @@ namespace FarFutureTechnologies
                     if (!ContainmentEnabled)
                     {
                         DetonationOccuring = true;
-                        DetonationStatus = String.Format("Losing {0:F2} u/s", DetonationRate);
-                        ContainmentStatus = "Disabled";
+                        DetonationStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Uncontained", DetonationRate.ToString("F2"));
+                        ContainmentStatus =  Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Disabled");
                     }
                   }
 
