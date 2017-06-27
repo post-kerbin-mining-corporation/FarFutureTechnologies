@@ -104,7 +104,7 @@ namespace FarFutureTechnologies
             GameEvents.OnVesselRollout.Add(new EventData<ShipConstruct>.OnEvent(OnVesselRollout));
             if (worldTime - lastUpdateTime > 0d)
             {
-                Utils.Log(String.Format("Delta time of {0} detected, catching up", worldTime-lastUpdateTime));
+                Utils.Log(String.Format("[AntimatteryFactory]: Delta time of {0} seconds detected, catching up", worldTime-lastUpdateTime));
                 // update storage to reflect delta
                 //CatchupProduction(worldTime - lastUpdateTime);
                 lastUpdateTime = worldTime;
@@ -121,9 +121,6 @@ namespace FarFutureTechnologies
             res.maxAmount = 0d;
 
           }
-
-
-
         }
 
         public void Initialize(int loadedLevel, double loadedStorage, double deferredConsumption)
@@ -135,7 +132,7 @@ namespace FarFutureTechnologies
             // If game mode is sandbox, set the level to max immediately and begin production
             if (HighLogic.CurrentGame.Mode == Game.Modes.SANDBOX)
             {
-                Utils.Log("Detected Sandbox, setting AM factory to max and activating");
+                Utils.Log("AntimatteryFactory]: Detected Sandbox, setting AM factory to max level and activating");
                 researched = true;
                 factoryLevel = FarFutureTechnologySettings.factoryLevels.Count - 1;
                 SetProductionStatus(true);
@@ -143,7 +140,7 @@ namespace FarFutureTechnologies
             // If science sandbox, check for the needed technology first
             else if (HighLogic.CurrentGame.Mode == Game.Modes.SCIENCE_SANDBOX)
             {
-                Utils.Log("Detected Science Sandbox, setting AM factory to max, detecting tech");
+                Utils.Log("AntimatteryFactory]: Detected Science Sandbox, setting AM factory to max level and detecting tech level");
                 bool isResearched = Utils.CheckTechPresence(FarFutureTechnologySettings.antimatterFactoryUnlockTech);
                 if (isResearched)
                 {
@@ -160,7 +157,7 @@ namespace FarFutureTechnologies
             }
             else
             {
-                Utils.Log("Detected Career, setting AM factory to stored level, detecting tech");
+                Utils.Log("AntimatteryFactory]: Detected Career, setting AM factory to stored level and detecting tech level");
                 bool isResearched = Utils.CheckTechPresence(FarFutureTechnologySettings.antimatterFactoryUnlockTech);
                 if (isResearched)
                 {
@@ -175,7 +172,7 @@ namespace FarFutureTechnologies
                 }
             }
 
-            Utils.Log("Completed data load, setting up factory for level "+ factoryLevel.ToString());
+            Utils.Log("AntimatteryFactory]: Completed data load, initializing AM factory for level "+ factoryLevel.ToString());
             curLevelDat =  FarFutureTechnologySettings.GetAMFactoryLevelData(factoryLevel);
 
 

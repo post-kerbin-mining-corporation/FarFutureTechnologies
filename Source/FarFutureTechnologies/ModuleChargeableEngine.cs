@@ -68,13 +68,41 @@ namespace FarFutureTechnologies
         }
 
         // VAB UI
+        public string GetModuleTitle()
+        {
+            return "Chargeable Engine";
+        }
+        public override string GetModuleDisplayName()
+        {
+            return Localizer.Format("#LOC_FFT_ModuleChargeableEngine_ModuleName");
+        }
+
         public override string GetInfo()
         {
-          string msg = String.Format("Containment Cost:  Ec/s");
+          return Localizer.Format("#LOC_FFT_ModuleChargeableEngine_PartInfo", ContainmentCost.ToString("F1"), (DetonationKJPerUnit/1000f).ToString("F2"));
+        }
+
+        public override string GetInfo()
+        {
+          string msg = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_PartInfo",
+            ChargeRate.ToString("F2"), (ChargeGoal/ChargeRate).ToString("F0"));
           return msg;
         }
 
         private ModuleEnginesFX engine;
+
+      void Start()
+      {
+        Fields["RechargeStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Title");
+        Fields["ChargeStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Title");
+
+        Events["Enable"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Event_Enable_Title");
+        Events["Disable"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Event_Disable_Title");
+
+        Actions["EnableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Action_EnableAction_Title");
+        Actions["DisableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Action_DisableAction_Title");
+        Actions["ToggleAction"].guiName = Localizer.Format("#LOC_ModuleChargeableEngine_Action_ToggleAction_Title");
+      }
 
         void Awake()
         {
@@ -117,12 +145,12 @@ namespace FarFutureTechnologies
 
           if (EngineOn)
           {
-            RechargeStatus = "Running";
-            ChargeStatus = "Running";
+            RechargeStatus = Localizer.Format("LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Running");
+            ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Running");
           } else
           {
             if (!Charged && !Charging)
-                RechargeStatus = String.Format("Disabled");
+                RechargeStatus = Localizer.Format("LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Disabled");
           }
 
         }
@@ -134,14 +162,14 @@ namespace FarFutureTechnologies
           CurrentCharge = Mathf.MoveTowards(CurrentCharge, ChargeGoal, (float)req);
 
           if (req > 0.0d)
-            RechargeStatus = String.Format("{{0} EC/s", ChargeRate);
+            RechargeStatus = Localizer.Format("LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Charging", ChargeRate.ToString("F2"));
           else
-            RechargeStatus = "Not enough ElectricCharg!e";
+            RechargeStatus = Localizer.Format("LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_NoPower");
 
-          ChargeStatus = String.Format("{{0}%", CurrentCharge/ChargeGoal * 100.0f);
+          ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Normal", (CurrentCharge/ChargeGoal * 100.0f).ToString("F1"));
           if (CurrentCharge >= ChargeGoal)
           {
-            RechargeStatus = "Ready";
+            RechargeStatus = Localizer.Format("LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Ready");
             Charged = true;
             SetEngineUI(true);
           }

@@ -1,5 +1,0 @@
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\PowerMonitor\PowerMonitor\obj\Debug\PowerMonitor.csprojResolveAssemblyReference.cache
-G:\KSP Modding\repositories\FarFutureTechnologies\GameData\FarFutureTechnologies\Plugins\PowerMonitor.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\GameData\FarFutureTechnologies\Plugins\PowerMonitor.pdb
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\PowerMonitor\PowerMonitor\obj\Debug\PowerMonitor.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\PowerMonitor\PowerMonitor\obj\Debug\PowerMonitor.pdb

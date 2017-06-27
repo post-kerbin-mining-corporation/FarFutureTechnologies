@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace PulsePropulsion
+namespace namespace FarFutureTechnologies
 {
     public class ModulePulseEngineAnimator: PartModule
     {
-        // Animation that plays 
+        // Animation that plays
         [KSPField(isPersistant = false)]
         public string PulseAnimation;
-        
+
         // Heat
         [KSPField(isPersistant = false)]
         public string HeatAnimation;
@@ -54,20 +54,20 @@ namespace PulsePropulsion
         private Transform fxCenter;
 
         // Animations
-        
+
         private AnimationState[] pulseStates;
         private AnimationState[] throttleStates;
 
         public override void OnStart(PartModule.StartState state)
         {
-           
+
             fxCenter = part.FindModelTransform(PulseTransformName);
-            
+
             engineModule = part.GetComponent<ModuleEnginesFX>();
-            
+
             if (engineModule == null)
             {
-                Utils.LogError("No ModuleEnginesFX found on part!");
+                Utils.LogError("[ModulePulseEngineAnimator]: No ModuleEnginesFX found on part!");
             }
             // Set up animations
             if (PulseAnimation != "")
@@ -78,7 +78,7 @@ namespace PulsePropulsion
                 {
                     pulseState.layer =1;
                 }
-                
+
             }
             if (ThrottleAnimation != "")
             {
@@ -88,18 +88,18 @@ namespace PulsePropulsion
                 {
                     throttleState.layer = 2;
                 }
-                
+
             }
 
-        
+
         }
-        
+
         private float currentPulseInterval = 0f;
         KSPParticleEmitter[] fxes;
 
         public void FixedUpdate()
         {
-            
+
             if (HighLogic.LoadedScene == GameScenes.FLIGHT)
             {
                 if (!engineModule)
@@ -109,7 +109,7 @@ namespace PulsePropulsion
                 {
                     if (engineModule.requestedThrottle > 0f && !engineModule.flameout)
                     {
-    
+
                         currentPulseInterval = Mathf.Clamp(PulseInterval * (1f/engineModule.normalizedThrustOutput), 0f, MaxPulseInterval);
 
                         // At start of pulse
@@ -166,7 +166,7 @@ namespace PulsePropulsion
                             }
                         }
                     }
-                    else 
+                    else
 
                     {
                         foreach (AnimationState throttleState in throttleStates)
@@ -199,10 +199,10 @@ namespace PulsePropulsion
                         part.Effect(PulseEffectName2, 0f);
                     }
                 }
-                
-                
+
+
             }
         }
-            
+
     }
 }

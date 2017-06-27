@@ -27,24 +27,43 @@ namespace FarFutureTechnologies
                 }
                 else
                     return false;
-            }
+            }x
             else
             {
                 return false;
             }
         }
 
+
+          // This function loads up some animationstates
+          public static AnimationState[] SetUpAnimation(string animationName, Part part)
+          {
+              var states = new List<AnimationState>();
+              foreach (var animation in part.FindModelAnimators(animationName))
+              {
+                  var animationState = animation[animationName];
+                  animationState.speed = 0;
+                  animationState.enabled = true;
+                  // Clamp this or else weird things happen
+                  animationState.wrapMode = WrapMode.ClampForever;
+                  animation.Blend(animationName);
+                  states.Add(animationState);
+              }
+              // Convert
+              return states.ToArray();
+          }
+
         public static void Log(string str)
         {
-            Debug.Log("Far Future Tech > " + str);
+            Debug.Log("[Far Future Tech]: " + str);
         }
         public static void LogError(string str)
         {
-            Debug.LogError("Far Future Tech > " + str);
+            Debug.LogError("[Far Future Tech]: " + str);
         }
         public static void LogWarning(string str)
         {
-            Debug.LogWarning("Far Future Tech > " + str);
+            Debug.LogWarning("[Far Future Tech]: " + str);
         }
 
         // Node loading

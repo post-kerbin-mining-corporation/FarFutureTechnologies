@@ -13,28 +13,28 @@ namespace FarFutureTechnologies
 
         public override void OnAwake()
         {
-            Utils.Log("Persistence: Init");
+            Utils.Log("[FFT Persistence]: Initialized");
             Instance = this;
             base.OnAwake();
 
-            
+
         }
 
         public override void OnLoad(ConfigNode node)
         {
-            Utils.Log("Persistence: Started Loading");
+            Utils.Log("[FFT Persistence]: Started Loading");
             base.OnLoad(node);
             FarFutureTechnologySettings.Load();
             DoLoad(node);
-            Utils.Log("Persistence: Done Loading");
+            Utils.Log("[FFT Persistence]: Done Loading");
         }
 
         public override void OnSave(ConfigNode node)
         {
-            Utils.Log("Persistence: Started Saving");
+            Utils.Log("[FFT Persistence]: Started Saving");
             base.OnSave(node);
             DoSave(node);
-            Utils.Log("Persistence: Finished Saving");
+            Utils.Log("[FFT Persistence]: Finished Saving");
         }
 
         void DoLoad(ConfigNode node)
@@ -42,24 +42,22 @@ namespace FarFutureTechnologies
             int factoryLevel = 0;
             double currentStorage = 0d;
             double deferredConsumption = 0d;
-            Utils.Log("x");
+
             if (node != null)
             {
                 ConfigNode[] kNodes = node.GetNodes(FarFutureTechnologySettings.amFactoryConfigNodeName);
                 if (kNodes.Length > 0)
                 {
-                    Utils.Log("y");
                     foreach (ConfigNode k in kNodes)
                     {
                         factoryLevel = Utils.GetValue(k, "AMFactoryLevel", 0);
                         currentStorage = Utils.GetValue(k, "AMAmount", 0d);
                         deferredConsumption = Utils.GetValue(k, "AMDeferred", 0d);
-                        Utils.Log("1");
                     }
-                    Utils.Log(String.Format("Loaded with Level {0}, Stored {1}, Deferred {2}",factoryLevel,currentStorage,deferredConsumption));
+                    Utils.Log(String.Format("[FFT Persistence]: AM Factory loaded at Level {0}, Stored Fuel {1}",factoryLevel,currentStorage));
                 }
             }
-            
+
             AntimatterFactory.Instance.Initialize(factoryLevel, currentStorage, deferredConsumption);
 
         }
@@ -72,13 +70,13 @@ namespace FarFutureTechnologies
                 dbNode = node.GetNode(FarFutureTechnologySettings.amFactoryConfigNodeName);
             else
                 dbNode = node.AddNode(FarFutureTechnologySettings.amFactoryConfigNodeName);
-            
+
             Utils.Log( AntimatterFactory.Instance.Antimatter.ToString());
 
             dbNode.SetValue("AMFactoryLevel",AntimatterFactory.Instance.FactoryLevel.ToString(), true);
             dbNode.SetValue("AMAmount", AntimatterFactory.Instance.Antimatter.ToString(), true);
             dbNode.SetValue("AMDeferred", AntimatterFactory.Instance.DeferredAntimatterAmount.ToString(), true);
-            Utils.Log(String.Format("Saved with Level {0}, Stored {1}, Deferred {2}", AntimatterFactory.Instance.FactoryLevel, AntimatterFactory.Instance.Antimatter, AntimatterFactory.Instance.DeferredAntimatterAmount));
+            Utils.Log(String.Format("[FFT Persistence]: AM Factory saved with Level {0}, Stored Fuel {1}", AntimatterFactory.Instance.FactoryLevel, AntimatterFactory.Instance.Antimatter));
         }
     }
 }

@@ -52,7 +52,7 @@ namespace FarFutureTechnologies
 
         public void Awake()
         {
-            Utils.Log("UI: Awake");
+            Utils.Log("[AM Factory UI]: Awake");
             Instance = this;
             GameEvents.onGUIApplicationLauncherReady.Add(OnGUIAppLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Add(OnGUIAppLauncherDestroyed);
@@ -109,7 +109,7 @@ namespace FarFutureTechnologies
 
         public void Start()
         {
-            Utils.Log("UI: Start");
+            Utils.Log("[AM Factory UI]: Start");
 
 
             if (ApplicationLauncher.Ready)
@@ -206,11 +206,11 @@ namespace FarFutureTechnologies
 
         void DrawMiniWindow(int WindowID)
         {
-            
+
             float curAM = (float)(AntimatterFactory.Instance.Antimatter);
             float maxAM = (float)(AntimatterFactory.Instance.AntimatterMax);
             float rateAM = (float)(AntimatterFactory.Instance.AntimatterRate);
-            
+
             float tempAreaWidth = 200f;
             float tempBarWidth = 200f;
             Rect tempArea = new Rect(10f, 0f, tempAreaWidth, 40f);
@@ -233,7 +233,7 @@ namespace FarFutureTechnologies
                 {
                     ShowFactory();
                 }
-            }  
+            }
 
             if (HighLogic.LoadedSceneIsFlight && AntimatterLoader.Instance != null && AntimatterLoader.Instance.loadingAllowed)
                 if (GUI.Button(new Rect(50f, 35f, 150, 20), "Load Antimatter", buttonStyle))

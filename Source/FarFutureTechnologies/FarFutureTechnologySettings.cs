@@ -20,10 +20,10 @@ namespace FarFutureTechnologies
         {
             ConfigNode settingsNode;
 
-            Utils.Log("Settings: Started loading");
+            Utils.Log("[FFT Settings]: Started loading");
             if (GameDatabase.Instance.ExistsConfigNode("FarFutureTechnologies/FFTSETTINGS"))
             {
-                Utils.Log("Settings: Located settings file");
+                Utils.Log("[FFT Settings]: Located settings file");
                 settingsNode = GameDatabase.Instance.GetConfigNode("FarFutureTechnologies/FFTSETTINGS");
 
                 ConfigNode amSettingsNode = settingsNode.GetNode("AntimatterFactory");
@@ -42,15 +42,15 @@ namespace FarFutureTechnologies
                     double max = Utils.GetValue(k, "ProductionCapacity", 0d);
 
                     factoryLevels.Add(new AntimatterFactoryLevelData(lvl, max, rate, cost));
-                    Utils.Log(String.Format("AM factory level {0} found, cost {1}, rate {2}, capacity {3}", lvl, cost, rate, max));
+                    //Utils.Log(String.Format("[FFT Settings]: AM factory level {0} found, cost {1}, rate {2}, capacity {3}", lvl, cost, rate, max));
                 }
 
             }
             else
             {
-                Utils.LogWarning("Settings: Couldn't find settings file, using defaults");
+                Utils.LogWarning("[FFT Settings]: Couldn't find settings file, using defaults");
             }
-            Utils.Log("Settings: Finished loading");
+            Utils.Log("[FFT Settings]: Finished loading");
         }
 
         public static AntimatterFactoryLevelData GetAMFactoryLevelData(int lvl)
