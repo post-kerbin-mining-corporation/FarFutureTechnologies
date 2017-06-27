@@ -1,18 +1,24 @@
 0.2.0
 -----
 - KSP 1.3
-- KSP 1.3 localization support
-- Z-Pinch engines received names
+- KSP 1.3 localization support for all parts and plugin components
+- Lots of minor improvements to the UI components
+- Z-Pinch engines received nicknames
+- Various changes to nomenclature of engines for better VAB sorting
+- Mass ratio of He3/D tanks was normalized to 6 (same as all cryogenic fuels in other mods)
 - Fixed small nuclear target tank containing 4000 pellets (reduced to 1800)
 - Increased visual pulse rate of Z-pinch engines by 25-33%
 - Casaba, MicroStar, Pleiades, Polaris engines now use the new ModuleChargeableEngine implementation
-- Rebalanced energy usage of all engines, typically now scales with thrurst power (magnetic nozzle field strength)
+- Rebalanced energy usage of all engines, typically now scales with thrust power (magnetic nozzle field strength)
 - Antimatter tanks now have "virtual" contents in the VAB, which are not carried to the pad, for compatibility with KER/MJ DV displays
 - Antimatter loader interface now reloads the antimatter count periodically
 - Added infinite mode to antimatter factory which sets factory capacity to the maximum (activate with CTRL+SHIFT+A)
+- The PulsePropulsion plugin was merged with the main FarFutureTechnologies plugin for easier maintenence
 - Added new ModuleChargeableEngine system
 -- Engine must be charged by a flow of EC for some time before being activated
 -- Engines using this method typically don't require as much EC during operation
+- ModuleAntimatterTank's timewarp compensation was removed
+- Added DynamicBatteryStorage component to distribution for timewarp EC management
 
 0.1.1
 -----
