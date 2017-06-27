@@ -60,12 +60,11 @@ namespace FarFutureTechnologies
             availableAM = AntimatterFactory.Instance.Antimatter;
          }
 
-         
+
 
          void RefreshAntimatterData(Vessel vessel)
          {
              antimatterTanks = new List<AntimatterContainer>();
-
              availableAM = AntimatterFactory.Instance.Antimatter;
 
             List<Part> parts = vessel.parts;
