@@ -118,7 +118,10 @@ namespace FarFutureTechnologies
           for (int i = 0; i < ship.Parts.Count; i++)
           {
             PartResource res =  ship.Parts[i].Resources.Get(id);
-            res.maxAmount = 0d;
+            if (res != null)
+            {
+                res.maxAmount = 0d;
+            }
 
           }
         }

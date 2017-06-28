@@ -7,7 +7,7 @@ using KSP.Localization;
 
 namespace FarFutureTechnologies
 {
-    public class ModuleChargeableEngine: PartModule
+    public class  ModuleChargeableEngine: PartModule
     {
         // Power used to charge the engine
         [KSPField(isPersistant = false)]
@@ -79,13 +79,7 @@ namespace FarFutureTechnologies
 
         public override string GetInfo()
         {
-          return Localizer.Format("#LOC_FFT_ModuleChargeableEngine_PartInfo", ContainmentCost.ToString("F1"), (DetonationKJPerUnit/1000f).ToString("F2"));
-        }
-
-        public override string GetInfo()
-        {
-          string msg = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_PartInfo",
-            ChargeRate.ToString("F2"), (ChargeGoal/ChargeRate).ToString("F0"));
+          string msg = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_PartInfo", ChargeRate.ToString("F2"), (ChargeGoal/ChargeRate).ToString("F0"));
           return msg;
         }
 
@@ -93,22 +87,31 @@ namespace FarFutureTechnologies
 
         void Start()
         {
-          Fields["RechargeStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Title");
-          Fields["ChargeStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Title");
+            if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
+            {
+                engine = this.GetComponent<ModuleEnginesFX>();
+                Fields["RechargeStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Title");
+                Fields["ChargeStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Title");
 
-          Events["Enable"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Event_Enable_Title");
-          Events["Disable"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Event_Disable_Title");
+                Events["Enable"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Event_Enable_Title");
+                Events["Disable"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Event_Disable_Title");
 
-          Actions["EnableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Action_EnableAction_Title");
-          Actions["DisableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Action_DisableAction_Title");
-          Actions["ToggleAction"].guiName = Localizer.Format("#LOC_ModuleChargeableEngine_Action_ToggleAction_Title");
+                Actions["EnableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Action_EnableAction_Title");
+                Actions["DisableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Action_DisableAction_Title");
+                Actions["ToggleAction"].guiName = Localizer.Format("#LOC_ModuleChargeableEngine_Action_ToggleAction_Title");
+            }
+            if (HighLogic.LoadedSceneIsFlight)
+            {
+                if (CurrentCharge >= ChargeGoal)
+                {
+                    SetEngineUI(true);
+                }
+                else
+                {
+                    SetEngineUI(false);
+                }
+            }
         }
-
-        void Awake()
-        {
-          engine = this.GetComponent<ModuleEnginesFX>();
-        }
-
         void FixedUpdate()
         {
           if (HighLogic.LoadedSceneIsFlight && engine != null)
@@ -117,9 +120,18 @@ namespace FarFutureTechnologies
             {
               DoRecharge();
             }
+              // iF the states don't match up, see if we need to change things
             if (engine.EngineIgnited != EngineOn)
             {
-
+                EvaluateEngineStateChange();
+            }
+              // If engine is on but dropped below a throttle setting, kill the engine
+            if (engine.EngineIgnited)
+            {
+                if (engine.requestedThrottle <= 0.01)
+                {
+                    OnShutdown();
+                }
             }
 
           }
@@ -127,7 +139,7 @@ namespace FarFutureTechnologies
 
         void EvaluateEngineStateChange()
         {
-          // Engine was turened on
+          // Engine was turned on
           if (engine.EngineIgnited && !EngineOn)
           {
               OnActive();
@@ -142,16 +154,26 @@ namespace FarFutureTechnologies
 
         void Update()
         {
+            if (HighLogic.LoadedSceneIsFlight)
+            {
+                if (EngineOn)
+                {
+                    RechargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Running");
+                    ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Running");
+                }
+                else
+                {
+                    if (!Charged && !Charging)
+                        RechargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Disabled");
+                }
 
-          if (EngineOn)
-          {
-            RechargeStatus = Localizer.Format("LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Running");
-            ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Running");
-          } else
-          {
-            if (!Charged && !Charging)
-                RechargeStatus = Localizer.Format("LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Disabled");
-          }
+                if (Events["Enable"].active == Charging || Events["Disable"].active != Charging)
+                {
+                    Events["Disable"].active = Charging;
+                    Events["Enable"].active = !Charging;
+               }
+            
+            }
 
         }
 
@@ -162,28 +184,33 @@ namespace FarFutureTechnologies
           CurrentCharge = Mathf.MoveTowards(CurrentCharge, ChargeGoal, (float)req);
 
           if (req > 0.0d)
-            RechargeStatus = Localizer.Format("LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Charging", ChargeRate.ToString("F2"));
+            RechargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Charging", ChargeRate.ToString("F2"));
           else
-            RechargeStatus = Localizer.Format("LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_NoPower");
+            RechargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_NoPower");
 
           ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Normal", (CurrentCharge/ChargeGoal * 100.0f).ToString("F1"));
           if (CurrentCharge >= ChargeGoal)
           {
-            RechargeStatus = Localizer.Format("LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Ready");
+            RechargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Ready");
             Charged = true;
             SetEngineUI(true);
           }
         }
 
+        
+
         public override void OnActive()
         {
-            if (!Charged && engine.EngineIgnited)
+            if (HighLogic.LoadedSceneIsFlight)
             {
-              KillEngine();
-            }
-            if (Charged && engine.EngineIgnited)
-            {
-              EngineOn = true;
+                if (!Charged && engine.EngineIgnited)
+                {
+                    KillEngine();
+                }
+                if (Charged && engine.EngineIgnited)
+                {
+                    EngineOn = true;
+                }
             }
         }
         public void OnShutdown()

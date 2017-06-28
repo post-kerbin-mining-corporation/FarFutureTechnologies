@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using PowerMonitor;
 using KSP.Localization;
 
 namespace FarFutureTechnologies
@@ -193,11 +192,8 @@ namespace FarFutureTechnologies
             // Show the containment status field if there is a cooling cost
               if (ContainmentCost > 0f)
             {
-              foreach (BaseField fld in base.Fields)
-                {
-                  Events["ContainmentStatus"].guiActive = true;
-
-                }
+              
+                Fields["ContainmentStatus"].guiActive = true;
 
               if (Events["Enable"].active == ContainmentEnabled || Events["Disable"].active != ContainmentEnabled)
                 {
@@ -208,10 +204,9 @@ namespace FarFutureTechnologies
           }
           if (HighLogic.LoadedSceneIsEditor)
           {
-                foreach (BaseField fld in base.Fields)
-                {
-                    Events["ContainmentStatus"].guiActive = true;
-                }
+            
+                Fields["ContainmentStatus"].guiActive = true;
+                
                 double max = GetMaxResourceAmount(FuelName);
                 ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Editor", (ContainmentCost * (float)(max)).ToString("F2"));
           }
@@ -301,7 +296,10 @@ namespace FarFutureTechnologies
 
 
               PartResource res = this.part.Resources.Get(PartResourceLibrary.Instance.GetDefinition(nm).id);
-              return res.amount;
+              if (res != null)
+                  return res.amount;
+              else
+                  return 0f;
           }
           protected double GetMaxResourceAmount(string nm)
           {
@@ -310,7 +308,10 @@ namespace FarFutureTechnologies
 
               PartResource res = this.part.Resources.Get(id);
 
-              return res.maxAmount;
+              if (res != null)
+                return res.maxAmount;
+              else
+                  return 0f;
           }
 
 

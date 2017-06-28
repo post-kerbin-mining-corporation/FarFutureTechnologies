@@ -27,7 +27,7 @@ namespace FarFutureTechnologies
                 }
                 else
                     return false;
-            }x
+            }
             else
             {
                 return false;

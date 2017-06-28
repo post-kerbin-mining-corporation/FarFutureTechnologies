@@ -31,6 +31,7 @@ namespace FarFutureTechnologies.UI
         System.Random randomizer;
         int windowIdentifier;
         int windowIdentifier2;
+        private UIResources resources;
         private static ApplicationLauncherButton stockToolbarButton = null;
         public UIResources GUIResources { get {return resources;}}
         public static AntimatterFactoryUI Instance { get; private set; }
@@ -39,22 +40,12 @@ namespace FarFutureTechnologies.UI
         {
             Utils.Log("[AM Factory UI]: Awake");
             Instance = this;
+            resources = new UIResources();
             GameEvents.onGUIApplicationLauncherReady.Add(OnGUIAppLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Add(OnGUIAppLauncherDestroyed);
         }
 
-        private void InitStyles()
-        {
-            scrollStyle = new GUIStyle(HighLogic.Skin.scrollView);
-            scrollBarStyle = new GUIStyle(HighLogic.Skin.verticalScrollbar);
-            scrollThumbStyle = new GUIStyle(HighLogic.Skin.verticalScrollbarThumb);
-
-
-            slider = new GUIStyle(HighLogic.Skin.horizontalSlider);
-            sliderThumb = new GUIStyle(HighLogic.Skin.horizontalSliderThumb);
-            // slider
-            initStyles = true;
-        }
+  
 
         public void Start()
         {
@@ -130,8 +121,6 @@ namespace FarFutureTechnologies.UI
 
         void OnUIDraw()
         {
-            if (!initStyles)
-                InitStyles();
 
             if (AntimatterFactory.Instance != null)
             {
@@ -155,9 +144,9 @@ namespace FarFutureTechnologies.UI
             float maxAM = (float)(AntimatterFactory.Instance.AntimatterMax);
             float rateAM = (float)(AntimatterFactory.Instance.AntimatterRate);
 
-            Rect barAreaRect = new Rect(10f, 0f, 200f, 40f);
+            Rect barAreaRect = new Rect(32f, 0f, 150f, 32f);
 
-            Vector2 barBackgroundSize = new Vector2(200, 20f);
+            Vector2 barBackgroundSize = new Vector2(150, 20f);
             Vector2 barForegroundSize = new Vector2(Mathf.Max(barBackgroundSize.x * (curAM / maxAM),8f), 18f);
 
             Rect barBackgroundRect = new Rect(0f, 10f, barBackgroundSize.x, barBackgroundSize.y);
@@ -165,23 +154,25 @@ namespace FarFutureTechnologies.UI
             Rect storageTextRect = new Rect(20f, 10f, 160f, 20f);
             Rect rateTextRect = new Rect(barBackgroundSize.x - 90f, 10f, 90f, 20f);
 
-            Rect factoryButtonRect = new Rect (50f, 35f, 150f, 20f);
-            Rect loadoutButtonRect = new Rect (50f, 35f, 150f, 20f);
+            Rect amIconRect = new Rect(0f, 0f, 32f, 32f);
+            Rect factoryButtonRect = new Rect (200f, 0f, 32f, 32f);
+            Rect loadoutButtonRect = new Rect (200f, 0f, 32f, 32f);
 
             GUI.BeginGroup(barAreaRect);
             GUI.Box(barBackgroundRect, "", GUIResources.GetStyle("bar_background"));
             GUI.color = GUIResources.GetColor("bar_blue");
-            GUI.Box(barForeroundRect, "", GUIResources.GetStyle("bar_foreground");
+            GUI.Box(barForeroundRect, "", GUIResources.GetStyle("bar_foreground"));
             GUI.color = Color.white;
 
             GUI.Label(storageTextRect, String.Format("<color=#ffffff>{0:F2} / {1:F0}</color>", curAM, maxAM), GUIResources.GetStyle("text_basic"));
             GUI.Label(rateTextRect, Localizer.Format("#LOC_FFT_AntimatterFactoryUI_MiniWindow_Rate", rateAM.ToString("F2")), GUIResources.GetStyle("text_label"));
 
             GUI.EndGroup();
+            GUI.DrawTextureWithTexCoords(amIconRect, GUIResources.GetIcon("antimatter").iconAtlas, GUIResources.GetIcon("antimatter").iconRect);
 
             if (HighLogic.LoadedScene == GameScenes.SPACECENTER)
             {
-                if (factoryButtonRect, "", GUIResources.GetStyle("button_overlaid")))
+                if (GUI.Button(factoryButtonRect, "", GUIResources.GetStyle("button_overlaid")))
                 {
                     ShowFactory();
                 }
@@ -238,7 +229,7 @@ namespace FarFutureTechnologies.UI
 
             // Tank display
             GUILayout.BeginVertical(GUIResources.GetStyle("block_background"));
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition,scrollBarStyle, scrollBarStyle, GUILayout.MinWidth(370f), GUILayout.MinHeight(250f));
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUIResources.GetStyle("scroll_bar"), GUIResources.GetStyle("scroll_bar"), GUILayout.MinWidth(370f), GUILayout.MinHeight(250f));
             for (int i = 0; i < AntimatterLoader.Instance.antimatterTanks.Count; i++)
             {
                 DrawAMContainer(AntimatterLoader.Instance.antimatterTanks[i]);
@@ -256,7 +247,7 @@ namespace FarFutureTechnologies.UI
 
             if (AntimatterLoader.Instance.usedAM < 0d)
             {
-                GUILayout.Label(Localizer.Format("#LOC_FFT_AntimatterFactoryUI_LoadoutWindow_LoadingResult_Refund", ()-AntimatterLoader.Instance.usedAM.ToString("F2"))), GUIResources.GetStyle("text_label"));
+                GUILayout.Label(Localizer.Format("#LOC_FFT_AntimatterFactoryUI_LoadoutWindow_LoadingResult_Refund", (-AntimatterLoader.Instance.usedAM).ToString("F2")), GUIResources.GetStyle("text_label"));
             } else if (AntimatterLoader.Instance.usedAM > AntimatterLoader.Instance.availableAM)
             {
                 GUILayout.Label(Localizer.Format("#LOC_FFT_AntimatterFactoryUI_LoadoutWindow_LoadingResult_NotEnough", AntimatterLoader.Instance.usedAM.ToString("F2")), GUIResources.GetStyle("text_label"));
@@ -351,13 +342,13 @@ namespace FarFutureTechnologies.UI
             GUI.BeginGroup(barAreaRect);
             GUI.Box(barBackgroundRect, "", GUIResources.GetStyle("bar_background"));
             GUI.color = GUIResources.GetColor("bar_blue");
-            GUI.Box(barForeroundRect, "", GUIResources.GetStyle("bar_foreground");
+            GUI.Box(barForeroundRect, "", GUIResources.GetStyle("bar_foreground"));
             GUI.color = Color.white;
 
 
-            GUI.Label(storageTextRect, Localizer.Format("#LOC_FFT_AntimatterFactoryUI_FactoryWindow_Storage"), curAM.ToString("F2"), maxAM.ToString("F2")),
+            GUI.Label(storageTextRect, Localizer.Format("#LOC_FFT_AntimatterFactoryUI_FactoryWindow_Storage", curAM.ToString("F2"), maxAM.ToString("F2")),
               GUIResources.GetStyle("text_label"));
-            GUI.Label(rateTextRect, Localizer.Format("#LOC_FFT_AntimatterFactoryUI_FactoryWindow_Rate"), rateAM.ToString("F2")), GUIResources.GetStyle("text_label"));
+            GUI.Label(rateTextRect, Localizer.Format("#LOC_FFT_AntimatterFactoryUI_FactoryWindow_Rate", rateAM.ToString("F2")), GUIResources.GetStyle("text_label"));
 
 
             GUI.EndGroup();
@@ -389,7 +380,7 @@ namespace FarFutureTechnologies.UI
             GUILayout.Label("<b>" + tank.part.partInfo.title +"</b>", GUIResources.GetStyle("text_basic"), GUILayout.MaxWidth(180f));
 
             GUILayout.BeginVertical();
-            tank.totalAmount = (double)GUILayout.HorizontalSlider((float)tank.totalAmount, 0f, (float)tank.resource.maxAmount, slider, sliderThumb, GUILayout.MinWidth(110f), GUILayout.MaxWidth(110f));
+            tank.totalAmount = (double)GUILayout.HorizontalSlider((float)tank.totalAmount, 0f, (float)tank.resource.maxAmount, GUIResources.GetStyle("slider"), GUIResources.GetStyle("slider_thumb"), GUILayout.MinWidth(110f), GUILayout.MaxWidth(110f));
             tank.requestedAmount = tank.totalAmount - tank.resource.amount;
             GUILayout.Label(String.Format("{0:F2} / {1:F2}", tank.totalAmount, tank.resource.maxAmount), GUIResources.GetStyle("text_label"));
             GUILayout.EndVertical();

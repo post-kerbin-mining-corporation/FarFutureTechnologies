@@ -68,7 +68,7 @@ namespace FarFutureTechnologies.UI
 
         // Window
         draftStyle = new GUIStyle(HighLogic.Skin.window);
-        draftStyle.padding = new RectOffset(draftStyle.padding.left, draftStyle.padding.right, 2, draftStyle.padding.bottom);
+        draftStyle.padding = new RectOffset(draftStyle.padding.left, draftStyle.padding.right, draftStyle.padding.bottom, draftStyle.padding.bottom);
         draftStyle.alignment = TextAnchor.UpperLeft;
         styleList.Add("window_main", new GUIStyle(draftStyle));
         // Toolbar window
@@ -115,6 +115,19 @@ namespace FarFutureTechnologies.UI
         draftStyle.normal.textColor = draftStyle.normal.textColor;
         draftStyle.fontSize = 12;
         styleList.Add("button_mini", new GUIStyle(draftStyle));
+
+        draftStyle = new GUIStyle(HighLogic.Skin.scrollView);
+        styleList.Add("scroll_area", new GUIStyle(draftStyle));
+        draftStyle = new GUIStyle(HighLogic.Skin.verticalScrollbarThumb);
+        styleList.Add("scroll_thumb", new GUIStyle(draftStyle));
+        draftStyle = new GUIStyle(HighLogic.Skin.verticalScrollbar);
+        styleList.Add("scroll_bar", new GUIStyle(draftStyle));
+
+        draftStyle = new GUIStyle(HighLogic.Skin.horizontalSlider);
+        styleList.Add("slider", new GUIStyle(draftStyle));
+
+        draftStyle = new GUIStyle(HighLogic.Skin.horizontalSliderThumb);
+        styleList.Add("slider_thumb", new GUIStyle(draftStyle));
 
         // Box
         draftStyle = new GUIStyle(HighLogic.Skin.textArea);

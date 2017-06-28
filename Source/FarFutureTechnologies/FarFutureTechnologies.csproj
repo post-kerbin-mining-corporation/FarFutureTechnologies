@@ -38,10 +38,6 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\..\..\..\..\Games\Steam\SteamApps\common\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="PowerMonitor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\GameData\FarFutureTechnologies\Plugins\PowerMonitor.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,16 +54,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AntimatterFactory.cs" />
-    <Compile Include="AntimatterFactoryUI.cs" />
+    <Compile Include="UI\AntimatterFactoryUI.cs" />
     <Compile Include="AntimatterLoader.cs" />
     <Compile Include="FarFutureTechnologyPersistence.cs" />
     <Compile Include="FarFutureTechnologySettings.cs" />
     <Compile Include="ModuleAntimatterTank.cs" />
     <Compile Include="ModuleChargeableEngine.cs" />
     <Compile Include="ModuleEngineHeatDisplay.cs" />
+    <Compile Include="ModulePulseEngineAnimator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\UIResources.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
