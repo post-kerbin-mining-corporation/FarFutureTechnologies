@@ -37,10 +37,12 @@ namespace FarFutureTechnologies
         [KSPField(isPersistant = true)]
         public int PowerUsePriority = 0;
 
+        [KSPField(isPersistant = true)]
+        public float ContainmentCostCurrent = 0f;
+
         // PRIVATE
         private double fuelAmount = 0.0;
         private double maxFuelAmount = 0.0;
-        private double totalPowerCost = 0.0;
 
         // UI FIELDS/ BUTTONS
         // Status string
@@ -101,48 +103,19 @@ namespace FarFutureTechnologies
                     DetonationOccuring = false;
                     DetonationStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Contained");
                     ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Contained", ContainmentCost.ToString("F2"));
+                    ContainmentCostCurrent = ContainmentCost;
                 }
                 else
                 {
                     DetonationOccuring = true;
                     DetonationStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Uncontained", DetonationRate.ToString("F2"));
                     ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Uncontained");
+                    ContainmentCostCurrent = ContainmentCost;
                 }
+            } else
+            {
+              ContainmentCostCurrent = 0f;
             }
-        }
-
-        // All AM
-        public int GetPriority()
-        {
-          return PowerUsePriority;
-        }
-
-        // Gets the canonical power usage
-        public double GetPowerUsage()
-        {
-            return totalPowerCost;
-        }
-
-        // Gets the current power usage
-        public double CalculatePowerUsage()
-        {
-          if (ContainmentEnabled)
-          {
-            return totalPowerCost;
-          }
-          return 0d;
-        }
-
-        // Does processing at "low" warp
-        public void ProcessLowWarp()
-        {
-          ConsumeCharge();
-        }
-
-        // Does processing at "high" warp
-        public void ProcessHighWarp()
-        {
-          ConsumeCharge();
         }
 
         public void Start()
@@ -161,7 +134,6 @@ namespace FarFutureTechnologies
 
               fuelAmount = GetResourceAmount(FuelName);
               maxFuelAmount = GetMaxResourceAmount(FuelName);
-              totalPowerCost = maxFuelAmount*ContainmentCost;
 
               // Catchup
               DoCatchup();
@@ -192,7 +164,7 @@ namespace FarFutureTechnologies
             // Show the containment status field if there is a cooling cost
               if (ContainmentCost > 0f)
             {
-              
+
                 Fields["ContainmentStatus"].guiActive = true;
 
               if (Events["Enable"].active == ContainmentEnabled || Events["Disable"].active != ContainmentEnabled)
@@ -204,9 +176,9 @@ namespace FarFutureTechnologies
           }
           if (HighLogic.LoadedSceneIsEditor)
           {
-            
+
                 Fields["ContainmentStatus"].guiActive = true;
-                
+
                 double max = GetMaxResourceAmount(FuelName);
                 ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Editor", (ContainmentCost * (float)(max)).ToString("F2"));
           }
@@ -243,6 +215,8 @@ namespace FarFutureTechnologies
                     }
                   }
 
+                  ConsumeCharge();
+
                 if (DetonationOccuring)
                 {
                     DoDetonation();
@@ -258,7 +232,7 @@ namespace FarFutureTechnologies
 
           if (ContainmentEnabled && ContainmentCost > 0f)
           {
-              double chargeRequest = totalPowerCost * TimeWarp.fixedDeltaTime;
+              double chargeRequest = ContainmentCost * TimeWarp.fixedDeltaTime;
 
               double req = part.RequestResource("ElectricCharge", chargeRequest);
               //Debug.Log(req.ToString() + " rec, wanted "+ chargeRequest.ToString());
@@ -272,6 +246,9 @@ namespace FarFutureTechnologies
               {
                   SetPoweredState(false);
               }
+          } else
+          {
+
           }
 
         }
