@@ -11,9 +11,17 @@ namespace FarFutureTechnologies
     public class ModuleProfilingScanner: PartModule
     {
 
-        // Range of this scanner
-        [KSPField(isPersistant = false)]
+        // Current range setting of this scanner
+        [KSPField(isPersistant = true, guiActive = true, guiName = "Profiler Range"), UI_FloatRange(minValue = 50000f, maxValue = 250000f, stepIncrement = 10000f)]
         public float ScanRange = 250000f;
+
+        // Minimum Range that can be set
+        [KSPField(isPersistant = false)]
+        public float MinimumRange = 50000f;
+
+        // Maximum range to be set
+        [KSPField(isPersistant = false)]
+        public float MaximumRange = 100000f;
 
         // How frequently to sample a profile
         [KSPField(isPersistant = false)]
@@ -22,6 +30,10 @@ namespace FarFutureTechnologies
         // Resources to scan for
         [KSPField(isPersistant = false)]
         public string ScannedResources = "";
+
+        // Scan reults
+        [KSPField(isPersistant = false, guiActive = true, guiName = "Local")]
+        public string LocalResults;
 
         // Events
         [KSPEvent(guiActive = true, guiName = "Analyze Profile", active = true)]
@@ -66,6 +78,16 @@ namespace FarFutureTechnologies
           if (HighLogic.LoadedSceneIsFlight)
           {
               scannedResources = SplitString(ScannedResources);
+
+              var range = (UI_FloatRange)this.Fields["ScanRange"].uiControlFlight;
+              range.minValue = MinimumRange;
+              range.maxValue = MaximumTemperatureRange;
+
+              Fields["LocalResults"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Field_LocalResults_Title");
+              Fields["ScanRange"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Field_ScanRange_Title");
+
+              Events["Scan"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Event_Scan_Title");
+              Actions["ScanAction"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Action_Scan_Title");
           }
         }
         // Profiles all resources
@@ -77,25 +99,25 @@ namespace FarFutureTechnologies
                 Utils.Log(String.Format("[ModuleProfilingScanner]: Taking profile for {0}", scannedResources[i]));
                 profiledResources.Add(TakeResourceProfile(scannedResources[i]));
             }
-            ProfilingUI.Instance.ShowProfileWindow(profiledResources); 
+            ProfilingUI.Instance.ShowProfileWindow(profiledResources);
         }
         // Profiles a specific resource
         protected ResourceProfile TakeResourceProfile(string resourceName)
         {
             float distance = 0f;
-            
+
             Dictionary<float,float> samples = new Dictionary<float,float>();
             while (distance <= ScanRange)
             {
-                 
+
                 Vector3 pos = part.partTransform.position + part.partTransform.up.normalized * distance;
-                samples.Add(distance, Sample(resourceName, pos));
+                samples.Add(distance, Sample(resourceName, pos, true));
 
                 distance += ScanInterval;
             }
             return new ResourceProfile(resourceName, samples);
         }
-        protected float Sample(string resourceName, Vector3 worldPos)
+        protected float Sample(string resourceName, Vector3 worldPos, bool useAtmo)
         {
             float abundance = 0f;
             AbundanceRequest req = new AbundanceRequest();
@@ -105,7 +127,6 @@ namespace FarFutureTechnologies
 
             part.vessel.mainBody.GetLatLonAlt(new Vector3d(worldPos.x, worldPos.y, worldPos.z), out lat, out lon, out alt);
 
-            
             req.BodyId = FlightGlobals.GetBodyIndex(part.vessel.mainBody);
             req.ResourceType = HarvestTypes.Atmospheric;
             req.ResourceName = resourceName;
@@ -113,7 +134,8 @@ namespace FarFutureTechnologies
             req.Altitude = alt;
             req.Longitude = lon;
             abundance += ResourceMap.Instance.GetAbundance(req);
-            abundance *= (float)part.vessel.mainBody.GetPressure(alt);
+            if (useAtmo)
+                abundance *= (float)part.vessel.mainBody.GetPressure(alt);
             // Sample exo
             req.ResourceType = HarvestTypes.Exospheric;
             abundance += ResourceMap.Instance.GetAbundance(req);
@@ -125,9 +147,14 @@ namespace FarFutureTechnologies
         {
             if (HighLogic.LoadedSceneIsFlight)
             {
-
-
-
+              LocalResults = "";
+                for (int i = 0; i < scannedResources.Count; i++)
+                {
+                  float abundance = Sample(scannedResources[i], part.partTransform.position, false);
+                  LocalResults += Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Field_LocalResults_Scanning", scannedResources[i], abundance.ToString("F3"));
+                  if (i < scannedResources.Count - 1)
+                    LocalResults += "\n";
+                }
             }
         }
         private List<string> SplitString(string toSplit)
