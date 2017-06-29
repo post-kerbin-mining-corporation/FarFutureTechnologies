@@ -86,6 +86,12 @@ namespace FarFutureTechnologies.UI
         draftStyle.normal.textColor = new Color(107f / 255f, 201f / 255f, 238f / 255f);
         draftStyle.padding = new RectOffset(2, 2, 2, 2);
         styleList.Add("text_label", new GUIStyle(draftStyle));
+        // Basic of all texts
+        draftStyle = new GUIStyle(draftStyle);
+        draftStyle.alignment = TextAnchor.UpperRight;
+        draftStyle.normal.textColor = new Color(255f / 255f, 255f / 255f, 255f / 255f);
+        draftStyle.padding = new RectOffset(2, 2, 2, 2);
+        styleList.Add("text_colored", new GUIStyle(draftStyle));
         // Progress bar
         // background
         draftStyle = new GUIStyle(HighLogic.Skin.textField);
@@ -141,7 +147,7 @@ namespace FarFutureTechnologies.UI
         draftStyle.stretchWidth = true;
         styleList.Add("header_basic", new GUIStyle(draftStyle));
         // Header 2
-        draftStyle.alignment = TextAnchor.MiddleLeft;
+        draftStyle.alignment = TextAnchor.MiddleCenter;
         styleList.Add("header_center", new GUIStyle(draftStyle));
 
         // Text area
@@ -172,6 +178,15 @@ namespace FarFutureTechnologies.UI
       colorList.Add("cancel_color", new Color(208f / 255f, 131f / 255f, 86f / 255f));
       colorList.Add("accept_color", new Color(209f / 255f, 250f / 255f, 146f / 255f));
       colorList.Add("bar_blue", new Color(107f / 255f, 201f / 255f, 238f / 255f));
+
+      colorList.Add("profile_axis", new Color(200f / 255f, 200f / 255f, 200f / 255f));
+      colorList.Add("profile_0", new Color(0f / 255f, 255f / 255f, 0f / 255f));
+      colorList.Add("profile_1", new Color(255f / 255f, 0f / 255f, 0f / 255f));
+      colorList.Add("profile_2", new Color(0f / 255f, 0f / 255f, 255f / 255f));
+      colorList.Add("profile_3", new Color(238f / 255f, 66f / 255f, 244f / 255f));
+      colorList.Add("profile_4", new Color(66f / 255f, 255f / 255f, 232f / 255f));
+      colorList.Add("profile_5", new Color(2550f / 255f, 232f / 255f, 66f / 255f));
+
       //colorList.Add("readout_green", new Color(203f / 255f, 238f / 255f, 115f / 255f));
     }
   }
