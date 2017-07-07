@@ -11,7 +11,7 @@ namespace FarFutureTechnologies.UI
     [KSPAddon(KSPAddon.Startup.Flight, false)]
   public class ProfilingUI:MonoBehaviour
   {
-      private Vector2 plotTextureSize = new Vector2(400, 200);
+      private Vector2 plotTextureSize = new Vector2(1600, 800);
 
       private Texture2D graphTexture;
       private bool showWindow = false;
@@ -30,13 +30,13 @@ namespace FarFutureTechnologies.UI
           drawnProfiles = profiles;
           GeneratePlotTexture();
         showWindow = true;
-        
-        
+
+
 
       }
        public void Awake()
         {
-         
+
             Instance = this;
             resources = new UIResources();
            profileColors = new Color[6];
@@ -68,12 +68,12 @@ namespace FarFutureTechnologies.UI
             {
                 windowPos = GUI.Window(windowIdentifier, windowPos, DrawPlottingWindow, "", GUIResources.GetStyle("window_toolbar"));
             }
-           
+
         }
 
         void DrawPlottingWindow(int WindowID)
         {
-            
+
             Rect closeRect = new Rect(350f, 10f, 48f, 48f);
             Rect plotGroupRect = new Rect(10f,50f, 330f, 155f);
 
@@ -81,8 +81,8 @@ namespace FarFutureTechnologies.UI
             GUI.Label(new Rect(10f, 10f, 330f, 32f), "Spectrometer Profile", GUIResources.GetStyle("header_center"));
 
             DrawPlot(plotGroupRect);
-            
-            
+
+
             if (GUI.Button(closeRect, "X", GUIResources.GetStyle("button_basic")))
                 showWindow = false;
         }
@@ -90,10 +90,10 @@ namespace FarFutureTechnologies.UI
         void DrawPlot(Rect group)
         {
             Rect plotRect = new Rect(40f, 10f, 275f, 120f);
-            
+
             GUI.BeginGroup(group, GUIResources.GetStyle("block_background"));
             GUI.DrawTexture(plotRect, graphTexture);
-            
+
             int colorIndex = 0;
             foreach (ResourceProfile profile in drawnProfiles)
             {
@@ -119,17 +119,17 @@ namespace FarFutureTechnologies.UI
 
           GenerateAxes();
           GenerateData();
-          
+
 
           graphTexture.Apply();
       }
 
       void GenerateAxes()
       {
-          
+
           Dictionary<float, float> xAxis1 = new Dictionary<float, float>();
           Dictionary<float, float> xAxis2 = new Dictionary<float, float>();
-          
+
           xAxis1.Add(0f, 0f);
           xAxis1.Add(plotTextureSize.x, 0f);
           xAxis2.Add(0f, plotTextureSize.y-1);
@@ -156,17 +156,18 @@ namespace FarFutureTechnologies.UI
       // Draw a line into a texture2D
       void CreateLine ( Texture2D tex, Dictionary<float, float> vals, Color col, float xScale, float yScale) {
 
-          FloatCurve curve = new FloatCurve();
-            foreach (var item in vals) {
-                curve.Add(item.Key * xScale, item.Value * yScale);
+            PlotLine curve = new PlotLine(vals);
+            //FloatCurve curve = new FloatCurve();
+            //foreach (var item in vals) {
+            //    curve.Add(item.Key * xScale, item.Value * yScale);
                 //tex.SetPixel((int)(xScale*item.Key), (int)(yScale*item.Value), col);
-            }
+            //}
             for (int i = 0; i < tex.width-1; i++)
             {
-                tex.SetPixel(i, (int)curve.Evaluate(i), col);
-                //tex.SetPixel(i, (int)curve.Evaluate(i+1), col);
-                //tex.SetPixel(i+1, (int)curve.Evaluate(i + 1), col);
-                //tex.SetPixel(i, (int)curve.Evaluate(i), col);
+                tex.SetPixel(i, (int)(curve.Evaluate(i*xScale)*yScale), col);
+                tex.SetPixel(i, (int)(curve.Evaluate(i*xScale+1)*yScale), col);
+                tex.SetPixel(i+1, (int)(curve.Evaluate(i*xScale + 1)*yScale), col);
+                tex.SetPixel(i, (int)(curve.Evaluate(i*xScale)*yScale), col);
             }
       }
       void FillTexture(Texture2D tex, Color col)
@@ -180,6 +181,36 @@ namespace FarFutureTechnologies.UI
           tex.Apply();
       }
 
+      public class PlotLine
+      {
+        float[] xVals;
+        float[] yVals;
+
+        public PlotLine (Dictionary<float, float> vals)
+        {
+          xVals = vals.Keys.ToArray();
+          yVals = vals.Values.ToArray();
+        }
+        public float Evaluate(float x)
+        {
+          int lowerIndex = ClosestLower(x);
+          int higherIndex = i+1;
+
+          float m = (yVals[higherIndex] - yVals[lowerIndex])/(xVals[higherIndex] - xVals[lowerIndex]);
+          y = m * x + yVals[lowerIndex]
+        }
+
+        int ClosestLower(float x)
+        {
+          for (int i = 1; i <xVals.Length; i++)
+          {
+            if (xVals[i-1] <= x && xVals[i] >= x)
+              return i-1;
+          }
+          return 0;
+        }
+
+      }
   }
 
 
