@@ -194,10 +194,10 @@ namespace FarFutureTechnologies.UI
         public float Evaluate(float x)
         {
           int lowerIndex = ClosestLower(x);
-          int higherIndex = i+1;
+          int higherIndex = lowerIndex+1;
 
           float m = (yVals[higherIndex] - yVals[lowerIndex])/(xVals[higherIndex] - xVals[lowerIndex]);
-          y = m * x + yVals[lowerIndex]
+          return m * x + yVals[lowerIndex];
         }
 
         int ClosestLower(float x)

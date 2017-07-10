@@ -21,7 +21,10 @@ namespace FarFutureTechnologies
 
           public ProfileableResource(ConfigNode node)
           {
-
+              node.TryGetValue("resourceName", ref resourceName);
+              node.TryGetValue("noiseMax", ref noiseMax);
+              node.TryGetValue("noiseMin", ref noiseMin);
+              node.TryGetValue("useAtmo", ref useAtmo);
           }
 
         }
@@ -62,7 +65,6 @@ namespace FarFutureTechnologies
         // Private
         private List<ResourceProfile> profiledResources;
         private List<ProfileableResource> scannableResources;
-        System.Random randomizer;
 
         public string GetModuleTitle()
         {
@@ -85,20 +87,31 @@ namespace FarFutureTechnologies
           return msg;
         }
 
-        public void Start()
+        public override void  OnStart(PartModule.StartState state)
         {
-          if (HighLogic.LoadedSceneIsFlight)
-          {
-              var range = (UI_FloatRange)this.Fields["ScanRange"].uiControlFlight;
-              range.minValue = MinimumRange;
-              range.maxValue = MaximumTemperatureRange;
+            Fields["LocalResults"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Field_LocalResults_Title");
+            Fields["ScanRange"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Field_ScanRange_Title");
 
-              Fields["LocalResults"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Field_LocalResults_Title");
-              Fields["ScanRange"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Field_ScanRange_Title");
+            Events["Scan"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Event_Scan_Title");
+            Actions["ScanAction"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Action_Scan_Title");
+            if (scannableResources == null || scannableResources.Count == 0)
+            {
+                  
+                ConfigNode node = GameDatabase.Instance.GetConfigs("PART").
+                    Single(c => part.partInfo.name == c.name).config.
+                    GetNodes("MODULE").Single(n => n.GetValue("name") == moduleName);
+                Utils.Log("[ModuleProfilingScanner]: Loaded node " + node.ToString());
+                OnLoad(node);
+            }
+            if (HighLogic.LoadedSceneIsFlight)
+            {
+             
+                var range = (UI_FloatRange)this.Fields["ScanRange"].uiControlFlight;
+                range.minValue = MinimumRange;
+                range.maxValue = MaximumRange;
 
-              Events["Scan"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Event_Scan_Title");
-              Actions["ScanAction"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Action_Scan_Title");
-          }
+             
+            }
         }
         public override void OnLoad(ConfigNode node)
         {
@@ -109,12 +122,14 @@ namespace FarFutureTechnologies
             for (int i=0; i < varNodes.Length; i++)
             {
               scannableResources.Add(new ProfileableResource(varNodes[i]));
+              Utils.Log("[ModuleProfilingScanner]: Added a new resource");
             }
         }
         // Profiles all resources
         protected void TakeProfile()
         {
             profiledResources = new List<ResourceProfile>();
+            
             for (int i = 0; i < scannableResources.Count; i++)
             {
                 Utils.Log(String.Format("[ModuleProfilingScanner]: Taking profile for {0}", scannableResources[i].resourceName));
@@ -129,6 +144,9 @@ namespace FarFutureTechnologies
 
             Dictionary<float,float> samples = new Dictionary<float,float>();
             float scanInterval = (ScanRange - MinimumRange)/ScanCount;
+
+            Utils.Log(String.Format("[ModuleProfilingScanner]: Scan Interval {0}", scanInterval));
+
             while (distance <= ScanRange)
             {
                 float fracDist = Mathf.Clamp01((distance - MinimumRange)/(MaximumRange- MinimumRange));
@@ -136,9 +154,9 @@ namespace FarFutureTechnologies
                 Vector3 pos = part.partTransform.position + part.partTransform.up.normalized * distance;
                 samples.Add(distance, Sample(resource, pos, noise));
 
-                distance += scanInterval;
+                distance = distance + scanInterval;
             }
-            return new ResourceProfile(resourceName, samples);
+            return new ResourceProfile(resource.resourceName, samples);
         }
         protected float Sample(ProfileableResource resource, Vector3 worldPos, float noiseScalar)
         {
@@ -158,13 +176,13 @@ namespace FarFutureTechnologies
             req.Longitude = lon;
             abundance += ResourceMap.Instance.GetAbundance(req);
             if (resource.useAtmo)
-                abundance *= (float)part.vessel.mainBody.GetPressure(alt);
+                abundance = abundance * (float)part.vessel.mainBody.GetPressure(alt);
 
             // Sample exo
             req.ResourceType = HarvestTypes.Exospheric;
-            abundance += ResourceMap.Instance.GetAbundance(req);
-            abundance *= noiseScalar * Random.Range(-1.0f, 1.0f);
-            Utils.Log(String.Format("[ModuleProfilingScanner]: Sampling position {0}, geocentric alt {1}, lat {2} lon {3}\n Result: {4}", worldPos.ToString(), alt, lat, lon, abundance));
+            abundance = abundance + ResourceMap.Instance.GetAbundance(req);
+            abundance = abundance + noiseScalar * UnityEngine.Random.Range(-1.0f, 1.0f);
+            Utils.Log(String.Format("[ModuleProfilingScanner]: Sampling position {0}, geocentric alt {1}, lat {2} lon {3}\n Noise: {4} Result: {5}", worldPos.ToString(), alt, lat, lon, noiseScalar, abundance));
             return abundance;
         }
 
@@ -175,8 +193,8 @@ namespace FarFutureTechnologies
               LocalResults = "";
                 for (int i = 0; i < scannableResources.Count; i++)
                 {
-                  float abundance = Sample(scannableResources[i], part.partTransform.position, 0.0f);
-                  LocalResults += Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Field_LocalResults_Scanning", scannableResources[i].resourceName, abundance.ToString("F3"));
+                  //float abundance = Sample(scannableResources[i], part.partTransform.position, 0.0f);
+                  //LocalResults += Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Field_LocalResults_Scanning", scannableResources[i].resourceName, abundance.ToString("F3"));
                   if (i < scannableResources.Count - 1)
                     LocalResults += "\n";
                 }

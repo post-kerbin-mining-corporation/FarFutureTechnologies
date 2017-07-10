@@ -9,12 +9,17 @@ namespace FarFutureTechnologies
 {
     public class ModuleMultiLengthEngine: PartModule
     {
-      public string SelectedConfig = "Size";
+        [KSPField(isPersistant = true)]
+      public int SelectedConfigIndex = 0;
+        [KSPField(isPersistant = false)]
+      public string NozzleTransform;
 
+      private Transform nozzle;
       private PartModule b9PartModule;
       private ModuleEnginesFX engine;
       private List<LengthConfiguration> lengthConfigs;
 
+        [System.Serializable]
       public class LengthConfiguration
       {
         public string subtypeName;
@@ -22,31 +27,56 @@ namespace FarFutureTechnologies
         public float minThrust ;
         public float maxThrust ;
         public float heatProduction;
+        public Vector3 localPosition;
 
         public List<Propellant> propellants;
 
         public LengthConfiguration(ConfigNode node)
         {
+            node.TryGetValue("subtypeName", ref subtypeName);
+            node.TryGetValue("minThrust", ref minThrust);
+            node.TryGetValue("maxThrust", ref maxThrust);
+            node.TryGetValue("heatProduction", ref heatProduction );
+
+            
+            string str = "";
+            node.TryGetValue("NozzlePosition", ref str);
+            string[] strSplit = str.Split(","[0]);
+            localPosition = new Vector3(float.Parse(strSplit[0]),
+                float.Parse(strSplit[1]),
+                float.Parse(strSplit[2]));
+
+            atmosphereCurve = Utils.GetValue(node, "atmosphereCurve", new FloatCurve());
           ConfigNode[] varNodes = node.GetNodes("PROPELLANT");
           propellants = new List<Propellant>();
           for (int i=0; i < varNodes.Length; i++)
           {
             Propellant p = new Propellant();
-            p.OnLoad(varNodes[i]);
+            p.Load(varNodes[i]);
             propellants.Add(p);
           }
         }
 
       }
-      private void Start()
+      public void  Start()
       {
+          
         if (HighLogic.LoadedSceneIsFlight || HighLogic.LoadedSceneIsEditor)
         {
+            if (lengthConfigs == null || lengthConfigs.Count == 0)
+            {
+                ConfigNode node = GameDatabase.Instance.GetConfigs("PART").
+                    Single(c => part.partInfo.name == c.name).config.
+                    GetNodes("MODULE").Single(n => n.GetValue("name") == moduleName);
+                Utils.Log(node.ToString());
+                OnLoad(node);
+            }
+          SetupTransform();  
           SetupB9();
           SetupEngines();
           if (b9PartModule != null && engine != null)
           {
-            AssignParameters(SelectedConfig);
+            SelectLengthConfig(SelectedConfigIndex);
           }
         }
       }
@@ -56,10 +86,13 @@ namespace FarFutureTechnologies
         {
           if (b9PartModule != null && engine != null)
           {
-            if (b9PartModule.Fields.GetValue("currentSubtypeName").ToString() != currentSubtypeName)
-            {
-                SelectLengthConfig(b9PartModule.Fields.GetValue("currentSubtypeName").ToString());
-            }
+              int result = (int)b9PartModule.Fields.GetValue("currentSubtypeIndex");
+            
+              if (result != SelectedConfigIndex)
+              {
+                  SelectLengthConfig(result);
+              }
+            
           }
         }
       }
@@ -75,9 +108,18 @@ namespace FarFutureTechnologies
           }
       }
 
+      private void SetupTransform()
+      {
+          Utils.LogWarning(String.Format("{0}", NozzleTransform));
+          nozzle = part.FindModelTransform(NozzleTransform);
+          if (nozzle == null)
+          {
+              Utils.LogWarning(String.Format("[ModuleMultiLengthEngine]: Could not find nozzle Transform"));
+          }
+      }
       private void SetupEngines()
       {
-        engine = this.GetComponent<ModuleEnginesFX();
+        engine = this.GetComponent<ModuleEnginesFX>();
         if (engine == null)
         {
           Utils.LogWarning(String.Format("[ModuleMultiLengthEngine]: Could not find engine Module"));
@@ -89,7 +131,7 @@ namespace FarFutureTechnologies
         for (int j = part.Modules.Count - 1; j >= 0; --j)
         {
             PartModule pm = part.Modules[j];
-            if (pm.moduleName = "ModuleB9PartSwitch")
+            if (pm.moduleName == "ModuleB9PartSwitch")
                 b9PartModule = pm;
         }
         if (b9PartModule == null)
@@ -99,16 +141,13 @@ namespace FarFutureTechnologies
 
       }
 
-      private void SelectLengthConfig(string configName)
+      private void SelectLengthConfig(int configIndex)
       {
-        for (int i = 0 ; i < lengthConfigs.Count;i++)
-        {
-          if (configName == lengthConfigs[i].subtypeName)
-          {
-            AssignParameters(lengthConfigs[i]);
-            SelectedConfig = configName;
-          }
-        }
+        
+            AssignParameters(lengthConfigs[configIndex]);
+            SelectedConfigIndex = configIndex;
+          
+        
       }
       private void AssignParameters(LengthConfiguration config)
       {
@@ -116,12 +155,16 @@ namespace FarFutureTechnologies
         engine.maxThrust = config.maxThrust;
         engine.minThrust = config.minThrust;
         engine.heatProduction = config.heatProduction;
-
+        Utils.Log(nozzle.ToString());
+        Utils.Log(config.localPosition.ToString());
+        Utils.Log(nozzle.localPosition.ToString());
+        nozzle.localPosition = config.localPosition;
+        Utils.Log(nozzle.localPosition.ToString());
         for (int i =0; i< engine.propellants.Count; i++)
         {
           for (int j = 0; j < config.propellants.Count; j++)
           {
-            if (engine.propellants[i].name == config.propellants[j])
+            if (engine.propellants[i].name == config.propellants[j].name)
             {
               engine.propellants[i].ratio = config.propellants[j].ratio;
             }

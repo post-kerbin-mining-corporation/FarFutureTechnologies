@@ -115,6 +115,29 @@ namespace FarFutureTechnologies
                     return val;
             }
             return defaultValue;
+        }// Based on some Firespitter code by Snjo
+        public static FloatCurve GetValue(ConfigNode node, string nodeID, FloatCurve defaultValue)
+        {
+            if (node.HasNode(nodeID))
+            {
+                FloatCurve theCurve = new FloatCurve();
+                ConfigNode[] nodes = node.GetNodes(nodeID);
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    string[] valueArray = nodes[i].GetValues("key");
+
+                    for (int l = 0; l < valueArray.Length; l++)
+                    {
+                        string[] splitString = valueArray[l].Split(' ');
+                        Vector2 v2 = new Vector2(float.Parse(splitString[0]), float.Parse(splitString[1]));
+                        theCurve.Add(v2.x, v2.y, 0, 0);
+                    }
+                }
+                Debug.Log(theCurve.Evaluate(0f));
+                return theCurve;
+            }
+            Debug.Log("default");
+            return defaultValue;
         }
     }
 }
