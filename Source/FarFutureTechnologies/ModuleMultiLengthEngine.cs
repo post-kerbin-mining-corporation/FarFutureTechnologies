@@ -19,7 +19,8 @@ namespace FarFutureTechnologies
       private ModuleEnginesFX engine;
       private List<LengthConfiguration> lengthConfigs;
 
-        [System.Serializable]
+      // Represents a length configuration
+      [System.Serializable]
       public class LengthConfiguration
       {
         public string subtypeName;
@@ -38,7 +39,6 @@ namespace FarFutureTechnologies
             node.TryGetValue("maxThrust", ref maxThrust);
             node.TryGetValue("heatProduction", ref heatProduction );
 
-            
             string str = "";
             node.TryGetValue("NozzlePosition", ref str);
             string[] strSplit = str.Split(","[0]);
@@ -58,9 +58,26 @@ namespace FarFutureTechnologies
         }
 
       }
+
+      public string GetModuleTitle()
+      {
+          return "Reaction Chamber";
+      }
+      public override string GetModuleDisplayName()
+      {
+          return Localizer.Format("#LOC_FFT_ModuleMultiLengthEngine_ModuleName");
+      }
+
+      public override string GetInfo()
+      {
+
+        string msg = Localizer.Format("##LOC_FFT_ModuleMultiLengthEngine_PartInfo"); ;
+        return msg;
+      }
+
       public void  Start()
       {
-          
+
         if (HighLogic.LoadedSceneIsFlight || HighLogic.LoadedSceneIsEditor)
         {
             if (lengthConfigs == null || lengthConfigs.Count == 0)
@@ -71,28 +88,30 @@ namespace FarFutureTechnologies
                 Utils.Log(node.ToString());
                 OnLoad(node);
             }
-          SetupTransform();  
+
+          SetupTransform();
           SetupB9();
           SetupEngines();
+
           if (b9PartModule != null && engine != null)
           {
             SelectLengthConfig(SelectedConfigIndex);
           }
         }
       }
+
       private void FixedUpdate()
       {
         if (HighLogic.LoadedSceneIsFlight || HighLogic.LoadedSceneIsEditor)
         {
           if (b9PartModule != null && engine != null)
           {
+              // Monitor for a change in subtype
               int result = (int)b9PartModule.Fields.GetValue("currentSubtypeIndex");
-            
               if (result != SelectedConfigIndex)
               {
                   SelectLengthConfig(result);
               }
-            
           }
         }
       }
@@ -138,28 +157,23 @@ namespace FarFutureTechnologies
         {
           Utils.LogWarning(String.Format("[ModuleMultiLengthEngine]: Could not find B9PartSwitch Module"));
         }
-
       }
 
       private void SelectLengthConfig(int configIndex)
       {
-        
+          Utils.LogWarning(String.Format("[ModuleMultiLengthEngine]: Selected config {0}", lengthConfigs[configIndex].subtypeName));
             AssignParameters(lengthConfigs[configIndex]);
             SelectedConfigIndex = configIndex;
-          
-        
       }
+
       private void AssignParameters(LengthConfiguration config)
       {
         engine.atmosphereCurve = config.atmosphereCurve;
         engine.maxThrust = config.maxThrust;
         engine.minThrust = config.minThrust;
         engine.heatProduction = config.heatProduction;
-        Utils.Log(nozzle.ToString());
-        Utils.Log(config.localPosition.ToString());
-        Utils.Log(nozzle.localPosition.ToString());
+
         nozzle.localPosition = config.localPosition;
-        Utils.Log(nozzle.localPosition.ToString());
         for (int i =0; i< engine.propellants.Count; i++)
         {
           for (int j = 0; j < config.propellants.Count; j++)

@@ -1,23 +1,42 @@
 0.2.0
 -----
 - KSP 1.3
+- Updated bundled MM to 2.8.1
+- Updated bundled CRP to 0.7.1
+- Updated bundled B9PartSwitch to 1.9.0
 - KSP 1.3 localization support for all parts and plugin components
-- Lots of minor improvements to the UI components
+- Lots of improvements to UI components
 - Z-Pinch engines received nicknames
 - Various changes to nomenclature of engines for better VAB sorting
-- Mass ratio of He3/D tanks was normalized to 6 (same as all cryogenic fuels in other mods)
+- Mass ratio of He3/D tanks was normalized to 6 (same as all cryogenic fuels in my other mods)
 - Fixed small nuclear target tank containing 4000 pellets (reduced to 1800)
 - Increased visual pulse rate of Z-pinch engines by 25-33%
 - Casaba, MicroStar, Pleiades, Polaris engines now use the new ModuleChargeableEngine implementation
+-- Engine must be charged by a flow of EC for some time before being activated at high draw
+-- Engines using this method typically don't require as much EC during operation
+- Cochrane engine completely rebalanced
+-- Uses new ModuleMultiLengthEngine implementation
+-- Engine reaction chamber length can be varied in the VAB between 5m and 30m
+-- Higher reaction chamber length gives better thrust (linear scaling) and better efficiency (geometric scaling) at the cost of higher mass and thrust (linear scaling)
 - Rebalanced energy usage of all engines, typically now scales with thrust power (magnetic nozzle field strength)
 - Antimatter tanks now have "virtual" contents in the VAB, which are not carried to the pad, for compatibility with KER/MJ DV displays
 - Antimatter loader interface now reloads the antimatter count periodically
 - Added infinite mode to antimatter factory which sets factory capacity to the maximum (activate with CTRL+SHIFT+A)
-- The PulsePropulsion plugin was merged with the main FarFutureTechnologies plugin for easier maintenence
-- Added new ModuleChargeableEngine system
--- Engine must be charged by a flow of EC for some time before being activated
--- Engines using this method typically don't require as much EC during operation
+- The PulsePropulsion plugin was merged with the main FarFutureTechnologies plugin for easier maintenance
 - ModuleAntimatterTank's timewarp compensation was removed
+- Atmospheric/Exospheric scanners have been completely revamped
+-- Now use new ModuleProfilingScanner implementation
+-- ModuleProfilingScanner scans detect concentrations at the sensor but also direct a scanning beam in the direction of instrument pointing
+-- Running a scan opens a window showing the measured concentrations out into space at a player-defined distance
+- Added JR-35B 'Jet' Tokamak Fusion Engine
+-- Simple entry level thermal fusion engine using D/He3 and LH2
+- Added J-18 'Fresnel' Mirror Cell Fusion Engine
+-- High efficiency thermal fusion engine using D/He3 and LH2
+-- Uses new ModuleMultiLengthEngine implementation
+-- Engine reaction chamber length can be varied in the VAB between 5m and 20m
+-- Higher reaction chamber length gives better thrust (linear scaling) and better efficiency (geometric scaling) at the cost of higher mass and thrust (linear scaling)
+- Added ST-4L3R Fusion Fuel Tank (3.75m)
+- Added ST-824 Fusion Fuel Tank (2.5m)
 - Added DynamicBatteryStorage component to distribution for timewarp EC management
 
 0.1.1

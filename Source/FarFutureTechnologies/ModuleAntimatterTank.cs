@@ -120,7 +120,7 @@ namespace FarFutureTechnologies
 
         public void Start()
         {
-            if (HighLogic.LoadedSceneIsFlight)
+            if (HighLogic.LoadedSceneIsFlight || HighLogic.LoadedSceneIsEditor)
             {
               Fields["DetonationStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Title");
               Fields["ContainmentStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Title");
