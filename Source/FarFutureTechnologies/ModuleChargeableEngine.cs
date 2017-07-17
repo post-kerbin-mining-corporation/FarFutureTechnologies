@@ -10,8 +10,9 @@ namespace FarFutureTechnologies
     public class  ModuleChargeableEngine: PartModule
     {
         // Power used to charge the engine
-        [KSPField(isPersistant = false)]
-        public float ChargeRate = 150f;
+        
+        [KSPField(isPersistant = true, guiActive = true, guiName = "Charge Rate"), UI_FloatRange(minValue = 5f, maxValue = 500f, stepIncrement = 5f)]
+        public float ChargeRate = 50f;
 
         // Amount of charge needed to start the engine
         [KSPField(isPersistant = false)]
@@ -43,23 +44,23 @@ namespace FarFutureTechnologies
         [KSPField(isPersistant = false, guiActive = true, guiName = "Recharge")]
         public string RechargeStatus = "N/A";
 
-        [KSPEvent(guiActive = true, guiName = "Enable Engine Charging", active = true)]
-        public void Enable()
+        [KSPEvent(guiActive = true, guiActiveEditor= true, guiName = "Enable Engine Charging", active = true)]
+        public void EnableCharging()
         {
             Charging = true;
         }
-        [KSPEvent(guiActive = false, guiName = "Disable Engine Charging", active = false)]
-        public void Disable()
+        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Disable Engine Charging", active = false)]
+        public void DisableCharging()
         {
             Charging = false;
         }
 
         // ACTIONS
         [KSPAction("Enable Engine Charging")]
-        public void EnableAction(KSPActionParam param) { Enable(); }
+        public void EnableAction(KSPActionParam param) { EnableCharging(); }
 
         [KSPAction("Disable Engine Charging")]
-        public void DisableAction(KSPActionParam param) { Disable(); }
+        public void DisableAction(KSPActionParam param) { DisableCharging(); }
 
         [KSPAction("Toggle Engine Charging")]
         public void ToggleAction(KSPActionParam param)
@@ -93,8 +94,8 @@ namespace FarFutureTechnologies
                 Fields["RechargeStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Title");
                 Fields["ChargeStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Title");
 
-                Events["Enable"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Event_Enable_Title");
-                Events["Disable"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Event_Disable_Title");
+                Events["EnableCharging"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Event_Enable_Title");
+                Events["DisableCharging"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Event_Disable_Title");
 
                 Actions["EnableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Action_EnableAction_Title");
                 Actions["DisableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Action_DisableAction_Title");
@@ -128,7 +129,7 @@ namespace FarFutureTechnologies
               // If engine is on but dropped below a throttle setting, kill the engine
             if (engine.EngineIgnited)
             {
-                if (engine.requestedThrottle <= 0.01)
+                if (engine.requestedThrottle <= 0.05)
                 {
                     OnShutdown();
                 }
@@ -142,72 +143,6 @@ namespace FarFutureTechnologies
           // Engine was turned on
           if (engine.EngineIgnited && !EngineOn)
           {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
               OnActive();
@@ -235,14 +170,17 @@ namespace FarFutureTechnologies
                         RechargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Disabled");
                 }
 
-                if (Events["Enable"].active == Charging || Events["Disable"].active != Charging)
-                {
-                    Events["Disable"].active = Charging;
-                    Events["Enable"].active = !Charging;
-               }
+                
             
             }
-
+            if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
+            {
+                if (Events["EnableCharging"].active == Charging || Events["DisableCharging"].active != Charging)
+                {
+                    Events["DisableCharging"].active = Charging;
+                    Events["EnableCharging"].active = !Charging;
+                }
+            }
         }
 
 

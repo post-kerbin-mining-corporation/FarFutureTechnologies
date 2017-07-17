@@ -57,7 +57,7 @@ namespace FarFutureTechnologies
         {
             ContainmentEnabled= true;
         }
-        [KSPEvent(guiActive = false, guiName = "Disable Containment", active = false)]
+        [KSPEvent(guiActive = true, guiName = "Disable Containment", active = false)]
         public void Disable()
         {
             ContainmentEnabled= false;
@@ -234,7 +234,7 @@ namespace FarFutureTechnologies
           {
               double chargeRequest = ContainmentCost * TimeWarp.fixedDeltaTime;
 
-              double req = part.RequestResource("ElectricCharge", chargeRequest);
+              double req = part.RequestResource("ElectricCharge", chargeRequest, ResourceFlowMode.ALL_VESSEL);
               //Debug.Log(req.ToString() + " rec, wanted "+ chargeRequest.ToString());
               // Fully cooled
               double tolerance = 0.0001;
