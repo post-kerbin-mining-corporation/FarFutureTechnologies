@@ -19,7 +19,7 @@
 - ModuleAntimatterTank's timewarp compensation was removed (Handled in DBS)
 - Fixed antimatter tank only drawing power from itself and not the entire vessel
 - New ModuleChargeableEngine component
--- Engine must be charged by a flow of EC for some time before being activated at a customizeable draw rate
+-- Engine must be charged by a flow of EC for some time before being activated at a customizable draw rate
 -- Engines using this method typically don't require as much EC during operation
 - New ModuleMultiLengthEngine component
 -- Engine reaction chamber length can be varied in the VAB
@@ -35,6 +35,7 @@
 - Mass ratio of He3/D tanks was normalized to 6 (same as all cryogenic fuels in my other mods)
 - Rebalanced energy usage of all engines, typically now scales with thrust power (magnetic nozzle field strength)
 - Rebalanced heat production of all engines to typically lower values
+- Increased emissivity and max temp of most engines
 - Fixed small nuclear target tank containing 4000 pellets (reduced to 1800)
 - All fusion fuel tanks now require cryogenic cooling
 - Nuclear smelter now has an Ablator Refurbishment mode that can transform large quantities of ore into Ablator in-place
@@ -58,8 +59,12 @@
 - Added K-49 'Stardust' Inertial Confinement Fusion Engine
 -- Chargeable engine
 -- ablative nozzle, high specific impulse, medium thrust
+- Added 'Implausability' Metallic Hydrogen Engine
+-- High TWR, high impulse chemical engine
 - Added ST-4L3R Fusion Fuel Tank (3.75m)
 - Added ST-824 Fusion Fuel Tank (2.5m)
+- Added MH-4 Metallic Hydrogen Tank (2.5m)
+- Added MH-8 Metallic Hydrogen Tank (3.75m)
 - Reexported all normal maps for correct-ness
 
 0.1.1
