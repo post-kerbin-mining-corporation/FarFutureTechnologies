@@ -10,10 +10,12 @@
 - The PulsePropulsion plugin was merged with the main FarFutureTechnologies plugin for easier maintenance
 - Lots of improvements to UI components
 - Antimatter handling was improved:
+-- Antimatter is now visible and tweakable in the VAB
 -- Antimatter tanks now have "virtual" contents in the VAB, which are not carried to the pad, for compatibility with KER/MJ DV displays
 -- Antimatter loader interface now reloads the antimatter count periodically
 -- Added infinite mode to antimatter factory which sets factory capacity to the maximum (activate with CTRL+SHIFT+A)
 - Improved ModuleEngineHeatDisplay's performance and utility
+- Improved PulseEngineAnimator to be more flexible, support "initiation" animations and heat animations
 - ModuleAntimatterTank's timewarp compensation was removed (Handled in DBS)
 - Fixed antimatter tank only drawing power from itself and not the entire vessel
 - New ModuleChargeableEngine component

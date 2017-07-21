@@ -12,12 +12,8 @@ namespace FarFutureTechnologies
         [KSPField(isPersistant = false)]
         public string PulseAnimation;
 
-        // Heat
         [KSPField(isPersistant = false)]
-        public string HeatAnimation;
-
-        [KSPField(isPersistant = false)]
-        public string ThrottleAnimation;
+        public string InitiateAnimation;
 
         [KSPField(isPersistant = false)]
         public float PulseInterval = 0.4f;
@@ -32,8 +28,15 @@ namespace FarFutureTechnologies
         public float PulseAnimationDecayRate = 3.0f;
 
         [KSPField(isPersistant = false)]
-        public float PulseAnimationGrowRate = 2.0f;
+        public float InitiateAnimationGrowRate = 2.0f;
+        [KSPField(isPersistant = false)]
+        public float InitiateAnimationDecayRate = 3.0f;
 
+        [KSPField(isPersistant = false)]
+        public float InitiateDuration = 3.0f;
+
+        [KSPField(isPersistant = false)]
+        public float PulseAnimationGrowRate = 2.0f;
         [KSPField(isPersistant = false)]
         public string PulseTransformName = "";
 
@@ -56,7 +59,7 @@ namespace FarFutureTechnologies
         // Animations
 
         private AnimationState[] pulseStates;
-        private AnimationState[] throttleStates;
+        private AnimationState[] initStates;
 
         public override void OnStart(PartModule.StartState state)
         {
@@ -78,20 +81,18 @@ namespace FarFutureTechnologies
                 {
                     pulseState.layer =1;
                 }
-
             }
-            if (ThrottleAnimation != "")
+            if (InitiateAnimation != "")
             {
-               throttleStates = Utils.SetUpAnimation(ThrottleAnimation, part);
+                initStates = Utils.SetUpAnimation(InitiateAnimation, part);
 
-                foreach (AnimationState throttleState in throttleStates)
+                foreach (AnimationState initState in initStates)
                 {
-                    throttleState.layer = 2;
+                    initState.layer = 2;
                 }
 
             }
-
-
+       
         }
 
         private float currentPulseInterval = 0f;
@@ -120,15 +121,20 @@ namespace FarFutureTechnologies
                             part.Effect(PulseEffectName1, 1f);
                             part.Effect(PulseEffectName2, 1f);
 
-                            foreach (AnimationState pulseState in pulseStates)
-                            {
-                                pulseState.time = 0f;
-                                pulseState.speed = PulseAnimationGrowRate;
-                            }
-                            foreach (AnimationState throttleState in throttleStates)
-                            {
-                                throttleState.normalizedTime = 1.0f;
-                            }
+                            if (PulseAnimation != "")
+                                foreach (AnimationState pulseState in pulseStates)
+                                {
+                                    pulseState.normalizedTime = 0f;
+                                    pulseState.speed = PulseAnimationGrowRate;
+                                }
+                            if (InitiateAnimation != "")
+                            
+                                foreach (AnimationState initState in initStates)
+                                {
+                                    initState.normalizedTime = 0f;
+                                    initState.speed = InitiateAnimationGrowRate;
+                                }
+                            
                             pulseProgress = pulseProgress + TimeWarp.fixedDeltaTime;
                         }
                         // During Pulse
@@ -136,19 +142,31 @@ namespace FarFutureTechnologies
                         {
                             part.Effect(PulseEffectName1, Mathf.Clamp01(1f - (pulseProgress / PulseDuration)));
                             part.Effect(PulseEffectName2, Mathf.Clamp01(1f - (pulseProgress / PulseDuration)));
+                            
+
+                            if (InitiateAnimation != "" && pulseProgress >= InitiateDuration)
+                                foreach (AnimationState initState in initStates)
+                                {
+                                    initState.normalizedTime = Mathf.MoveTowards(initState.normalizedTime, 0f, TimeWarp.fixedDeltaTime * InitiateAnimationDecayRate);
+                                    initState.speed = 0f;
+                                }
                             pulseProgress = pulseProgress + TimeWarp.fixedDeltaTime;
                         } else if (pulseProgress >= currentPulseInterval)
                         {
                             foreach (AnimationState pulseState in pulseStates)
                             {
-                                pulseState.time = 0f;
+                                pulseState.normalizedTime = 0f;
                                 pulseState.speed = 0f;
                             }
+                            if (InitiateAnimation != "")
+
+                                foreach (AnimationState initState in initStates)
+                                {
+                                    initState.normalizedTime = 0f;
+                                    initState.speed = 0f;
+                                }
                             pulseProgress = 0f;
-                            foreach (AnimationState throttleState in throttleStates)
-                            {
-                                throttleState.normalizedTime = 0f;
-                            }
+                           
                         }
                         // After pulse but before next
                         else
@@ -156,28 +174,36 @@ namespace FarFutureTechnologies
                             part.Effect(PulseEffectName1, 0f);
                             part.Effect(PulseEffectName2, 0f);
                             pulseProgress = pulseProgress + TimeWarp.fixedDeltaTime;
-                            foreach (AnimationState throttleState in throttleStates)
-                            {
-                                throttleState.normalizedTime = Mathf.MoveTowards(throttleState.normalizedTime, 0f, TimeWarp.fixedDeltaTime * PulseAnimationDecayRate);
-                            }
+                           
                             foreach (AnimationState pulseState in pulseStates)
                             {
+                                pulseState.speed = 0f;
                                 pulseState.normalizedTime = Mathf.MoveTowards(pulseState.normalizedTime, 0f, TimeWarp.fixedDeltaTime * PulseAnimationDecayRate);
                             }
+                            if (InitiateAnimation != "")
+                                foreach (AnimationState initState in initStates)
+                                {
+                                    initState.normalizedTime = Mathf.MoveTowards(initState.normalizedTime, 0f, TimeWarp.fixedDeltaTime * InitiateAnimationDecayRate);
+                                    initState.speed = 0f;
+                                }
+                            
                         }
                     }
                     else
 
                     {
-                        foreach (AnimationState throttleState in throttleStates)
-                        {
-                            throttleState.normalizedTime = Mathf.Lerp(throttleState.normalizedTime, 0f, TimeWarp.fixedDeltaTime*PulseAnimationDecayRate);
-                        }
+                       
                         foreach (AnimationState pulseState in pulseStates)
                         {
-                            pulseState.time = Mathf.MoveTowards(pulseState.time, 0f, TimeWarp.fixedDeltaTime*PulseAnimationDecayRate);
+                            pulseState.normalizedTime = Mathf.MoveTowards(pulseState.normalizedTime, 0f, TimeWarp.fixedDeltaTime * PulseAnimationDecayRate);
                             pulseState.speed = 0f;
                         }
+                        if (InitiateAnimation != "")
+                            foreach (AnimationState initState in initStates)
+                            {
+                                initState.normalizedTime = Mathf.MoveTowards(initState.normalizedTime, 0f, TimeWarp.fixedDeltaTime * InitiateAnimationDecayRate); ;
+                                initState.speed = 0f;
+                            }
                         if (PulseEffectName1 != "")
                         {
                             part.Effect(PulseEffectName1, 0f);
@@ -188,16 +214,24 @@ namespace FarFutureTechnologies
                 }
                 else
                 {
-                    foreach (AnimationState throttleState in throttleStates)
-                    {
-                        throttleState.normalizedTime = Mathf.Lerp(throttleState.normalizedTime, 0f, TimeWarp.fixedDeltaTime);
-                    }
+                    
                     pulseProgress = 0f;
                     if (PulseEffectName1 != "")
                     {
                         part.Effect(PulseEffectName1, 0f);
                         part.Effect(PulseEffectName2, 0f);
                     }
+                    foreach (AnimationState pulseState in pulseStates)
+                    {
+                        pulseState.time = Mathf.MoveTowards(pulseState.time, 0f, TimeWarp.fixedDeltaTime * PulseAnimationDecayRate);
+                        pulseState.speed = 0f;
+                    }
+                    if (InitiateAnimation != "")
+                        foreach (AnimationState initState in initStates)
+                        {
+                            initState.time = Mathf.MoveTowards(initState.time, 0f, TimeWarp.fixedDeltaTime * InitiateAnimationDecayRate); ;
+                            initState.speed = 0f;
+                        }
                 }
 
 

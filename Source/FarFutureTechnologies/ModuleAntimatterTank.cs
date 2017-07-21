@@ -136,7 +136,11 @@ namespace FarFutureTechnologies
               maxFuelAmount = GetMaxResourceAmount(FuelName);
 
               // Catchup
-              DoCatchup();
+              
+            }
+            if (HighLogic.LoadedSceneIsFlight)
+            {
+                DoCatchup();
             }
         }
 
