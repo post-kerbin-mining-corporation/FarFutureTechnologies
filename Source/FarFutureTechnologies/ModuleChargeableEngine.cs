@@ -11,7 +11,7 @@ namespace FarFutureTechnologies
     {
         // Power used to charge the engine
         
-        [KSPField(isPersistant = true, guiActive = true, guiName = "Charge Rate"), UI_FloatRange(minValue = 5f, maxValue = 500f, stepIncrement = 5f)]
+        [KSPField(isPersistant = true, guiActive = true, guiName = "Charge Rate"), UI_FloatRange(minValue = 10f, maxValue = 1000f, stepIncrement = 10f)]
         public float ChargeRate = 50f;
 
         // Amount of charge needed to start the engine
@@ -80,7 +80,7 @@ namespace FarFutureTechnologies
 
         public override string GetInfo()
         {
-          string msg = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_PartInfo", ChargeRate.ToString("F2"), (ChargeGoal/ChargeRate).ToString("F0"));
+          string msg = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_PartInfo", ChargeGoal.ToString("F0"), (ChargeGoal/1000f).ToString("F0"));
           return msg;
         }
 

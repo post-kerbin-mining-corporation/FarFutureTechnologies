@@ -71,7 +71,7 @@ namespace FarFutureTechnologies
       public override string GetInfo()
       {
 
-        string msg = Localizer.Format("##LOC_FFT_ModuleMultiLengthEngine_PartInfo"); ;
+        string msg = Localizer.Format("#LOC_FFT_ModuleMultiLengthEngine_PartInfo"); ;
         return msg;
       }
 
