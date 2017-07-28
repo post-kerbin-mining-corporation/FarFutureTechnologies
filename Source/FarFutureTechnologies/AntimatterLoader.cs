@@ -51,7 +51,7 @@ namespace FarFutureTechnologies
          {
              if (HighLogic.LoadedSceneIsFlight && FlightGlobals.ActiveVessel != null)
              {
-
+                 GameEvents.OnVesselRollout.Add(ClearAMOnRollout);
                  RefreshAntimatterData(FlightGlobals.ActiveVessel);
              }
          }
@@ -59,7 +59,20 @@ namespace FarFutureTechnologies
          {
             availableAM = AntimatterFactory.Instance.Antimatter;
          }
-
+         void ClearAMOnRollout(ShipConstruct construct)
+         {
+             foreach (Part part in construct.parts)
+             {
+                 if (part.Resources.Get("Antimatter") != null)
+                 {
+                     //Debug.LogWarning(part.Resources.Get("Antimatter").amount);
+                     //Debug.LogWarning(part.Resources.Get("Antimatter").maxAmount);
+                     part.Resources.Get("Antimatter").amount = 0d;
+                     //Debug.LogWarning(part.Resources.Get("Antimatter").amount);
+                     //Debug.LogWarning(part.Resources.Get("Antimatter").maxAmount);
+                 }
+             }
+         }
 
 
          void RefreshAntimatterData(Vessel vessel)

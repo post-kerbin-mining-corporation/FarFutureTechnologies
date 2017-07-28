@@ -101,7 +101,7 @@ namespace FarFutureTechnologies
         private void Start()
         {
             double worldTime = Planetarium.GetUniversalTime();
-            GameEvents.OnVesselRollout.Add(new EventData<ShipConstruct>.OnEvent(OnVesselRollout));
+            //GameEvents.OnVesselRollout.Add(new EventData<ShipConstruct>.OnEvent(OnVesselRollout));
             if (worldTime - lastUpdateTime > 0d)
             {
                 Utils.Log(String.Format("[AntimatteryFactory]: Delta time of {0} seconds detected, catching up", worldTime-lastUpdateTime));

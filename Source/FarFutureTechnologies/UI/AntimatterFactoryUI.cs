@@ -78,7 +78,7 @@ namespace FarFutureTechnologies.UI
             showMainWindow = true;
             showLaunchMode = false;
             mainWindowPos.width = 300f;
-            mainWindowPos.height = 300f;
+            mainWindowPos.height = 250f;
             mainWindowPos.x = Screen.width / 2f - mainWindowPos.width / 2f;
             mainWindowPos.y = Screen.height / 2f - mainWindowPos.height / 2f;
         }
@@ -100,11 +100,11 @@ namespace FarFutureTechnologies.UI
                     Vector3 pos = stockToolbarButton.GetAnchor();
                     if (ApplicationLauncher.Instance.IsPositionedAtTop)
                     {
-                        miniWindowPos = new Rect(Screen.width-280f, 0f, 250f, 60f);
+                        miniWindowPos = new Rect(Screen.width-280f, 0f, 240f, 42f);
                     }
                     else
                     {
-                        miniWindowPos = new Rect(Screen.width - 280f, Screen.height-150f, 250f, 60f);
+                        miniWindowPos = new Rect(Screen.width - 280f, Screen.height-92f, 245f, 42f);
                     }
                 }
             }
@@ -132,7 +132,7 @@ namespace FarFutureTechnologies.UI
                 if (showMainWindow)
                 {
                     mainWindowPos = GUILayout.Window(windowIdentifier2, mainWindowPos, DrawMainWindow,
-                      Localizer.Format("#LOC_FFT_AntimatterFactoryUI_LoadoutWindow_Title"),
+                      new GUIContent(),
                       GUIResources.GetStyle("window_main"), GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
                 }
             }
@@ -144,19 +144,19 @@ namespace FarFutureTechnologies.UI
             float maxAM = (float)(AntimatterFactory.Instance.AntimatterMax);
             float rateAM = (float)(AntimatterFactory.Instance.AntimatterRate);
 
-            Rect barAreaRect = new Rect(32f, 0f, 150f, 32f);
+            Rect barAreaRect = new Rect(39f, 0f, 160f, 32f);
 
             Vector2 barBackgroundSize = new Vector2(150, 20f);
             Vector2 barForegroundSize = new Vector2(Mathf.Max(barBackgroundSize.x * (curAM / maxAM),8f), 18f);
 
             Rect barBackgroundRect = new Rect(0f, 10f, barBackgroundSize.x, barBackgroundSize.y);
-            Rect barForeroundRect = new Rect(0f, 6f, barForegroundSize.x, barForegroundSize.y);
-            Rect storageTextRect = new Rect(20f, 10f, 160f, 20f);
+            Rect barForeroundRect = new Rect(0f, 11f, barForegroundSize.x, barForegroundSize.y);
+            Rect storageTextRect = new Rect(5f, 10f, 160f, 20f);
             Rect rateTextRect = new Rect(barBackgroundSize.x - 90f, 10f, 90f, 20f);
 
-            Rect amIconRect = new Rect(0f, 0f, 32f, 32f);
-            Rect factoryButtonRect = new Rect (200f, 0f, 32f, 32f);
-            Rect loadoutButtonRect = new Rect (200f, 0f, 32f, 32f);
+            Rect amIconRect = new Rect(5f, 5f, 32f, 32f);
+            Rect factoryButtonRect = new Rect (200f, 5f, 32f, 32f);
+            Rect loadoutButtonRect = new Rect (200f, 5f, 32f, 32f);
 
             GUI.BeginGroup(barAreaRect);
             GUI.Box(barBackgroundRect, "", GUIResources.GetStyle("bar_background"));
@@ -180,11 +180,13 @@ namespace FarFutureTechnologies.UI
             }
 
             if (HighLogic.LoadedSceneIsFlight && AntimatterLoader.Instance != null && AntimatterLoader.Instance.loadingAllowed)
+            {
                 if (GUI.Button(loadoutButtonRect, "", GUIResources.GetStyle("button_overlaid")))
                 {
                     ShowLoading();
                 }
                 GUI.DrawTextureWithTexCoords(loadoutButtonRect, GUIResources.GetIcon("pump").iconAtlas, GUIResources.GetIcon("pump").iconRect);
+            }
         }
 
         void DrawMainWindow(int WindowID)
@@ -204,6 +206,9 @@ namespace FarFutureTechnologies.UI
         void DrawLaunchMode()
         {
             GUI.skin = HighLogic.Skin;
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(String.Format("{0}", Localizer.Format("#LOC_FFT_AntimatterFactoryUI_LoadoutWindow_Title")));
+            GUILayout.EndHorizontal();
 
             AntimatterLoader.Instance.availableAM = AntimatterFactory.Instance.Antimatter;
             AntimatterLoader.Instance.usedAM = 0d;
@@ -297,6 +302,9 @@ namespace FarFutureTechnologies.UI
 
         void DrawFactoryMode()
         {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(String.Format("{0}", Localizer.Format("#LOC_FFT_AntimatterFactoryUI_LoadoutWindow_Title")));
+            GUILayout.EndHorizontal();
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal(GUIResources.GetStyle("block_background"));
             GUILayout.Label(Localizer.Format("#LOC_FFT_AntimatterFactoryUI_FactoryWindow_Description"), GUIResources.GetStyle("text_basic"));
@@ -327,17 +335,17 @@ namespace FarFutureTechnologies.UI
             float maxAM = (float)(AntimatterFactory.Instance.AntimatterMax);
             float rateAM = (float)(AntimatterFactory.Instance.AntimatterRate);
 
-            Rect barAreaRect = GUILayoutUtility.GetRect(250, 60f);
+            Rect barAreaRect = GUILayoutUtility.GetRect(280, 68f);
 
-            Vector2 barBackgroundSize = new Vector2(250, 20f);
+            Vector2 barBackgroundSize = new Vector2(260, 20f);
             Vector2 barForegroundSize = new Vector2(Mathf.Max(barBackgroundSize.x * (curAM / maxAM),8f), 18f);
 
-            Rect barBackgroundRect = new Rect(0f, 10f, barBackgroundSize.x, barBackgroundSize.y);
-            Rect barForeroundRect = new Rect(0f, 6f, barForegroundSize.x, barForegroundSize.y);
+            Rect barBackgroundRect = new Rect(10f, 10f, barBackgroundSize.x, barBackgroundSize.y);
+            Rect barForeroundRect = new Rect(10f, 11f, barForegroundSize.x, barForegroundSize.y);
 
-            Rect storageTextRect = new Rect(barBackgroundSize.x - 80f, 23f, 80f, 40f);
+            Rect storageTextRect = new Rect(barBackgroundSize.x - 80f, 33f, 80f, 40f);
 
-            Rect rateTextRect = new Rect(0f, 23f, 50f, 20f);
+            Rect rateTextRect = new Rect(0f, 29f, 80f, 20f);
 
             GUI.BeginGroup(barAreaRect);
             GUI.Box(barBackgroundRect, "", GUIResources.GetStyle("bar_background"));

@@ -85,6 +85,8 @@ namespace FarFutureTechnologies.UI
 
             if (GUI.Button(closeRect, "X", GUIResources.GetStyle("button_basic")))
                 showWindow = false;
+
+            GUI.DragWindow();
         }
 
         void DrawPlot(Rect group)
