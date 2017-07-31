@@ -34,17 +34,36 @@ namespace FarFutureTechnologies
             }
         }
 
+
+          // This function loads up some animationstates
+          public static AnimationState[] SetUpAnimation(string animationName, Part part)
+          {
+              var states = new List<AnimationState>();
+              foreach (var animation in part.FindModelAnimators(animationName))
+              {
+                  var animationState = animation[animationName];
+                  animationState.speed = 0;
+                  animationState.enabled = true;
+                  // Clamp this or else weird things happen
+                  animationState.wrapMode = WrapMode.ClampForever;
+                  animation.Blend(animationName);
+                  states.Add(animationState);
+              }
+              // Convert
+              return states.ToArray();
+          }
+
         public static void Log(string str)
         {
-            Debug.Log("Far Future Tech > " + str);
+            Debug.Log("[Far Future Tech]: " + str);
         }
         public static void LogError(string str)
         {
-            Debug.LogError("Far Future Tech > " + str);
+            Debug.LogError("[Far Future Tech]: " + str);
         }
         public static void LogWarning(string str)
         {
-            Debug.LogWarning("Far Future Tech > " + str);
+            Debug.LogWarning("[Far Future Tech]: " + str);
         }
 
         // Node loading
@@ -95,6 +114,29 @@ namespace FarFutureTechnologies
                 if (bool.TryParse(node.GetValue(nodeID), out val))
                     return val;
             }
+            return defaultValue;
+        }// Based on some Firespitter code by Snjo
+        public static FloatCurve GetValue(ConfigNode node, string nodeID, FloatCurve defaultValue)
+        {
+            if (node.HasNode(nodeID))
+            {
+                FloatCurve theCurve = new FloatCurve();
+                ConfigNode[] nodes = node.GetNodes(nodeID);
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    string[] valueArray = nodes[i].GetValues("key");
+
+                    for (int l = 0; l < valueArray.Length; l++)
+                    {
+                        string[] splitString = valueArray[l].Split(' ');
+                        Vector2 v2 = new Vector2(float.Parse(splitString[0]), float.Parse(splitString[1]));
+                        theCurve.Add(v2.x, v2.y, 0, 0);
+                    }
+                }
+                Debug.Log(theCurve.Evaluate(0f));
+                return theCurve;
+            }
+            Debug.Log("default");
             return defaultValue;
         }
     }

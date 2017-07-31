@@ -1,0 +1,18 @@
+{
+    "NAME":"FarFutureTechnologies",
+    "URL":"https://raw.githubusercontent.com/ChrisAdderley/FarFutureTechnologies/master/GameData/FarFutureTechnologies/Versioning/FarFutureTechnologies.version",
+    "DOWNLOAD":"http://forum.kerbalspaceprogram.com/threads/52042",
+    "VERSION":
+    {
+        "MAJOR":0,
+        "MINOR":2,
+        "PATCH":0,
+        "BUILD":0
+    },
+    "KSP_VERSION":
+    {
+        "MAJOR":1,
+        "MINOR":3,
+        "PATCH":0
+    }
+}

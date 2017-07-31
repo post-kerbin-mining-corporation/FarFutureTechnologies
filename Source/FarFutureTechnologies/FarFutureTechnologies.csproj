@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FarFutureTechnologies</RootNamespace>
     <AssemblyName>FarFutureTechnologies</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,14 +39,10 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\..\..\..\..\Games\Steam\SteamApps\common\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="KSPUtil">
-      <HintPath>..\..\..\..\..\Games\Steam\SteamApps\common\Kerbal Space Program\KSP_Data\Managed\KSPUtil.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
@@ -57,13 +54,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AntimatterFactory.cs" />
-    <Compile Include="AntimatterFactoryUI.cs" />
+    <Compile Include="ModuleMultiLengthEngine.cs" />
+    <Compile Include="ModuleProfilingScanner.cs" />
+    <Compile Include="UI\AntimatterFactoryUI.cs" />
+    <Compile Include="AntimatterLoader.cs" />
     <Compile Include="FarFutureTechnologyPersistence.cs" />
     <Compile Include="FarFutureTechnologySettings.cs" />
     <Compile Include="ModuleAntimatterTank.cs" />
+    <Compile Include="ModuleChargeableEngine.cs" />
+    <Compile Include="ModuleEngineHeatDisplay.cs" />
+    <Compile Include="ModulePulseEngineAnimator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\ProfilingUI.cs" />
+    <Compile Include="UI\UIResources.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
