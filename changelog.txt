@@ -1,6 +1,11 @@
 0.2.1
 -----
 - Updated CryoTanks to 0.4.7
+- Added a popup that appears the first time a save has an active Antimatter Factory that tells you how to use it
+- Clarified some tooltips and part descriptions to indicate that antimatter must be loaded on the pad
+- Fixed mirror-cell fusion engine choking on startup
+- Worked around stock KSP bug regarding atmospheric harvesters
+- Fixed an issue that caused a harmless exception during game loading
 
 0.2.0
 -----

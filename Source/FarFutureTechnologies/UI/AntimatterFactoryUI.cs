@@ -13,7 +13,6 @@ namespace FarFutureTechnologies.UI
     {
 
         double availableAM = 0d;
-        double usedAM = 0d;
         List<Part> antimatterTanks = new List<Part>();
         List<PartResource> antimatterResources = new List<PartResource>();
 
@@ -22,8 +21,7 @@ namespace FarFutureTechnologies.UI
 
         private bool showMainWindow = false;
         private bool showLaunchMode = false;
-
-        private bool initStyles = false;
+        private bool showTips = false;
 
         private Rect miniWindowPos = new Rect(75, 100, 250, 50);
         private Rect mainWindowPos = new Rect(75, 100, 250, 50);
@@ -67,6 +65,7 @@ namespace FarFutureTechnologies.UI
         {
             showMainWindow = true;
             showLaunchMode = true;
+            showTips = false;
             mainWindowPos.width = 400f;
             mainWindowPos.height = 400f;
             mainWindowPos.x = Screen.width / 2f - mainWindowPos.width / 2f;
@@ -77,6 +76,7 @@ namespace FarFutureTechnologies.UI
         {
             showMainWindow = true;
             showLaunchMode = false;
+            showTips = false;
             mainWindowPos.width = 300f;
             mainWindowPos.height = 250f;
             mainWindowPos.x = Screen.width / 2f - mainWindowPos.width / 2f;
@@ -85,6 +85,7 @@ namespace FarFutureTechnologies.UI
 
         void FixedUpdate()
         {
+            
             if (!showToolbarButton)
             {
                 if (AntimatterFactory.Instance.Researched)
@@ -108,6 +109,16 @@ namespace FarFutureTechnologies.UI
                     }
                 }
             }
+            if (AntimatterFactory.Instance.Researched && AntimatterFactory.Instance.FirstLoad)
+            {
+                showMainWindow = true;
+                showTips = true;
+            }
+            else
+            {
+                showTips = false;
+            }
+       
         }
 
         // UI FUNCTIONS
@@ -124,6 +135,7 @@ namespace FarFutureTechnologies.UI
 
             if (AntimatterFactory.Instance != null)
             {
+                
                 if (showMiniWindow)
                 {
                     miniWindowPos = GUI.Window(windowIdentifier, miniWindowPos, DrawMiniWindow, "", GUIResources.GetStyle("window_toolbar"));
@@ -135,6 +147,7 @@ namespace FarFutureTechnologies.UI
                       new GUIContent(),
                       GUIResources.GetStyle("window_main"), GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
                 }
+                
             }
         }
 
@@ -194,6 +207,9 @@ namespace FarFutureTechnologies.UI
             if (showLaunchMode)
             {
                 DrawLaunchMode();
+            } else if (showTips)
+            {
+                DrawTips();
             }
             else
             {
@@ -368,6 +384,20 @@ namespace FarFutureTechnologies.UI
             }
 
             GUILayout.EndVertical();
+        }
+        void DrawTips()
+        {
+            GUI.skin = HighLogic.Skin;
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(String.Format("{0}", Localizer.Format("#LOC_FFT_AntimatterFactoryUI_LoadoutWindow_Title")));
+            GUILayout.EndHorizontal();
+
+            GUILayout.Label(Localizer.Format("#LOC_FFT_AntimatterFactoryUI_IntroWindow_Description"), GUIResources.GetStyle("text_basic"));
+            if (GUILayout.Button(Localizer.Format("#LOC_FFT_AntimatterFactoryUI_IntroWindow_Dismiss"), GUIResources.GetStyle("button_basic")))
+            {
+                showMainWindow = false;
+                AntimatterFactory.Instance.FirstLoad = false;
+            }
         }
         void TryUpgradeFactory(float cost)
         {
