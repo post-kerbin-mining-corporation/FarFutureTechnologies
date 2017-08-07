@@ -4,9 +4,12 @@
 - Reduced constant power usage of both Z-Pinch engines by 50%, now 50/65 kW from 100/125 kW
 - Reduced constant power usage of tokamak fusion engine from 125 to 75 kW
 - Reduced mass of magnetic ICF to 20 from 25 t, reduced heat generation by 2/3
-- Reduced mass of Casaba to 11.5 from 15.82, reduced Ablator to 4750 (enough for 1 large pellet tank)
+- Reduced mass of Casaba to 11.5 from 15.82, increased Ablator to 8500
+- Tweaked propellant ratios of Casaba so that the consumption of all the Ablator requires exactly 1 full antimatter storage ring a 2 large full fission pellet tanks
+- Increased Isp of Microstar to 90950 from 60950, increased thrust to 150 kN from 60 kN
+- Tweaked propellant ratios of Microstar so that 1 full 3.75m fusion fuel tank takes very close to 1 full antimatter ring to consume
 - Tweaked Ablator use of ablative ICF so that the engine burns through exactly 1 full small pellet tank with its ablator supply
-- Reduced dry mass of ablative ICF to 16 from 30 t, increased Ablator amount to 16000 from 15000
+- Reduced dry mass of ablative ICF to 20 from 30 t, increased Ablator amount to 16000 from 15000
 - Increased power usage of mirror cell fusion engine by 85 kW per segment
 - Decreased specific impulse of NSWR to 5650 from 6730
 - Fixed small nuclear target tank mass and cost when using fusion pellets
