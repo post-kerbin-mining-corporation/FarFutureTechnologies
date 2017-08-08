@@ -1,6 +1,6 @@
 /// FissionReactor
 /// ---------------------------------------------------
-/// Fission Generator!
+/// 
 ///
 
 using System;
