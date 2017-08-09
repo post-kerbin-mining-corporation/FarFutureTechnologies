@@ -1,8 +1,11 @@
 0.2.2
 -----
 - Added FX-2 Fusion Reactor
--- 
+-- 2.5m fusion reactor, 4-8 MW power output
 - Added FX-3 Fusion Reactor
+-- 3.75m fusion reactor, 10-20 MW power output
+- Added Asimov Fission Fragment Rocket
+-- Very low TWR rocket with integrated fuel, very high specific impulse, low heat generation, no EC consumption past charging
 - Increased thrust of Z-pinch fusion engine to 375 from 160
 - Reduced constant power usage of both Z-Pinch engines by 50%, now 50/65 kW from 100/125 kW
 - Reduced constant power usage of tokamak fusion engine from 125 to 75 kW
