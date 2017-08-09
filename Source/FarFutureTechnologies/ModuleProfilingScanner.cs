@@ -32,7 +32,7 @@ namespace FarFutureTechnologies
         }
 
         // Current range setting of this scanner
-        [KSPField(isPersistant = true, guiActive = true, guiName = "Profiler Range"), UI_FloatRange(minValue = 50000f, maxValue = 250000f, stepIncrement = 10000f)]
+        [KSPField(isPersistant = true, guiActive = true, guiName = "Profiler Range"), UI_FloatRange(minValue = 50000f, maxValue = 250000f, stepIncrement = 500f)]
         public float ScanRange = 250000f;
 
         // Minimum Range that can be set

@@ -137,7 +137,7 @@ namespace FarFutureTechnologies
               foreach (ResourceRatio input in mode.inputs)
               {
                 msg += Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo_Fuel",
-                  input.FuelName, input.Ratio);
+                  input.ResourceName, input.Ratio);
               }
             }
             return msg;
