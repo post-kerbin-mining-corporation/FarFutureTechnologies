@@ -241,12 +241,12 @@ namespace FarFutureTechnologies
             Fields["ChargeStatus"].guiName =  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ChargeStatus_Title");
             Fields["RechargeStatus"].guiName =  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_RechargeStatus_Title");
 
-            Events["EnableCharging"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Event_Enable_Title ");
-            Events["DisableCharging"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Event_Disable_Title ");
+            Events["EnableCharging"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Event_Enable_Title");
+            Events["DisableCharging"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Event_Disable_Title");
 
-            Actions["EnableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Action_EnableAction_Title ");
-            Actions["DisableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Action_DisableAction_Title ");
-            Actions["ToggleAction"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Action_ToggleAction_Title ");
+            Actions["EnableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Action_EnableAction_Title");
+            Actions["DisableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Action_DisableAction_Title");
+            Actions["ToggleAction"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Action_ToggleAction_Title");
         }
 
         /// <summary>

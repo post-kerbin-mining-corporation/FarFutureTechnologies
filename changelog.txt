@@ -11,9 +11,9 @@
 - Reduced constant power usage of tokamak fusion engine from 125 to 75 kW
 - Reduced mass of magnetic ICF to 20 from 25 t, reduced heat generation by 2/3
 - Reduced mass of Casaba to 11.5 from 15.82, decreased Ablator to 4250
-- Tweaked propellant ratios of Casaba so that the consumption of all the Ablator requires exactly 1/2 a antimatter storage ring an 1 large full fission pellet tanks
+- Tweaked propellant ratios of Casaba so that the consumption of all the Ablator requires exactly 1/2 an antimatter storage ring and 1 small full fission pellet tanks
 - Increased Isp of Microstar to 90950 from 60950, increased thrust to 150 kN from 60 kN
-- Tweaked propellant ratios of Microstar so that 1 full 3.75m fusion fuel tank takes very close to 1 full antimatter ring to consume
+- Tweaked propellant ratios of Microstar so that 1 full short 3.75m fusion fuel tank takes very close to 1 full antimatter ring to consume
 - Reduced Antimatter consumption of the Dirac by 75% in Medium Density mode
 - Increased thrust of Dirac in Medium Density mode to 190 from 122, increased Isp to 75,250 from 55,000 s
 - Increased thrust of Dirac in High Density mode to 870 from 720
