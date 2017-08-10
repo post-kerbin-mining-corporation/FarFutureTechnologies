@@ -58,7 +58,7 @@ namespace FarFutureTechnologies
         public string LocalResults4;
         [KSPField(isPersistant = false, guiActive = false, guiName = "Local5")]
         public string LocalResults5;
-        
+
         // Events
         [KSPEvent(guiActive = true, guiName = "Analyze Profile", active = true)]
         public void Scan()
@@ -105,7 +105,7 @@ namespace FarFutureTechnologies
             Actions["ScanAction"].guiName = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Action_Scan_Title");
             if (scannableResources == null || scannableResources.Count == 0)
             {
-                  
+
                 ConfigNode node = GameDatabase.Instance.GetConfigs("PART").
                     Single(c => part.partInfo.name == c.name).config.
                     GetNodes("MODULE").Single(n => n.GetValue("name") == moduleName);
@@ -114,7 +114,7 @@ namespace FarFutureTechnologies
             }
             if (HighLogic.LoadedSceneIsFlight)
             {
-             
+
                 var range = (UI_FloatRange)this.Fields["ScanRange"].uiControlFlight;
                 range.minValue = MinimumRange;
                 range.maxValue = MaximumRange;
@@ -149,7 +149,7 @@ namespace FarFutureTechnologies
         protected void TakeProfile()
         {
             profiledResources = new List<ResourceProfile>();
-            
+
             for (int i = 0; i < scannableResources.Count; i++)
             {
                 Utils.Log(String.Format("[ModuleProfilingScanner]: Taking profile for {0}", scannableResources[i].resourceName));
@@ -206,7 +206,7 @@ namespace FarFutureTechnologies
             abundance = abundance + ResourceMap.Instance.GetAbundance(req);
             //Utils.Log(String.Format("[ModuleProfilingScanner]: Sampling position {0}, geocentric alt {1}, lat {2} lon {3}\n Noise: {4} Result: {5}", worldPos.ToString(), alt, lat, lon, noiseScalar, abundance));
             abundance = abundance + noiseScalar * UnityEngine.Random.Range(-1.0f, 1.0f);
-            
+
             return Mathf.Clamp(abundance, 0f, 10000f);
         }
 
@@ -218,15 +218,15 @@ namespace FarFutureTechnologies
             {
                 if (interval > 10)
                 {
-                    
+
                     for (int i = 1; i < scannableResources.Count+1; i++)
                     {
-                        
+
 
                         float abundance = Sample(scannableResources[i-1], part.partTransform.position, 0.0f);
                         string res = Localizer.Format("#LOC_FFT_ModuleProfilingScanner_Field_LocalResults_Scanning", abundance.ToString("F3"));
                         Fields["LocalResults" + i.ToString()].SetValue(res, Fields["LocalResults" + i.ToString()].host);
-                        
+
                     }
                     interval = 0;
                 }

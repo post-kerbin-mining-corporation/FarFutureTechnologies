@@ -43,7 +43,7 @@ namespace FarFutureTechnologies.UI
             GameEvents.onGUIApplicationLauncherDestroyed.Add(OnGUIAppLauncherDestroyed);
         }
 
-  
+
 
         public void Start()
         {
@@ -85,7 +85,7 @@ namespace FarFutureTechnologies.UI
 
         void FixedUpdate()
         {
-            
+
             if (!showToolbarButton)
             {
                 if (AntimatterFactory.Instance.Researched)
@@ -118,7 +118,7 @@ namespace FarFutureTechnologies.UI
             {
                 showTips = false;
             }
-       
+
         }
 
         // UI FUNCTIONS
@@ -135,7 +135,7 @@ namespace FarFutureTechnologies.UI
 
             if (AntimatterFactory.Instance != null)
             {
-                
+
                 if (showMiniWindow)
                 {
                     miniWindowPos = GUI.Window(windowIdentifier, miniWindowPos, DrawMiniWindow, "", GUIResources.GetStyle("window_toolbar"));
@@ -147,7 +147,7 @@ namespace FarFutureTechnologies.UI
                       new GUIContent(),
                       GUIResources.GetStyle("window_main"), GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
                 }
-                
+
             }
         }
 
