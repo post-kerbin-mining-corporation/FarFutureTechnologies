@@ -27,6 +27,8 @@
 - Adjusted part and science costs of all resourcing parts
 - First stab at costs for engine parts
 - Increased the number of FusionPellets in the toggleable tanks by 5x
+- Fixed a bug with the ModuleResourceProfiler's range setting
+- Fixed a localization issue with the VAB ModuleResourceProfiler's info box
 - Fixed a few textures that were still tgas
 - Fixed small nuclear target tank mass and cost when using fusion pellets
 - Fixed missing CTT nodes for some engines
