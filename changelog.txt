@@ -1,3 +1,47 @@
+0.2.2
+-----
+- Added FX-2 Fusion Reactor
+-- 2.5m fusion reactor, 4-8 MW power output
+- Added FX-3 Fusion Reactor
+-- 3.75m fusion reactor, 10-20 MW power output
+- Added Asimov Fission Fragment Rocket
+-- Very low TWR rocket with integrated fuel, very high specific impulse, low heat generation, no EC consumption past charging
+- Increased thrust of Z-pinch fusion engine to 375 from 160
+- Reduced constant power usage of both Z-Pinch engines by 50%, now 50/65 kW from 100/125 kW
+- Reduced constant power usage of tokamak fusion engine from 125 to 75 kW
+- Reduced mass of magnetic ICF to 20 from 25 t, reduced heat generation by 2/3
+- Reduced mass of Casaba to 11.5 from 15.82, decreased Ablator to 4250
+- Tweaked propellant ratios of Casaba so that the consumption of all the Ablator requires exactly 1/2 an antimatter storage ring and 1 small full fission pellet tanks
+- Increased Isp of Microstar to 90950 from 60950, increased thrust to 150 kN from 60 kN
+- Tweaked propellant ratios of Microstar so that 1 full short 3.75m fusion fuel tank takes very close to 1 full antimatter ring to consume
+- Reduced Antimatter consumption of the Dirac by 75% in Medium Density mode
+- Increased thrust of Dirac in Medium Density mode to 190 from 122, increased Isp to 75,250 from 55,000 s
+- Increased thrust of Dirac in High Density mode to 870 from 720
+- Tweaked Ablator use of ablative ICF so that the engine burns through exactly 1 full small pellet tank with its ablator supply
+- Reduced dry mass of ablative ICF to 20 from 30 t, increased Ablator amount to 32000 from 15000
+- Increased power usage of mirror cell fusion engine by 85 kW per segment
+- Decreased specific impulse of NSWR to 5650 from 6730
+- Increased cost of NuclearSaltWater to 8 funds/unit from 4 funds/unit
+- Decreased mass ratio of NuclearSaltWater tanks to 3 from 5
+- Adjusted science costs of all fuel tanks
+- Adjusted part and science costs of all resourcing parts
+- First stab at costs for engine parts
+- Increased the number of FusionPellets in the toggleable tanks by 5x
+- Fixed a bug with the ModuleResourceProfiler's range setting
+- Fixed a localization issue with the VAB ModuleResourceProfiler's info box
+- Fixed a few textures that were still tgas
+- Fixed small nuclear target tank mass and cost when using fusion pellets
+- Fixed missing CTT nodes for some engines
+
+0.2.1
+-----
+- Updated CryoTanks to 0.4.7
+- Added a popup that appears the first time a save has an active Antimatter Factory that tells you how to use it
+- Clarified some tooltips and part descriptions to indicate that antimatter must be loaded on the pad
+- Fixed mirror-cell fusion engine choking on startup
+- Worked around stock KSP bug regarding atmospheric harvesters
+- Fixed an issue that caused a harmless exception during game loading
+
 0.2.0
 -----
 - KSP 1.3

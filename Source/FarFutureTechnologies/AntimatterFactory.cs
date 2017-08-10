@@ -39,12 +39,15 @@ namespace FarFutureTechnologies
         public double AntimatterRate { get { return curAntimatterRate; } }
         public double AntimatterMax { get { return maxAntimatter; } }
         public double DeferredAntimatterAmount { get { return deferredAntimatterAmount; } }
+        public bool FirstLoad { get { return firstLoad; } set { firstLoad = value; } }
 
         private bool productionOn = false;
         private bool researched = false;
         private bool infinite = false;
 
         private int factoryLevel = 0;
+
+        private bool firstLoad = true;
 
         private double curAntimatter = 0d;
         private double maxAntimatter = 0d;
@@ -100,14 +103,17 @@ namespace FarFutureTechnologies
 
         private void Start()
         {
-            double worldTime = Planetarium.GetUniversalTime();
-            //GameEvents.OnVesselRollout.Add(new EventData<ShipConstruct>.OnEvent(OnVesselRollout));
-            if (worldTime - lastUpdateTime > 0d)
+            if (HighLogic.LoadedSceneIsGame)
             {
-                Utils.Log(String.Format("[AntimatteryFactory]: Delta time of {0} seconds detected, catching up", worldTime-lastUpdateTime));
-                // update storage to reflect delta
-                //CatchupProduction(worldTime - lastUpdateTime);
-                lastUpdateTime = worldTime;
+                double worldTime = Planetarium.GetUniversalTime();
+                //GameEvents.OnVesselRollout.Add(new EventData<ShipConstruct>.OnEvent(OnVesselRollout));
+                if (worldTime - lastUpdateTime > 0d)
+                {
+                    Utils.Log(String.Format("[AntimatteryFactory]: Delta time of {0} seconds detected, catching up", worldTime - lastUpdateTime));
+                    // update storage to reflect delta
+                    //CatchupProduction(worldTime - lastUpdateTime);
+                    lastUpdateTime = worldTime;
+                }
             }
 
         }
@@ -126,8 +132,9 @@ namespace FarFutureTechnologies
           }
         }
 
-        public void Initialize(int loadedLevel, double loadedStorage, double deferredConsumption)
+        public void Initialize(int loadedLevel, double loadedStorage, double deferredConsumption, bool firstLoadWithAM)
         {
+            firstLoad = firstLoadWithAM;
             factoryLevel = loadedLevel;
             curAntimatter = loadedStorage;
             deferredAntimatterAmount = deferredConsumption;
