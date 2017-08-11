@@ -1,3 +1,11 @@
+0.2.3
+-----
+- Fixed a bug where a field for the fusion reactor was visible in the VAB when it shouldn't be
+- Fixed some fusion reactor localization bugs
+- Fixed an issue where fusion reactors would shut down on startup when using D-He3 mode
+- Added new functionality to Metallic H2 engine, can vary mixing ratio. Higher ratio = lower heat and performance, lower ratio = higher heat and performance
+
+
 0.2.2
 -----
 - Added FX-2 Fusion Reactor

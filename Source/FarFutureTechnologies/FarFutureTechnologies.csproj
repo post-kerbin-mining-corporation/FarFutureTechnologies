@@ -54,14 +54,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AntimatterFactory.cs" />
-<<<<<<< HEAD
     <Compile Include="ModuleFusionCore.cs" />
     <Compile Include="ModuleFusionReactor.cs">
       <SubType>Code</SubType>
     </Compile>
-=======
->>>>>>> master
     <Compile Include="ModuleMultiLengthEngine.cs" />
+    <Compile Include="ModuleMultiRatioEngine.cs" />
     <Compile Include="ModuleProfilingScanner.cs" />
     <Compile Include="UI\AntimatterFactoryUI.cs" />
     <Compile Include="AntimatterLoader.cs" />
