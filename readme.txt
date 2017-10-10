@@ -1,5 +1,5 @@
 =============================
-FAR FUTURE TECHNOLOGIES 0.2.3
+FAR FUTURE TECHNOLOGIES 0.2.4
 =============================
 
 This is a pack containing far-future but possible propulsion technologies. These might not be possible today, but the physics works out, and might be feasible within the next 100 years.

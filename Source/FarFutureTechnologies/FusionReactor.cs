@@ -1,10 +1,4 @@
-/// FissionReactor
-/// ---------------------------------------------------
-/// 
-///
-
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,20 +8,8 @@ using KSP.Localization;
 
 namespace FarFutureTechnologies
 {
-    public class FusionReactor: ModuleResourceConverter
+    public class ModuleFusionReactor: ModuleResourceConverter
     {
-        public struct ResourceBaseRatio
-        {
-            public string ResourceName;
-            public double ResourceRatio;
-
-            public ResourceBaseRatio(string name, double ratio)
-            {
-                ResourceName = name;
-                ResourceRatio = ratio;
-            }
-         }
-
         /// CONFIGURABLE FIELDS
         // ----------------------
 
@@ -39,80 +21,66 @@ namespace FarFutureTechnologies
         public bool Charging = false;
 
         [KSPField(isPersistant = true)]
-        public float ChargeAmount = 0f;
+        public float CurrentCharge = 0f;
 
-        [KSPField(isPersistant = false)]
-        public float ChargeRate = 500000f;
+        [KSPField(isPersistant = true, guiActive = true, guiName = "Charge Rate"), UI_FloatRange(minValue = 10f, maxValue = 1000f, stepIncrement = 10f)]
+        public float ChargeRate = 50f;
 
         [KSPField(isPersistant = false)]
         public float ChargeGoal = 500000f;
 
-        // --- Power Generation -----
-        // Heat generation at full power
-        [KSPField(isPersistant = false)]
-        public float PowerGeneration = 1000f;
-
-        // --- Fuel Use -----
-        // Heat generation at full power
-        [KSPField(isPersistant = false)]
-        public float PassiveFuelUseScale = 0.001f;
-
-        // --- Heat -----
-        // Temperature for auto-shutdown
-        [KSPField(isPersistant = true, guiActive = true, guiName = "Auto-Shutdown Temp"), UI_FloatRange(minValue = 700f, maxValue = 6000f, stepIncrement = 100f)]
-        public float CurrentSafetyOverride = 1000f;
-
+        // --- Heat ---
         // Heat generation at full power
         [KSPField(isPersistant = false)]
         public float HeatGeneration;
 
-        // Nominal reactor temperature (where the reactor should live)
-        [KSPField(isPersistant = false)]
-        public float NominalTemperature = 900f;
 
-        // Critical reactor temperature (core damage after this)
-        [KSPField(isPersistant = false)]
-        public float CriticalTemperature = 1400f;
-
-        // Critical reactor temperature (kaboom at this)
-        [KSPField(isPersistant = false)]
-        public float MaximumTemperature = 2000f;
-
+        // --- Animation ---
         // name of the overheat animation
         [KSPField(isPersistant = false)]
-        public string OverheatAnimation;
-
+        public string ActiveAnimationName;
+        // name of the overheat animation
         [KSPField(isPersistant = false)]
-        public int smoothingInterval = 25;
+        public string OverheatAnimationName;
 
 
-        // REPAIR VARIABLES
-        // integrity of the core
-        [KSPField(isPersistant = true)]
-        public float CoreIntegrity = 100f;
-
-        // Rate the core is damaged, in % per S per K
+        // ---- Fuels ----
+        // Current fuel mode name
+        public string CurrentModeID = null;
         [KSPField(isPersistant = false)]
-        public float CoreDamageRate = 0.005f;
+        public float MinimumReactorPower = 0.1f;
 
-        // Engineer level to repair the core
-        [KSPField(isPersistant = false)]
-        public int EngineerLevelForRepair = 5;
+        /// UI
+        /// ---------------------
+        /// // Current fuel mode
+        [KSPField(guiActive = true, guiActiveEditor = true, guiName = "Fuel Mode")]
+        [UI_ChooseOption(affectSymCounterparts = UI_Scene.None, scene = UI_Scene.All, suppressEditorShipModified = true)]
+        public int currentModeIndex = 0;
 
-        [KSPField(isPersistant = false)]
-        public float MaxRepairPercent = 75;
+        // Heat Status string
+        [KSPField(isPersistant = false, guiActive = true, guiName = "Heat Generated")]
+        public string HeatOutput;
 
-        [KSPField(isPersistant = false)]
-        public float MinRepairPercent = 10;
+        // Reactor Status string
+        [KSPField(isPersistant = false, guiActive = true, guiName = "Power Generated")]
+        public string ReactorOutput;
 
-        [KSPField(isPersistant = false)]
-        public float MaxTempForRepair = 325;
+        // Fuel Status string
+        [KSPField(isPersistant = false, guiActive = true, guiName = "Fuel Usage")]
+        public string FuelInput;
 
-        [KSPField(isPersistant = true)]
-        public bool FirstLoad = true;
+        // Vessel Temperature
+        [KSPField(isPersistant = false, guiActive = true, guiName = "System Temperature")]
+        public string CoreTemp;
 
-        /// UI ACTIONS
-        /// --------------------
+        [KSPField(isPersistant = false, guiActive = true, guiName = "Capacitors")]
+        public string ChargeStatus = "N/A";
+
+        [KSPField(isPersistant = false, guiActive = true, guiName = "Recharge")]
+        public string RechargeStatus = "N/A";
+
+        /// KSPACTIONS
+        /// ----------------------
         [KSPAction("Enable Startup Charging")]
         public void EnableAction(KSPActionParam param) { EnableCharging(); }
 
@@ -125,7 +93,10 @@ namespace FarFutureTechnologies
             Charging = !Charging;
         }
 
-        [KSPEvent(guiActive = true, guiActiveEditor= true, guiName = "Enable Startup Charging", active = true)]
+        /// KSPEVENTS
+        /// ----------------------
+
+        [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Enable Startup Charging", active = true)]
         public void EnableCharging()
         {
             Charging = true;
@@ -135,61 +106,17 @@ namespace FarFutureTechnologies
         {
             Charging = false;
         }
-        // Try to fix the reactor
-        [KSPEvent(externalToEVAOnly = true, guiActiveUnfocused = true, unfocusedRange = 3.5f, guiName = "Repair Reactor")]
-        public void RepairReactor()
-        {
-            if (TryRepairReactor())
-            {
-              DoReactorRepair();
-            }
-        }
 
-        // ACCESSORS
-        /// ---------------
-        public ModuleCoreHeat Core{ get {return core;}}
-        public bool ReactorEnabled { get {return base.ModuleIsActive();}}
+        private float maintenenceConsumption = 0f;
+        private bool activeFlag;
+        private int heatTicker = 0;
+        private List<FusionReactorMode> modes;
 
-        /// PRIVATE VARIABLES
-        /// ----------------------
-        private ModuleCoreHeat core;
-        private AnimationState[] overheatStates;
+        private AnimationState activeAnimation;
+        private AnimationState overheatAnimation;
 
+        private ModuleFusionCore core;
 
-        // base paramters
-        private List<ResourceBaseRatio> inputs;
-        private List<ResourceBaseRatio> outputs;
-
-        /// UI FIELDS
-        /// --------------------
-        // Reactor Status string
-        [KSPField(isPersistant = false, guiActive = true, guiName = "Reactor Power")]
-        public string ReactorOutput;
-
-        // Reactor Status string
-        [KSPField(isPersistant = false, guiActive = true, guiName = "Available Power")]
-        public string ThermalTransfer;
-
-        // integrity of the core
-        [KSPField(isPersistant = false, guiActive = true, guiName = "Core Temperature")]
-        public string CoreTemp;
-
-        // integrity of the core
-        [KSPField(isPersistant = false, guiActive = true, guiName = "Core Health")]
-        public string CoreStatus;
-
-        public override string GetInfo()
-        {
-            double baseRate = 0d;
-            for (int i = 0 ;i < inputList.Count;i++)
-            {
-                if (inputList[i].ResourceName == FuelName)
-                    baseRate = inputList[i].Ratio;
-            }
-            return
-                Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo")
-                + base.GetInfo();
-        }
         public string GetModuleTitle()
         {
             return "FusionReactor";
@@ -199,362 +126,486 @@ namespace FarFutureTechnologies
             return Localizer.Format("#LOC_FFT_ModuleFusionReactor_ModuleName");
         }
 
-        private void SetupResourceRatios()
+        public override string GetInfo()
         {
-
-            inputs = new List<ResourceBaseRatio>();
-            outputs = new List<ResourceBaseRatio>();
-
-            for (int i = 0 ;i < inputList.Count;i++)
+            string msg = Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo", (HeatGeneration/50f).ToString());
+            foreach(FusionReactorMode mode in modes)
             {
-                inputs.Add(new ResourceBaseRatio(inputList[i].ResourceName, inputList[i].Ratio));
+              msg += Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo_Mode",
+                  mode.modeName,
+                  mode.GetOutput().ToString("F0"));
+              foreach (ResourceRatio input in mode.inputs)
+              {
+                msg += Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo_Fuel",
+                  input.ResourceName, input.Ratio.ToString("F5"));
+              }
             }
-            for (int i = 0 ;i < outputList.Count;i++)
+            return msg;
+        }
+
+        public override void OnLoad(ConfigNode node)
+        {
+            base.OnLoad(node);
+            ConfigNode[] varNodes = node.GetNodes("FUSIONMODE");
+            modes = new List<FusionReactorMode>();
+            for (int i = 0; i < varNodes.Length; i++)
             {
-                outputs.Add(new ResourceBaseRatio(outputList[i].ResourceName, outputList[i].Ratio));
+                modes.Add(new FusionReactorMode(varNodes[i]));
             }
         }
 
         public override void OnStart(PartModule.StartState state)
         {
             base.OnStart(state);
-            SetupLocalization();
-            SetupSafetyOverride();
 
-
-          if (HighLogic.LoadedScene != GameScenes.EDITOR)
-          {
-              core = this.GetComponent<ModuleCoreHeat>();
-              if (core == null)
-                  Utils.LogError("[FusionReactor]: Could not find core heat module!");
-
-              SetupResourceRatios();
-
-              if (OverheatAnimation != "")
-                  overheatStates = Utils.SetUpAnimation(OverheatAnimation, this.part);
-          } else
-          {
-              //this.CurrentSafetyOverride = this.NominalTemperature;
-          }
-        }
-
-        // Sets up the localization
-        private void SetupLocalization()
-        {
-          //Events["RepairReactor"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Event_RepairReactor");
-          //Fields["CurrentSafetyOverride"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_CurrentSafetyOverride");
-          //Fields["CurrentPowerPercent"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_CurrentPowerPercent");
-          //Fields["ReactorOutput"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput");
-          //Fields["ThermalTransfer"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ThermalTransfer");
-          //Fields["CoreTemp"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_CoreTemp");
-          //Fields["CoreStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_CoreStatus");
-          //Fields["FuelStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_FuelStatus");
-        }
-        // Sets up the safery overrides
-        private void SetupSafetyOverride()
-        {
-          var range = (UI_FloatRange)this.Fields["CurrentSafetyOverride"].uiControlEditor;
-          range.minValue = 0f;
-          range.maxValue = MaximumTemperature;
-
-          range = (UI_FloatRange)this.Fields["CurrentSafetyOverride"].uiControlFlight;
-          range.minValue = 0f;
-          range.maxValue = MaximumTemperature;
-
-
-          if (FirstLoad)
-          {
-            this.CurrentSafetyOverride = this.CriticalTemperature;
-            FirstLoad = false;
-          }
-        }
-
-        public virtual void OnUpdate()
-        {
-          if (HighLogic.LoadedScene == GameScenes.FLIGHT)
-          {
-              Fields["status"].guiActive = false;
-
-
-
-
-              // Adjust the safety override
-              if (core != null)
-              {
-                  core.CoreShutdownTemp = (double)CurrentSafetyOverride+10d;
-              }
-          }
-
-          if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
-          {
-              if (Events["EnableCharging"].active == Charging || Events["DisableCharging"].active != Charging)
-              {
-                  Events["DisableCharging"].active = Charging;
-                  Events["EnableCharging"].active = !Charging;
-              }
-          }
-        }
-        public virtual void OnFixedUpdate()
-        {
-          if (HighLogic.LoadedScene == GameScenes.FLIGHT)
-          {
-              // Update reactor core integrity readout
-              if (CoreIntegrity > 0)
-                  CoreStatus = String.Format("{0:F2} %", CoreIntegrity);
-              else
-                  CoreStatus = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_CoreStatus_Meltdown");
-
-              // Handle core damage tracking and effects
-              HandleCoreDamage();
-              // Heat consumption occurs if reactor is on or off
-              DoHeatConsumption();
-
-              // IF REACTOR ON
-              // =============
-              if (ReactorEnabled)
-              {
-                DoFuelConsumption();
-                DoHeatGeneration();
-              }
-              // IF REACTOR OFF
-              // =============
-              else
-              {
-                  // Update UI
-                  if (CoreIntegrity <= 0f)
-                  {
-                      FuelStatus = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_FuelStatus_Meltdown");
-                      ReactorOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput_Meltdown");
-                  }
-                  else
-                  {
-                      FuelStatus = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_FuelStatus_Offline");
-                      ReactorOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput_Offline");
-
-                  }
-              }
-          }
-        }
-
-        // Gets the current reactor throttle
-        private float GetReactorThrottle()
-        {
-          // lastTimeFactor is a factor that, multiplied by the config ratio parameter, gives the current (well, last frame) production
-          if (ReactorEnabled)
-            return base.lastTimeFactor;
-            else
-          return 0d;
-        }
-
-        private void DoFuelConsumption()
-        {
-          if (ReactorEnabled && GetReactorThrottle() <= 0.01)
-          {
-            for (int i = 0; i < inputs.Count;i++)
+            /// Reload nodes as needed
+            if (HighLogic.LoadedSceneIsFlight || HighLogic.LoadedSceneIsEditor)
             {
-                this.part.RequestResource(inputs[i].ResourceName, TimeWarp.fixedDeltaTime*PassiveFuelUseScale);
+                if (modes == null || modes.Count == 0)
+                {
+                    ConfigNode node = GameDatabase.Instance.GetConfigs("PART").
+                        Single(c => part.partInfo.name == c.name).config.
+                        GetNodes("MODULE").Single(n => n.GetValue("name") == moduleName);
+                    OnLoad(node);
+                }
             }
-          }
+            SetupUI();
+            SetupAnimations();
+            SetupHeat();
+            SetupRecharge();
+
+            ChangeMode(currentModeIndex);
+
+            part.force_activate();
         }
 
-        // Creates heat from the reaction
-        private void DoHeatGeneration()
+        public override void OnFixedUpdate()
         {
-            // Generate heat from the reaction and apply it
-            SetHeatGeneration((GetReactorThrottle() * HeatGeneration)* CoreIntegrity/100f);
+            base.OnFixedUpdate();
 
-            if (CoreIntegrity <= 0f)
+            RechargeCapacitors();
+            GenerateHeat();
+            MaintainMinimumConsumption();
+            HandleAnimation();
+        }
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            if (base.ModuleIsActive())
             {
-                FuelStatus = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_FuelStatus_Meltdown");
-                ReactorOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput_Meltdown");
+                ReactorOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput_Running", (base.lastTimeFactor * modes[currentModeIndex].GetOutput()).ToString("F1"));
+
+                float fuelUse = maintenenceConsumption;
+                for (int i = 0; i < inputList.Count ; i++)
+                {
+                    fuelUse += (float)base.lastTimeFactor * (float)inputList[i].Ratio;
+                }
+                FuelInput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_FuelInput_Running", fuelUse.ToString("F4"));
             }
             else
             {
-                ReactorOutput = String.Format("{0:F1} kW", GetReactorThrottle() * HeatGeneration / 50f * CoreIntegrity / 100f);
+                ReactorOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput_Offline");
+                FuelInput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_FuelInput_Offline");
+            }
+
+            CoreTemp = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_CoreTemp_Running", core.CoreTemperature.ToString("F0"), core.CoreTempGoal.ToString("F0"));
+
+            if (Events["EnableCharging"].active == Charging || Events["DisableCharging"].active != Charging)
+            {
+                Events["DisableCharging"].active = Charging;
+                Events["EnableCharging"].active = !Charging;
             }
         }
 
-        // Does the transformation of heat into power
-        private void DoHeatConsumption()
+        /// <summary>
+        /// Sets up the UI
+        /// </summary>
+        void SetupUI()
         {
+            var chooseField = Fields["currentModeIndex"];
+            var chooseOption = (UI_ChooseOption)chooseField.uiControlEditor;
+            chooseOption.options = modes.Select(s => s.modeName).ToArray();
+            chooseOption.onFieldChanged = UpdateModesFromControl;
+            chooseOption = (UI_ChooseOption)chooseField.uiControlFlight;
+            chooseOption.options = modes.Select(s => s.modeName).ToArray();
+            chooseOption.onFieldChanged = UpdateModesFromControl;
 
-            // save some divisions later
-            float coreIntegrity = CoreIntegrity / 100f;
-            float reactorThrottle = GetReactorThrottle();
+            // Kill converter field
+            //Fields["status"].guiActive = false;
 
-            float productionScalingFactor = reactorThrottle * coreIntegrity;
+            Fields["currentModeIndex"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_CurrentModeIndex_Title");
+            Fields["HeatOutput"].guiName =  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Title");
+            Fields["ReactorOutput"].guiName =  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput_Title");
+            Fields["FuelInput"].guiName =  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_FuelInput_Title");
+            Fields["CoreTemp"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_CoreTemp_Title");
+            Fields["ChargeStatus"].guiName =  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ChargeStatus_Title");
+            Fields["RechargeStatus"].guiName =  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_RechargeStatus_Title");
 
-            RecalculateRatios(productionScalingFactor);
+            Events["EnableCharging"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Event_Enable_Title");
+            Events["DisableCharging"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Event_Disable_Title");
 
-            // GUI
-            ThermalTransfer = String.Format("{0:F1} kW", AvailablePower);
-            CoreTemp = String.Format("{0:F1}/{1:F1} K", (float)core.CoreTemperature, NominalTemperature);
+            Actions["EnableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Action_EnableAction_Title");
+            Actions["DisableAction"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Action_DisableAction_Title");
+            Actions["ToggleAction"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Action_ToggleAction_Title");
         }
 
-        // Set the reactor's heat generation properties
+        /// <summary>
+        /// Sets up Animations
+        /// </summary>
+        void SetupAnimations()
+        {
+            if (ActiveAnimationName != "")
+                activeAnimation = Utils.SetUpAnimation(ActiveAnimationName, part, 2)[0];
+
+            for (int i = 0; i < modes.Count; i++)
+            {
+                modes[i].InitializeAnimations(part);
+            }
+        }
+
+        /// <summary>
+        /// Sets up heat related parameters
+        /// </summary>
+        void SetupHeat()
+        {
+            if (base.ModuleIsActive())
+                activeFlag = true;
+            else
+                activeFlag = false;
+
+            if (HighLogic.LoadedScene != GameScenes.EDITOR)
+            {
+                core = this.GetComponent<ModuleFusionCore>();
+            }
+        }
+
+        /// <summary>
+        /// Sets up the capacitor recharge/discharge parameters
+        /// </summary>
+        void SetupRecharge()
+        {
+            if (CurrentCharge >= ChargeGoal)
+            {
+                SetRechargeUI(true);
+            }
+            else
+            {
+                SetRechargeUI(false);
+            }
+        }
+
+        /// <summary>
+        /// Delegate method called when the fuel mode button is pressed
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="oldFieldValueObj"></param>
+        void UpdateModesFromControl(BaseField field, object oldFieldValueObj)
+        {
+            ChangeMode(currentModeIndex);
+        }
+
+        /// <summary>
+        /// Handles updating animations
+        /// </summary>
+        void HandleAnimation()
+        {
+            if (ActiveAnimationName != "")
+            {
+                if (base.ModuleIsActive())
+                {
+                    activeAnimation.speed = 1f;
+                    activeAnimation.normalizedTime = Mathf.Clamp01(activeAnimation.normalizedTime);
+                }
+                else
+                {
+                    activeAnimation.speed = -1f;
+                    activeAnimation.normalizedTime = Mathf.Clamp01(activeAnimation.normalizedTime);
+                }
+            }
+        }
+
+        /// <summary>
+        ///
+        /// Handles heat generation
+        /// </summary>
+        void GenerateHeat()
+        {
+            if (base.ModuleIsActive())
+            {
+                if (base.ModuleIsActive() != activeFlag)
+                {
+                    base.lastUpdateTime = Planetarium.GetUniversalTime();
+                    heatTicker = 60;
+                    ReactorActivated();
+                }
+                HeatOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Running", (HeatGeneration/50f).ToString("F0"));
+                SetHeatGeneration(HeatGeneration);
+            }
+            else
+            {
+                if (base.ModuleIsActive() != activeFlag)
+                {
+                    ZeroThermal();
+                    ReactorDeactivated();
+                }
+                HeatOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Offline");
+                SetHeatGeneration(0f);
+            }
+        }
+
+        void ReactorActivated()
+        {
+            Debug.Log("[ModuleFusionReactor]: Reactor Startup");
+            if (!Charged)
+            {
+                Utils.Log(String.Format("[FusionReactor]: Disabling due to insufficient charge"));
+                base.StopResourceConverter();
+            }
+            else
+            {
+
+                activeFlag = true;
+            }
+        }
+
+        void ReactorDeactivated()
+        {
+            Debug.Log("[ModuleFusionReactor]: Reactor Shutdown");
+            Charged = false;
+            CurrentCharge = 0f;
+            activeFlag = false;
+        }
+
+        /// <summary>
+        /// Handles the lower level heat functionality
+        /// </summary>
+        /// <param name="heat"></param>
         private void SetHeatGeneration(float heat)
         {
-            if (Time.timeSinceLevelLoad > 5f)
+            if (Time.timeSinceLevelLoad > 1f)
                 GeneratesHeat = true;
             else
                 GeneratesHeat = false;
 
-            TemperatureModifier = new FloatCurve();
-            TemperatureModifier.Add(0f, heat;
-
-            core.MaxCoolant = heat;
-        }
-
-        // track and set core damage
-        private void HandleCoreDamage()
-        {
-          // Update reactor damage
-          float critExceedance = (float)core.CoreTemperature - CriticalTemperature;
-
-          // If overheated too much, damage the core
-          if (critExceedance > 0f && TimeWarp.CurrentRate < 100f)
-          {
-              // core is damaged by Rate * temp exceedance * time
-              CoreIntegrity = Mathf.MoveTowards(CoreIntegrity, 0f, CoreDamageRate * critExceedance * TimeWarp.fixedDeltaTime);
-          }
-
-          // Calculate percent exceedance of nominal temp
-          float tempNetScale = 1f - Mathf.Clamp01((float)((core.CoreTemperature - NominalTemperature) / (MaximumTemperature - NominalTemperature)));
-
-          if (OverheatAnimation != "")
-          {
-            for (int i = 0;i<overheatStates.Length;i++)
-              {
-                  overheatStates[i].normalizedTime = 1f - tempNetScale;
-              }
-          }
-        }
-
-        // Set ModuleResourceConverter ratios based on an input scale
-        private void RecalculateRatios(float fuelInputScale)
-        {
-
-            for (int i = 0; i < _recipe.Inputs.Count; i++)
+            if (heatTicker <= 0)
             {
-                for (int j = 0; j < inputs.Count; j++)
-                {
-                    if (inputs[j].ResourceName == inputList[i].ResourceName)
-                    {
-                        _recipe.Inputs[i] = new ResourceRatio(inputList[i].ResourceName, inputs[j].ResourceRatio * fuelInputScale, inputList[i].DumpExcess);
-                    }
-                }
-            }
-            for (int i = 0; i < _recipe.Outputs.Count; i++)
-            {
-                for (int j = 0; j < outputs.Count; j++)
-                {
-                    if (outputs[j].ResourceName == outputList[i].ResourceName)
-                    {
-                        //Debug.Log("OUT: edited " + outputList[i].ResourceName + " ratio to " + (outputs[j].ResourceRatio * fuelInputScale).ToString());
-                        _recipe.Outputs[i] = new ResourceRatio(outputList[i].ResourceName, inputs[j].ResourceRatio * fuelInputScale, outputList[i].DumpExcess);
-                    }
-                }
-            }
-            for (int i = 0; i < inputList.Count; i++)
-            {
-                //Debug.Log("IN: edited " + inputList[i].ResourceName + " ratio to " + (inputList[i].Ratio).ToString());
-            }
-        }
-
-
-
-        // ####################################
-        // Repairing
-        // ####################################
-
-        public bool TryRepairReactor()
-        {
-          if (CoreIntegrity <= MinRepairPercent)
-          {
-              ScreenMessages.PostScreenMessage(new ScreenMessage(
-                Localizer.Format("#LOC_FFT_ModuleFusionReactor_Message_Repair_CoreTooDamaged"),
-                5.0f, ScreenMessageStyle.UPPER_CENTER));
-              return false;
-          }
-          if (!CheckEVAEngineerLevel(EngineerLevelForRepair))
-          {
-              ScreenMessages.PostScreenMessage(new ScreenMessage(
-              Localizer.Format("#LOC_FFT_ModuleFusionReactor_Message_Repair_CoreTooDamaged",EngineerLevelForRepair.ToString("F0")),
-                  5.0f, ScreenMessageStyle.UPPER_CENTER));
-              return false;
-          }
-          if (base.ModuleIsActive())
-          {
-              ScreenMessages.PostScreenMessage(new ScreenMessage(
-                  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Message_Repair_NotWhileRunning"),
-                  5.0f, ScreenMessageStyle.UPPER_CENTER));
-              return false;
-          }
-          if (core.CoreTemperature > MaxTempForRepair)
-          {
-              ScreenMessages.PostScreenMessage(new ScreenMessage(
-                Localizer.Format("#LOC_FFT_ModuleFusionReactor_Message_Repair_CoreTooHot", MaxTempForRepair.ToString("F0")),
-                5.0f, ScreenMessageStyle.UPPER_CENTER));
-              return false;
-          }
-          if (CoreIntegrity >= MaxRepairPercent)
-          {
-              ScreenMessages.PostScreenMessage(new ScreenMessage(
-                Localizer.Format("#LOC_FFT_ModuleFusionReactor_Message_Repair_CoreAlreadyRepaired", MaxRepairPercent.ToString("F0")),
-                  5.0f, ScreenMessageStyle.UPPER_CENTER));
-              return false;
-          }
-          return true;
-        }
-
-        // Repair the reactor to max Repair percent
-        public void DoReactorRepair()
-        {
-            this.CoreIntegrity = MaxRepairPercent;
-            ScreenMessages.PostScreenMessage(new ScreenMessage(
-              Localizer.Format("#LOC_FFT_ModuleFusionReactor_Message_Repair_RepairSuccess", MaxRepairPercent.ToString("F0")),
-              5.0f, ScreenMessageStyle.UPPER_CENTER));
-        }
-
-        // Check the current EVA engineer's level
-        private bool CheckEVAEngineerLevel(int level)
-        {
-            ProtoCrewMember kerbal = FlightGlobals.ActiveVessel.GetVesselCrew()[0];
-            if (kerbal.experienceTrait.Title == "Engineer" && kerbal.experienceLevel >= level)
-            {
-                return true;
+                core.AddEnergyToCore(heat / 50f);
+                //TemperatureModifier = new FloatCurve();
+                //TemperatureModifier.Add(0f, heat);
             }
             else
             {
-                return false;
+                ZeroThermal();
+                heatTicker = heatTicker - 1;
+            }
+            core.MaxCoolant = heat;
+        }
+
+        /// <summary>
+        /// Zeros all thermal parameters
+        /// </summary>
+        private void ZeroThermal()
+        {
+            base.lastHeatFlux = 0d;
+            core.ZeroThermal();
+            base.GeneratesHeat = false;
+            TemperatureModifier = new FloatCurve();
+            TemperatureModifier.Add(0f, 0f);
+        }
+
+        /// <summary>
+        /// Consumes fuel to maintaina minimum consumption
+        /// </summary>
+        void MaintainMinimumConsumption()
+        {
+            if (base.ModuleIsActive())
+            {
+
+                float diff = (float)base.lastTimeFactor - MinimumReactorPower;
+
+                if (diff < 0)
+                {
+                    diff = Mathf.Abs(diff);
+                    maintenenceConsumption = 0f;
+                    for (int i = 0; i < inputList.Count; i++)
+                    {
+                        maintenenceConsumption += diff * (float)inputList[i].Ratio;
+                        double req = part.RequestResource(inputList[i].ResourceName, diff * inputList[i].Ratio * TimeWarp.fixedDeltaTime);
+                        if (req < 0.000001)
+                        {
+                            ToggleResourceConverterAction(new KSPActionParam(0, KSPActionType.Activate));
+                        }
+                    }
+                }
+                else
+                {
+                    maintenenceConsumption = 0f;
+                }
+            }
+            else
+            {
+                maintenenceConsumption = 0f;
             }
         }
 
-        public float GetCoreTemperature()
+        /// <summary>
+        /// Handles capacitor recharge
+        /// </summary>
+        void RechargeCapacitors()
         {
-          return (float)core.CoreTemperature;
+            if (Charging && !Charged)
+            {
+                double req = part.RequestResource("ElectricCharge", ChargeRate * TimeWarp.fixedDeltaTime);
+                CurrentCharge = Mathf.MoveTowards(CurrentCharge, ChargeGoal, (float)req);
+
+                if (req > 0.0d)
+                    RechargeStatus = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_RechargeStatus_Charging", ChargeRate.ToString("F2"));
+                else
+                    RechargeStatus = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_RechargeStatus_NoPower");
+
+                ChargeStatus = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ChargeStatus_Normal", (CurrentCharge / ChargeGoal * 100.0f).ToString("F1"));
+                if (CurrentCharge >= ChargeGoal)
+                {
+                    RechargeStatus = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_RechargeStatus_Ready");
+                    Charged = true;
+                   SetRechargeUI(false);
+                }
+            }
         }
 
-        // ####################################
-        // Refuelling
-        // ####################################
-
-        // Finds time remaining at specified fuel burn rates
-        public string FindTimeRemaining(double amount, double rate)
+        /// <summary>
+        /// Toggles the UI between a "ready" mode and a "recharging" mode
+        /// </summary>
+        /// <param name="isCharging"></param>
+        void SetRechargeUI(bool isCharging)
         {
-            if (rate < 0.0000001)
-            {
-                return Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_FuelStatus_VeryLong");
-            }
-            double remaining = amount / rate;
-            //TimeSpan t = TimeSpan.FromSeconds(remaining);
+            //Fields["HeatOuput"].guiActive = !isCharging;
+            //Fields["ReactorOutput"].guiActive = !isCharging;
+            //Fields["FuelInput"].guiActive = !isCharging;
+            //Fields["FuelStatus"].guiActive = !isCharging;
 
-            if (remaining >= 0)
+            //Events["startEvt"].guiActive = !isCharging;
+
+            //Fields["RechargeStatus"].guiActive = isCharging;
+            //Fields["ChargeStatus"].guiActive = isCharging;
+        }
+
+        /// <summary>
+        /// Switches the reactor's mode to a new mode
+        /// </summary>
+        /// <param name="newMode"></param>
+        ///
+        void ChangeMode(int modeIndex)
+        {
+            // Turn off the reactor when switching fuels
+            if (base.ModuleIsActive())
             {
-                return Utils.FormatTimeString(remaining);
+                Utils.Log(String.Format("[FusionReactor]: Disabling due to resource change"));
+                ToggleResourceConverterAction(new KSPActionParam(0, KSPActionType.Activate));
             }
+
+            for (int i = 0; i < modes.Count; i++)
             {
-                return Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_FuelStatus_Exhausted");
+                modes[i].Deactivate();
+            }
+            Utils.Log(String.Format("[FusionReactor]: Fuel Mode was changed to {0}", modes[modeIndex].modeID));
+            modes[modeIndex].Activate();
+            inputList = modes[modeIndex].inputs;
+            outputList = modes[modeIndex].outputs;
+            
+            
+            base._recipe = LoadRecipe();
+        }
+
+    }
+
+    /// <summary>
+    /// A class that holds information about a fusion reactor mode
+    /// </summary>
+    public class FusionReactorMode
+    {
+        public string modeName;
+        public string modeID;
+        public string animationName;
+        public int animationLayer = 0;
+        public AnimationState modeAnimation;
+        public List<ResourceRatio> inputs;
+        public List<ResourceRatio> outputs;
+
+        public FusionReactorMode()
+        {
+        }
+        /// <summary>
+        /// Construct from confignode
+        /// </summary>
+        /// <param name="node"></param>
+        ///
+        public FusionReactorMode(ConfigNode node)
+        {
+            OnLoad(node);
+        }
+
+        public void OnLoad(ConfigNode node)
+        {
+            // Process nodes
+            node.TryGetValue("DisplayName", ref modeName);
+            node.TryGetValue("ModeID", ref modeID);
+            node.TryGetValue("AnimationName", ref animationName);
+            node.TryGetValue("AnimationLayer", ref animationLayer);
+
+            ConfigNode[] inNodes = node.GetNodes("INPUT_RESOURCE");
+            ConfigNode[] outNodes = node.GetNodes("OUTPUT_RESOURCE");
+
+            inputs = new List<ResourceRatio>();
+            outputs = new List<ResourceRatio>();
+            for (int i = 0; i < inNodes.Length; i++)
+            {
+                ResourceRatio p = new ResourceRatio();
+                p.Load(inNodes[i]);
+                inputs.Add(p);
+            }
+            for (int i = 0; i < outNodes.Length; i++)
+            {
+                ResourceRatio p = new ResourceRatio();
+                p.Load(outNodes[i]);
+                outputs.Add(p);
+            }
+        }
+        /// <summary>
+        /// Gets the current reactor output
+        /// </summary>
+        /// <returns></returns>
+        public double GetOutput()
+        {
+            for (int i = 0; i < outputs.Count; i++)
+            {
+                if (outputs[i].ResourceName == "ElectricCharge")
+                    return outputs[i].Ratio;
+            }
+            return 0d;
+        }
+
+
+        public void InitializeAnimations(Part host)
+        {
+            if (animationName != "")
+                modeAnimation = Utils.SetUpAnimation(animationName, host, animationLayer)[0];
+
+            // TODO: Localize
+            modeName = Localizer.Format(modeName);
+        }
+        public void Activate()
+        {
+            if (modeAnimation)
+                if (modeAnimation.normalizedTime < 0f) modeAnimation.normalizedTime = 0f;
+                modeAnimation.speed = 1f;
+        }
+        public void Deactivate()
+        {
+            if (modeAnimation)
+            {
+                if (modeAnimation.normalizedTime > 1f) modeAnimation.normalizedTime = 1f;
+                modeAnimation.speed = -1f;
             }
         }
     }
