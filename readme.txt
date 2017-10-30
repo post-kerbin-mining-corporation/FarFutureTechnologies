@@ -9,9 +9,10 @@ DEPENDENCIES
 ============
 
 Required:
-- B9PartSwitch (1.9.0)
-- Community Resource Pack (0.7.1)
+- B9PartSwitch (1.10.0)
+- Community Resource Pack (0.8.0)
 - ModuleManager (v2.8.1)
+- CryoTanks ()
 
 Recommended
 - Community Tech Tree (v2.2+)

@@ -14,6 +14,12 @@ namespace FarFutureTechnologies
         public float MixingRatio = 2.5f;
 
         [KSPField(isPersistant = false)]
+        public float MinMixingRatio = 0.01f;
+
+        [KSPField(isPersistant = false)]
+        public float MaxMixingRatio = 3.5f;
+
+        [KSPField(isPersistant = false)]
         public float RatioScale = 32;
 
         [KSPField(isPersistant = false)]
@@ -93,6 +99,14 @@ namespace FarFutureTechnologies
         void SetupUI()
         {
             Fields["MixingRatio"].guiName = Localizer.Format("#LOC_FFT_ModuleMultiRatioEngine_Field_MixingRatio_Title");
+
+          var range = (UI_FloatRange)this.Fields["MixingRatio"].uiControlEditor;
+          range.minValue = MinMixingRatio;
+          range.maxValue = MaxMixingRatio;
+
+          range = (UI_FloatRange)this.Fields["MixingRatio"].uiControlFlight;
+          range.minValue = MinMixingRatio;
+          range.maxValue = MaxMixingRatio;
         }
         void HandleMixingRatioChange()
         {
