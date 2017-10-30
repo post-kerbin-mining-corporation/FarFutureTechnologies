@@ -54,10 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AntimatterFactory.cs" />
+    <Compile Include="FusionReactor.cs" />
     <Compile Include="ModuleFusionCore.cs" />
-    <Compile Include="ModuleFusionReactor.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ModuleMultiLengthEngine.cs" />
     <Compile Include="ModuleMultiRatioEngine.cs" />
     <Compile Include="ModuleProfilingScanner.cs" />

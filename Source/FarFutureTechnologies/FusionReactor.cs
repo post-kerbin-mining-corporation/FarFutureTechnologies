@@ -8,7 +8,7 @@ using KSP.Localization;
 
 namespace FarFutureTechnologies
 {
-    public class ModuleFusionReactor: ModuleResourceConverter
+    public class FusionReactor: ModuleResourceConverter
     {
         /// CONFIGURABLE FIELDS
         // ----------------------

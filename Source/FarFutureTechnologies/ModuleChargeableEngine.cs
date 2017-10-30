@@ -129,7 +129,7 @@ namespace FarFutureTechnologies
               // If engine is on but dropped below a throttle setting, kill the engine
             if (engine.EngineIgnited)
             {
-                if (engine.requestedThrottle <= 0.05)
+                if (engine.requestedThrottle <= 0.025)
                 {
                     OnShutdown();
                 }
