@@ -512,8 +512,8 @@ namespace FarFutureTechnologies
             modes[modeIndex].Activate();
             inputList = modes[modeIndex].inputs;
             outputList = modes[modeIndex].outputs;
-            
-            
+
+
             base._recipe = LoadRecipe();
         }
 

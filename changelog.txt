@@ -5,7 +5,7 @@
 - Fixed angled thrust issue on FFRE
 - Fixed gimbal pistons on MetallicH2 engine
 - Changed fusion reactor module name to fix conflict with DSEV
-- Made ModuleMultiRatioEngine configurable with MinMixingRatio and MaxMixingRatio fields. Note that the RatioScale must map correctly to changed values. 
+- Made ModuleMultiRatioEngine configurable with MinMixingRatio and MaxMixingRatio fields. Note that the RatioScale must map correctly to changed values.
 - Added some indications of fuel tank ratios to some engines
 
 0.2.3
