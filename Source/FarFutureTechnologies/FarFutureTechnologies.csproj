@@ -54,14 +54,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AntimatterFactory.cs" />
-<<<<<<< HEAD
+    <Compile Include="FusionReactor.cs" />
     <Compile Include="ModuleFusionCore.cs" />
-    <Compile Include="ModuleFusionReactor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-=======
 >>>>>>> master
     <Compile Include="ModuleMultiLengthEngine.cs" />
+    <Compile Include="ModuleMultiRatioEngine.cs" />
     <Compile Include="ModuleProfilingScanner.cs" />
     <Compile Include="UI\AntimatterFactoryUI.cs" />
     <Compile Include="AntimatterLoader.cs" />
@@ -78,7 +75,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
