@@ -4,8 +4,10 @@
 - Updated B9PartSwitch to 2.3.3
 - Updated MM version to 3.0.7
 - Fixed CTT node of nuclear smelter
-- Improvements to fusion reactor module (screen messages, UI bit hiding, etc)
-- Improvements to chargeable engine module (screen messages, UI bit hiding, etc)
+- Cleaned up display modalities for most new modules (clearer text, better information)
+- Significant improvements to ModuleFusionReactor (screen messages for important events, UI bit hiding, stability, VAB formatting)
+- Significant improvements to ModuleChargeableEngine (screen messages for events, UI hiding, passive power generation, VAB formatting)
+- Multiple fixes to ModuleMultiLengthEngine for stability 
 - Fixed ModuleEngineHeatDisplay display output being 0.5x what it should have been
 - Tuned all engine thermal behaviours to reduce likelihood of explosions
 - Renamed/renumbered engines for better VAB sorting

@@ -24,6 +24,7 @@ namespace FarFutureTechnologies
         public class LengthConfiguration
         {
             public string subtypeName;
+            public string subtypeAlias;
             public FloatCurve atmosphereCurve;
             public float minThrust;
             public float maxThrust;
@@ -36,6 +37,7 @@ namespace FarFutureTechnologies
             public LengthConfiguration(ConfigNode node)
             {
                 node.TryGetValue("subtypeName", ref subtypeName);
+                node.TryGetValue("subtypeAlias", ref subtypeAlias);
                 node.TryGetValue("minThrust", ref minThrust);
                 node.TryGetValue("maxThrust", ref maxThrust);
                 node.TryGetValue("heatProduction", ref heatProduction);
@@ -73,7 +75,16 @@ namespace FarFutureTechnologies
         public override string GetInfo()
         {
 
-            string msg = Localizer.Format("#LOC_FFT_ModuleMultiLengthEngine_PartInfo"); ;
+            string msg = Localizer.Format("#LOC_FFT_ModuleMultiLengthEngine_PartInfo");
+            foreach (LengthConfiguration length in lengthConfigs)
+            {
+                msg += Localizer.Format("#LOC_FFT_ModuleMultiLengthEngine_PartInfo_ChamberProperties",
+                                        length.subtypeAlias,
+                                        length.atmosphereCurve.Evaluate(1.0f).ToString("F0"),
+                                        length.atmosphereCurve.Evaluate(0.0f).ToString("F0"),
+                                        length.maxThrust.ToString("F0"),
+                                        length.maxThrust.ToString("F0"));
+            }
             return msg;
         }
 
