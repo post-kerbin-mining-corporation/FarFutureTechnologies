@@ -1,20 +1,26 @@
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\FarFutureTechnologies.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\FarFutureTechnologies.pdb
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\Assembly-CSharp-firstpass.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\Assembly-CSharp.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\KSPUtil.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\UnityEngine.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\UnityEngine.UI.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\SaveUpgradePipeline.Core.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\TrackIRUnity.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\KSPAssets.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\Mono.Cecil.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\Vectrosity.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\TDx.TDxInput.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\Mono.Security.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Debug\UnityEngine.xml
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Debug\FarFutureTechnologies.csprojResolveAssemblyReference.cache
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Debug\FarFutureTechnologies.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Debug\FarFutureTechnologies.pdb
-G:\KSP Modding\repositories\FarFutureTechnologies\GameData\FarFutureTechnologies\Plugins\FarFutureTechnologies.dll
-G:\KSP Modding\repositories\FarFutureTechnologies\GameData\FarFutureTechnologies\Plugins\FarFutureTechnologies.pdb
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/FarFutureTechnologies.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/FarFutureTechnologies.pdb
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/Assembly-CSharp-firstpass.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/Assembly-CSharp.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/KSPUtil.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/UnityEngine.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/UnityEngine.UI.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/SaveUpgradePipeline.Core.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/TrackIRUnity.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/KSPAssets.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/Mono.Cecil.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/Vectrosity.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/TDx.TDxInput.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/Mono.Security.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/bin/Debug/UnityEngine.xml
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/obj/Debug/FarFutureTechnologies.csprojResolveAssemblyReference.cache
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/obj/Debug/FarFutureTechnologies.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/Source/FarFutureTechnologies/obj/Debug/FarFutureTechnologies.pdb
+G:/KSP Modding/repositories/FarFutureTechnologies/GameData/FarFutureTechnologies/Plugins/FarFutureTechnologies.dll
+G:/KSP Modding/repositories/FarFutureTechnologies/GameData/FarFutureTechnologies/Plugins/FarFutureTechnologies.pdb
+/github/FarFutureTechnologies/GameData/FarFutureTechnologies/Plugins/FarFutureTechnologies.dll
+/github/FarFutureTechnologies/GameData/FarFutureTechnologies/Plugins/FarFutureTechnologies.pdb
+/github/FarFutureTechnologies/Source/FarFutureTechnologies/obj/Debug/FarFutureTechnologies.csprojResolveAssemblyReference.cache
+/github/FarFutureTechnologies/Source/FarFutureTechnologies/obj/Debug/FarFutureTechnologies.csproj.CoreCompileInputs.cache
+/github/FarFutureTechnologies/Source/FarFutureTechnologies/obj/Debug/FarFutureTechnologies.dll
+/github/FarFutureTechnologies/Source/FarFutureTechnologies/obj/Debug/FarFutureTechnologies.pdb

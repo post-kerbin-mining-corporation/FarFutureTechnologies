@@ -8,7 +8,7 @@ using KSP.Localization;
 
 namespace FarFutureTechnologies
 {
-    public class FusionReactor: ModuleResourceConverter
+    public class FusionReactor : ModuleResourceConverter
     {
         /// CONFIGURABLE FIELDS
         // ----------------------
@@ -128,17 +128,17 @@ namespace FarFutureTechnologies
 
         public override string GetInfo()
         {
-            string msg = Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo", (HeatGeneration/50f).ToString());
-            foreach(FusionReactorMode mode in modes)
+            string msg = Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo", (HeatGeneration / 50f).ToString());
+            foreach (FusionReactorMode mode in modes)
             {
-              msg += Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo_Mode",
-                  mode.modeName,
-                  mode.GetOutput().ToString("F0"));
-              foreach (ResourceRatio input in mode.inputs)
-              {
-                msg += Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo_Fuel",
-                  input.ResourceName, input.Ratio.ToString("F5"));
-              }
+                msg += Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo_Mode",
+                    mode.modeName,
+                    mode.GetOutput().ToString("F0"));
+                foreach (ResourceRatio input in mode.inputs)
+                {
+                    msg += Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo_Fuel",
+                      input.ResourceName, input.Ratio.ToString("F5"));
+                }
             }
             return msg;
         }
@@ -196,7 +196,7 @@ namespace FarFutureTechnologies
                 ReactorOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput_Running", (base.lastTimeFactor * modes[currentModeIndex].GetOutput()).ToString("F1"));
 
                 float fuelUse = maintenenceConsumption;
-                for (int i = 0; i < inputList.Count ; i++)
+                for (int i = 0; i < inputList.Count; i++)
                 {
                     fuelUse += (float)base.lastTimeFactor * (float)inputList[i].Ratio;
                 }
@@ -215,6 +215,7 @@ namespace FarFutureTechnologies
                 Events["DisableCharging"].active = Charging;
                 Events["EnableCharging"].active = !Charging;
             }
+
         }
 
         /// <summary>
@@ -234,12 +235,12 @@ namespace FarFutureTechnologies
             //Fields["status"].guiActive = false;
 
             Fields["currentModeIndex"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_CurrentModeIndex_Title");
-            Fields["HeatOutput"].guiName =  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Title");
-            Fields["ReactorOutput"].guiName =  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput_Title");
-            Fields["FuelInput"].guiName =  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_FuelInput_Title");
+            Fields["HeatOutput"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Title");
+            Fields["ReactorOutput"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput_Title");
+            Fields["FuelInput"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_FuelInput_Title");
             Fields["CoreTemp"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_CoreTemp_Title");
-            Fields["ChargeStatus"].guiName =  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ChargeStatus_Title");
-            Fields["RechargeStatus"].guiName =  Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_RechargeStatus_Title");
+            Fields["ChargeStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ChargeStatus_Title");
+            Fields["RechargeStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_RechargeStatus_Title");
 
             Events["EnableCharging"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Event_Enable_Title");
             Events["DisableCharging"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Event_Disable_Title");
@@ -280,17 +281,17 @@ namespace FarFutureTechnologies
         }
 
         /// <summary>
-        /// Sets up the capacitor recharge/discharge parameters
+        /// Sets up the reactor recharge/discharge parameters
         /// </summary>
         void SetupRecharge()
         {
             if (CurrentCharge >= ChargeGoal)
             {
-                SetRechargeUI(true);
+                SetRechargeUI(false);
             }
             else
             {
-                SetRechargeUI(false);
+                SetRechargeUI(true);
             }
         }
 
@@ -338,7 +339,7 @@ namespace FarFutureTechnologies
                     heatTicker = 60;
                     ReactorActivated();
                 }
-                HeatOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Running", (HeatGeneration/50f).ToString("F0"));
+                HeatOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Running", (HeatGeneration / 50f).ToString("F0"));
                 SetHeatGeneration(HeatGeneration);
             }
             else
@@ -360,6 +361,10 @@ namespace FarFutureTechnologies
             {
                 Utils.Log(String.Format("[FusionReactor]: Disabling due to insufficient charge"));
                 base.StopResourceConverter();
+                ScreenMessages.PostScreenMessage(new ScreenMessage(Localizer.Format("#LOC_FFT_ModuleFusionReactor_Message_OutOfCharge",
+                                                                                    part.partInfo.title),
+                                                                           5.0f,
+                                                                           ScreenMessageStyle.UPPER_CENTER));
             }
             else
             {
@@ -434,6 +439,10 @@ namespace FarFutureTechnologies
                         if (req < 0.000001)
                         {
                             ToggleResourceConverterAction(new KSPActionParam(0, KSPActionType.Activate));
+                            ScreenMessages.PostScreenMessage(new ScreenMessage(Localizer.Format("#LOC_FFT_ModuleFusionReactor_Message_OutOfFuel",
+                                                                                    part.partInfo.title),
+                                                                           5.0f,
+                                                                           ScreenMessageStyle.UPPER_CENTER));
                         }
                     }
                 }
@@ -468,7 +477,11 @@ namespace FarFutureTechnologies
                 {
                     RechargeStatus = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_RechargeStatus_Ready");
                     Charged = true;
-                   SetRechargeUI(false);
+                    SetRechargeUI(false);
+                }
+                else
+                {
+                    SetRechargeUI(true);
                 }
             }
         }
@@ -479,15 +492,10 @@ namespace FarFutureTechnologies
         /// <param name="isCharging"></param>
         void SetRechargeUI(bool isCharging)
         {
-            //Fields["HeatOuput"].guiActive = !isCharging;
-            //Fields["ReactorOutput"].guiActive = !isCharging;
-            //Fields["FuelInput"].guiActive = !isCharging;
-            //Fields["FuelStatus"].guiActive = !isCharging;
-
-            //Events["startEvt"].guiActive = !isCharging;
-
-            //Fields["RechargeStatus"].guiActive = isCharging;
-            //Fields["ChargeStatus"].guiActive = isCharging;
+            Fields["HeatOutput"].guiActive = !isCharging;
+            Fields["ReactorOutput"].guiActive = !isCharging;
+            Fields["FuelInput"].guiActive = !isCharging;
+            Events["StartResourceConverter"].guiActive = !isCharging;
         }
 
         /// <summary>
@@ -500,7 +508,7 @@ namespace FarFutureTechnologies
             // Turn off the reactor when switching fuels
             if (base.ModuleIsActive())
             {
-                Utils.Log(String.Format("[FusionReactor]: Disabling due to resource change"));
+                Utils.Log(String.Format("[FusionReactor]: Disabling due to fuel change"));
                 ToggleResourceConverterAction(new KSPActionParam(0, KSPActionType.Activate));
             }
 
@@ -598,7 +606,7 @@ namespace FarFutureTechnologies
         {
             if (modeAnimation)
                 if (modeAnimation.normalizedTime < 0f) modeAnimation.normalizedTime = 0f;
-                modeAnimation.speed = 1f;
+            modeAnimation.speed = 1f;
         }
         public void Deactivate()
         {

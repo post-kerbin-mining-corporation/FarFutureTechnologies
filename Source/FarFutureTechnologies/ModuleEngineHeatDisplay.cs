@@ -7,7 +7,7 @@ using KSP.Localization;
 
 namespace FarFutureTechnologies
 {
-    public class ModuleEngineHeatDisplay: PartModule
+    public class ModuleEngineHeatDisplay : PartModule
     {
 
         [KSPField(isPersistant = false, guiActive = true, guiName = "Heat Production")]
@@ -27,39 +27,39 @@ namespace FarFutureTechnologies
 
         public override string GetInfo()
         {
-          string msg = "";
-          engines = part.GetComponents<ModuleEnginesFX>();
-          foreach (ModuleEnginesFX engine in engines)
-          {
-            msg += Localizer.Format("#LOC_FFT_ModuleEngineHeatDisplay_PartInfo", engine.engineID,
-              (engine.heatProduction*800.0*0.025*0.4975*part.mass/1000.0).ToString("F1"));
-          }
-          return msg;
+            string msg = "";
+            engines = part.GetComponents<ModuleEnginesFX>();
+            foreach (ModuleEnginesFX engine in engines)
+            {
+                msg += Localizer.Format("#LOC_FFT_ModuleEngineHeatDisplay_PartInfo", engine.engineID,
+                  (engine.heatProduction * 800.0 * 0.025 * 0.4975 * part.mass / 1000.0 * 2.0).ToString("F1"));
+            }
+            return msg;
         }
 
         public void Start()
         {
-          if (HighLogic.LoadedSceneIsFlight)
-          {
-            Fields["HeatProductionStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleEngineHeatDisplay_Field_HeatProductionStatus_Title");
-              engines = part.GetComponents<ModuleEnginesFX>();
-          }
+            if (HighLogic.LoadedSceneIsFlight)
+            {
+                Fields["HeatProductionStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleEngineHeatDisplay_Field_HeatProductionStatus_Title");
+                engines = part.GetComponents<ModuleEnginesFX>();
+            }
         }
 
         protected void FixedUpdate()
         {
             if (HighLogic.LoadedSceneIsFlight)
             {
-              HeatProductionStatus = Localizer.Format("#LOC_FFT_ModuleEngineHeatDisplay_Field_HeatProductionStatus_None");
+                HeatProductionStatus = Localizer.Format("#LOC_FFT_ModuleEngineHeatDisplay_Field_HeatProductionStatus_None");
 
-              foreach (ModuleEnginesFX engine in engines)
-              {
-                if (engine.EngineIgnited)
+                foreach (ModuleEnginesFX engine in engines)
                 {
-                    HeatProductionStatus = Localizer.Format("#LOC_FFT_ModuleEngineHeatDisplay_Field_HeatProductionStatus_Normal",
-                      (engine.heatProduction * 800.0 * 0.025 * 0.4975 * part.mass / 1000.0 * engine.GetCurrentThrust() / engine.GetMaxThrust()).ToString("F1"));
-                  }
-              }
+                    if (engine.EngineIgnited)
+                    {
+                        HeatProductionStatus = Localizer.Format("#LOC_FFT_ModuleEngineHeatDisplay_Field_HeatProductionStatus_Normal",
+                          (engine.heatProduction * 800.0 * 0.025 * 0.4975 * part.mass / 1000.0 * engine.GetCurrentThrust() / engine.GetMaxThrust() * 2.0).ToString("F1"));
+                    }
+                }
             }
         }
 
