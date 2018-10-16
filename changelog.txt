@@ -1,16 +1,18 @@
 0.3.0
 -----
-- KSP 1.4.5
-- Updated B9PartSwitch to 2.3.3
-- Updated MM version to 3.0.7
+- KSP 1.5.0
+- Updated B9PartSwitch to 2.4.1
+- Updated MM version to 3.1.0
 - Fixed CTT node of nuclear smelter
 - Cleaned up display modalities for most new modules (clearer text, better information)
 - Significant improvements to ModuleFusionReactor (screen messages for important events, UI bit hiding, stability, VAB formatting)
 - Significant improvements to ModuleChargeableEngine (screen messages for events, UI hiding, passive power generation, VAB formatting)
-- Multiple fixes to ModuleMultiLengthEngine for stability 
+- Multiple fixes to ModuleMultiLengthEngine for stability
 - Fixed ModuleEngineHeatDisplay display output being 0.5x what it should have been
 - Tuned all engine thermal behaviours to reduce likelihood of explosions
 - Renamed/renumbered engines for better VAB sorting
+- Fixed several collider/model issues with the mirror cell and beam core antimatter engines
+- Greatly improved engine FX for the mirror cell and beam core antimatter engines
 - Balance updates to further differentiate engines
 -- FFRE now generates lots of power while in operation (still requires charge-up time)
 -- Thermal fusion engines power use model reworked
