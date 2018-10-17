@@ -1,11 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="ModuleEngineHeatDisplay.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ModuleChargeableEngine.cs">
     <Files>
       <File FileName="ModuleChargeableEngine.cs" Line="101" Column="95" />
-      <File FileName="FusionReactor.cs" Line="136" Column="26" />
+      <File FileName="FusionReactor.cs" Line="532" Column="19" />
       <File FileName="ModuleFusionCore.cs" Line="1" Column="1" />
-      <File FileName="ModuleMultiLengthEngine.cs" Line="78" Column="10" />
-      <File FileName="ModuleEngineHeatDisplay.cs" Line="10" Column="41" />
+      <File FileName="ModuleMultiLengthEngine.cs" Line="109" Column="60" />
+      <File FileName="ModuleEngineHeatDisplay.cs" Line="16" Column="43" />
+      <File FileName="ModuleAntimatterTank.cs" Line="200" Column="34" />
+      <File FileName="ModuleMultiRatioEngine.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

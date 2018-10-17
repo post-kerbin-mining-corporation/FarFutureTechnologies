@@ -312,21 +312,26 @@ namespace FarFutureTechnologies
             double rate = GeneratorRate / 100d;
             double powerToGenerate = GetPowerOutput() * rate * TimeWarp.fixedDeltaTime;
             bool resourceCheck = true;
+
             for (int i = 0; i < powerInputs.Count(); i++)
             {
                 double req = part.RequestResource(powerInputs[i].ResourceName, rate * powerInputs[i].Ratio * TimeWarp.fixedDeltaTime);
-                if (req < 0.000001)
+                if (engine.requestedThrottle < 0.01)
                 {
-                    ScreenMessages.PostScreenMessage(new ScreenMessage(Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Message_StaticFuelOut",
-                                                                                        part.partInfo.title, powerInputs[i].ResourceName),
-                                                                           5.0f,
-                                                                           ScreenMessageStyle.UPPER_CENTER));
-                    GeneratorStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_GeneratorStatus_NoFuel", powerInputs[i].ResourceName);
-                    OnShutdown();
-                    resourceCheck = false;
+                    if (req < 0.0000000001)
+                    {
+                        ScreenMessages.PostScreenMessage(new ScreenMessage(Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Message_StaticFuelOut",
+                                                                                            part.partInfo.title, powerInputs[i].ResourceName),
+                                                                               5.0f,
+                                                                               ScreenMessageStyle.UPPER_CENTER));
+                        GeneratorStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_GeneratorStatus_NoFuel", powerInputs[i].ResourceName);
+                        OnShutdown();
+                        resourceCheck = false;
+                    }
                 }
 
             }
+
             if (resourceCheck)
             {
                 GeneratorStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_GeneratorStatus_Running", (GetPowerOutput() * rate).ToString("F2"));
