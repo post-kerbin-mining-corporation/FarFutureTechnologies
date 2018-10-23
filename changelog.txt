@@ -1,8 +1,9 @@
 0.3.0
 -----
 - KSP 1.5.0
-- Updated B9PartSwitch to 2.4.3
+- Updated B9PartSwitch to 2.4.4
 - Updated MM version to 3.1.0
+- Updated CRP to 1.0.0
 - Updated CryoTanks to 1.0.2
 - Fixed CTT node of nuclear smelter
 - Cleaned up display modalities for most new modules (clearer text, better information)
@@ -14,6 +15,8 @@
 - Renamed/renumbered engines for better VAB sorting
 - Fixed several collider/model issues with the mirror cell and beam core antimatter engines
 - Greatly improved engine FX for the mirror cell and beam core antimatter engines
+- Removed custom resource distributions from package
+- Rebalanced harvesting rates for new CRP atmo/exo resource distribution paradigm
 - Balance updates to further differentiate engines
 -- FFRE now generates lots of power while in operation (still requires charge-up time)
 -- Thermal fusion engines power use model reworked
