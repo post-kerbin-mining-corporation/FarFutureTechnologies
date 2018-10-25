@@ -33,7 +33,7 @@ namespace FarFutureTechnologies
         [KSPField(isPersistant = false)]
         public bool EngineOn = false;
 
-        // Amout of power generated 
+        // Amout of power generated
         [KSPField(isPersistant = true)]
         public bool ShutdownEngineOnLowThrottle = true;
 
