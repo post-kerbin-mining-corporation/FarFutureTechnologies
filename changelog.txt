@@ -5,6 +5,7 @@
 - Updated MM version to 3.1.0
 - Updated CRP to 1.0.0
 - Updated CryoTanks to 1.0.2
+- Updated MiniAVC to 1.2.0.6
 - Fixed CTT node of nuclear smelter
 - Cleaned up display modalities for most new modules (clearer text, better information)
 - Significant improvements to ModuleFusionReactor (screen messages for important events, UI bit hiding, stability, VAB formatting)
