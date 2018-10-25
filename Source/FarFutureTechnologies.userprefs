@@ -1,0 +1,22 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workbench ActiveDocument="FarFutureTechnologies/ModuleRadiatorExtension.cs">
+    <Files>
+      <File FileName="FarFutureTechnologies/ModuleChargeableEngine.cs" Line="120" Column="9" />
+      <File FileName="FarFutureTechnologies/ModuleAntimatterTank.cs" Line="227" Column="25" />
+      <File FileName="FarFutureTechnologies/ModuleMultiLengthEngine.cs" Line="91" Column="10" />
+      <File FileName="FarFutureTechnologies/ModuleRadiatorExtension.cs" Line="18" Column="13" />
+      <File FileName="FarFutureTechnologies/ModuleFusionCore.cs" Line="1" Column="1" />
+      <File FileName="FarFutureTechnologies/FusionReactor.cs" Line="1" Column="1" />
+      <File FileName="FarFutureTechnologies/ModulePulseEngineAnimator.cs" Line="232" Column="98" />
+      <File FileName="FarFutureTechnologies/ModuleProfilingScanner.cs" Line="1" Column="1" />
+      <File FileName="FarFutureTechnologies/ModuleMultiRatioEngine.cs" Line="1" Column="1" />
+      <File FileName="FarFutureTechnologies/ModuleEngineHeatDisplay.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>

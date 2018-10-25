@@ -1,3 +1,31 @@
+0.3.0
+-----
+- KSP 1.5.0
+- Updated B9PartSwitch to 2.4.4
+- Updated MM version to 3.1.0
+- Updated CRP to 1.0.0
+- Updated CryoTanks to 1.0.2
+- Updated MiniAVC to 1.2.0.6
+- Fixed CTT node of nuclear smelter
+- Cleaned up display modalities for most new modules (clearer text, better information)
+- Significant improvements to ModuleFusionReactor (screen messages for important events, UI bit hiding, stability, VAB formatting)
+- Significant improvements to ModuleChargeableEngine (screen messages for events, UI hiding, passive power generation, VAB formatting)
+- Multiple fixes to ModuleMultiLengthEngine for stability
+- Fixed ModuleEngineHeatDisplay display output being 0.5x what it should have been
+- Tuned all engine thermal behaviours to reduce likelihood of explosions
+- Renamed/renumbered engines for better VAB sorting
+- Fixed several collider/model issues with the mirror cell and beam core antimatter engines
+- Greatly improved engine FX for the mirror cell and beam core antimatter engines
+- Removed custom resource distributions from package
+- Rebalanced harvesting rates for new CRP atmo/exo resource distribution paradigm
+- Balance updates to further differentiate engines
+-- FFRE now generates lots of power while in operation (still requires charge-up time)
+-- Thermal fusion engines power use model reworked
+--- Charge-up still required, but once activated, can generate constant power by slow but inefficient usage of fusion fuel (~50% of "real" reactor). While active, power output can be modified and engine has instant response.
+--- Tokamak generates 500 kW, mirror cell generates 250 kW
+-- Z-Pinch engines now no longer need external power when running (still require charge-up)
+-- Inertial fusion engines got a 150% Isp boost
+
 0.2.4
 -----
 - KSP 1.3.1
