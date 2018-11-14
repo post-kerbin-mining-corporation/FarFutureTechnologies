@@ -1,8 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="ModuleChargeableEngine.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FusionReactor.cs">
     <Files>
       <File FileName="ModuleChargeableEngine.cs" Line="331" Column="18" />
-      <File FileName="FusionReactor.cs" Line="532" Column="19" />
+      <File FileName="FusionReactor.cs" Line="54" Column="15" />
       <File FileName="ModuleFusionCore.cs" Line="1" Column="1" />
       <File FileName="ModuleMultiLengthEngine.cs" Line="109" Column="60" />
       <File FileName="ModuleEngineHeatDisplay.cs" Line="16" Column="43" />
