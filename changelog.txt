@@ -3,6 +3,10 @@
 - Updated B9PartSwitch to 2.4.5
 - Removed MiniAVC from distribution
 - Updated CryoTanks to 1.0.3
+- New effects for NSWR and FFRE
+- Retextured NSWR and FFRE
+- Fixed fusion reactor fuel mode not being saved between scenes
+- Fixed a possible issue with fusion reactor fuel consumption
 
 0.3.0
 -----
