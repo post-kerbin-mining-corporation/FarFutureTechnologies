@@ -46,6 +46,7 @@ namespace FarFutureTechnologies
 
         // ---- Fuels ----
         // Current fuel mode name
+        [KSPField(isPersistant = true)]
         public string CurrentModeID = null;
         [KSPField(isPersistant = false)]
         public float MinimumReactorPower = 0.1f;
@@ -53,7 +54,7 @@ namespace FarFutureTechnologies
         /// UI
         /// ---------------------
         /// // Current fuel mode
-        [KSPField(guiActive = true, guiActiveEditor = true, guiName = "Fuel Mode")]
+        [KSPField(isPersistant = true, guiActive = true, guiActiveEditor = true, guiName = "Fuel Mode")]
         [UI_ChooseOption(affectSymCounterparts = UI_Scene.None, scene = UI_Scene.All, suppressEditorShipModified = true)]
         public int currentModeIndex = 0;
 
@@ -107,7 +108,7 @@ namespace FarFutureTechnologies
             Charging = false;
         }
 
-        private float maintenenceConsumption = 0f;
+        private double maintenenceConsumption = 0d;
         private bool activeFlag;
         private int heatTicker = 0;
         private List<FusionReactorMode> modes;
@@ -195,7 +196,7 @@ namespace FarFutureTechnologies
             {
                 ReactorOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput_Running", (base.lastTimeFactor * modes[currentModeIndex].GetOutput()).ToString("F1"));
 
-                float fuelUse = maintenenceConsumption;
+                float fuelUse = (float)maintenenceConsumption;
                 for (int i = 0; i < inputList.Count; i++)
                 {
                     fuelUse += (float)base.lastTimeFactor * (float)inputList[i].Ratio;
@@ -426,17 +427,18 @@ namespace FarFutureTechnologies
             if (base.ModuleIsActive())
             {
 
-                float diff = (float)base.lastTimeFactor - MinimumReactorPower;
-
-                if (diff < 0)
+                double diff = base.lastTimeFactor - (double)MinimumReactorPower;
+                //Utils.Log(String.Format("LTF={0} \nMRP={1}", base.lastTimeFactor, MinimumReactorPower));
+                if (diff < 0.0)
                 {
-                    diff = Mathf.Abs(diff);
-                    maintenenceConsumption = 0f;
+                    diff = Math.Abs(diff);
+                    maintenenceConsumption = 0d;
+
                     for (int i = 0; i < inputList.Count; i++)
                     {
-                        maintenenceConsumption += diff * (float)inputList[i].Ratio;
+                        maintenenceConsumption += diff * inputList[i].Ratio;
                         double req = part.RequestResource(inputList[i].ResourceName, diff * inputList[i].Ratio * TimeWarp.fixedDeltaTime);
-                        if (req < 0.000001)
+                        if (req < 0.00000001)
                         {
                             ToggleResourceConverterAction(new KSPActionParam(0, KSPActionType.Activate));
                             ScreenMessages.PostScreenMessage(new ScreenMessage(Localizer.Format("#LOC_FFT_ModuleFusionReactor_Message_OutOfFuel",

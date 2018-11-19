@@ -1,3 +1,15 @@
+0.3.1
+-----
+- Updated B9PartSwitch to 2.4.5
+- Removed MiniAVC from distribution
+- Updated CryoTanks to 1.0.3
+- Increased thrust of NSWR to 960 from 520 kN, decreased Isp to from 5650 to 3650
+- New engine effects for NSWR and FFRE
+- Separated thermal and engine throttle effects for NSWR and FFRE
+- Updated textures for NSWR, NSW tanks and FFRE
+- Fixed fusion reactor fuel mode not being saved between scenes
+- Fixed an issue with fusion reactor fuel consumption
+
 0.3.0
 -----
 - KSP 1.5.0
