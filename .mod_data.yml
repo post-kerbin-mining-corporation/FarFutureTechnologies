@@ -1,0 +1,28 @@
+# Example annotated build data file
+mod-name: FarFutureTechnologies
+package:
+  include-dependencies: true  # Include dependencies in the package
+  included-support-files:  # Include these root-level files in packages
+    - readme.txt
+    - changelog.txt
+dependencies:  # Configure dependencies
+  B9PartSwitch:
+    version: 2.6.0  # The version to use
+    location: s3  # Pull this from an S3 location
+  ModuleManager:
+    version: 3.1.1
+    location: s3
+  CryoTanks:
+    location: github
+    repository: ChrisAdderley/CryoTanks
+    tag: 1.1.1  # The release tag to use
+deploy:
+  - SpaceDock:
+      enabled: false  # activate/deactivate this deployment script
+      mod-id: 709  # The Spacedock mod ID for deployment
+  - CurseForge:
+      enabled: false  # activate/deactivate this deployment script
+      mod-id: 230112  # The CurseForge mod ID for deployment
+  - GitHub:
+      enabled: false  # activate/deactivate this deployment script
+      mod-id: 230112  # The CurseForge mod ID for deployment
