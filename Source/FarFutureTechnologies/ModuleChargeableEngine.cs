@@ -283,7 +283,7 @@ namespace FarFutureTechnologies
         /// </summary>
         void DoRecharge()
         {
-            double req = part.RequestResource("ElectricCharge", ChargeRate * TimeWarp.fixedDeltaTime);
+            double req = part.RequestResource("ElectricCharge",(double)ChargeRate * TimeWarp.fixedDeltaTime);
             CurrentCharge = Mathf.MoveTowards(CurrentCharge, ChargeGoal, (float)req);
 
             if (req > 0.0d)
