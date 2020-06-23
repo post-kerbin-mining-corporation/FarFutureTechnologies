@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FusionReactor.cs" />
+    <Compile Include="ModuleColorAnimator.cs" />
     <Compile Include="ModuleFusionEngine.cs" />
     <Compile Include="ModuleMultiLengthEngine.cs" />
     <Compile Include="ModuleChargeableEngine.cs" />

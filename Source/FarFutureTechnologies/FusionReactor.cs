@@ -336,17 +336,17 @@ namespace FarFutureTechnologies
 
         Transform onLightParent = part.FindModelTransform(OnLightTransformName);
         if (!onLightParent)
-          Utils.Log($"[FusionReactor] Couldn't find ChargingLightRootTransformName {OnLightTransformName}");
+          Utils.Log($"[FusionReactor] Couldn't find OnLightTransformName {OnLightTransformName}");
         else
           onLight = onLightParent.GetComponent<Renderer>();
         Transform offLightParent = part.FindModelTransform(OffLightTransformName);
         if (!offLightParent)
-          Utils.Log($"[FusionReactor] Couldn't find ChargingLightRootTransformName {OffLightTransformName}");
+          Utils.Log($"[FusionReactor] Couldn't find OffLightTransformName {OffLightTransformName}");
         else
           offLight = offLightParent.GetComponent<Renderer>();
         Transform modeLightParent = part.FindModelTransform(ModeLightTransformName);
         if (!modeLightParent)
-          Utils.Log($"[FusionReactor] Couldn't find ChargingLightRootTransformName {ModeLightTransformName}");
+          Utils.Log($"[FusionReactor] Couldn't find ModeLightTransformName {ModeLightTransformName}");
         else
           modeLight = modeLightParent.GetComponent<Renderer>();
 
