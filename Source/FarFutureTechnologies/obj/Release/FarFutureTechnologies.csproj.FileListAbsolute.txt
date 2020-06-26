@@ -70,3 +70,4 @@ C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\obj\
 C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Release\FarFutureTechnologies.dll
 C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Release\FarFutureTechnologies.pdb
 C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Release\FarFutureTechnologies.csprojAssemblyReference.cache
+C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Release\Waterfall.dll

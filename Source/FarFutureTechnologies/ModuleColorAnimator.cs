@@ -102,7 +102,8 @@ namespace FarFutureTechnologies
           {
             Renderer r = x.GetComponent<Renderer>();
             
-            if (r != null && r.material.HasProperty(shaderProperty)) targetRenderers.Add(r);
+            if (r != null && r.material.HasProperty(shaderProperty))
+              targetRenderers.Add(r);
           }
         }
       }
@@ -123,12 +124,12 @@ namespace FarFutureTechnologies
     {
       if (HighLogic.LoadedSceneIsFlight && targetRenderers != null)
       {
-        animationFraction = Mathf.MoveTowards(animationFraction, animationGoal, TimeWarp.deltaTime * animRate);
+         animationFraction = Mathf.MoveTowards(animationFraction, animationGoal, TimeWarp.deltaTime * animRate);
+        
         Color c = new Color(redCurve.Evaluate(animationFraction), greenCurve.Evaluate(animationFraction), blueCurve.Evaluate(animationFraction), alphaCurve.Evaluate(animationFraction));
+     
         foreach (Renderer r in targetRenderers)
         {
-
-          
           r.material.SetColor(shaderProperty, c);
         }
       }
