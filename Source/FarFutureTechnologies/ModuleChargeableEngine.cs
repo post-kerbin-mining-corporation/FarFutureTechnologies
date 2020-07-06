@@ -358,35 +358,39 @@ namespace FarFutureTechnologies
       }
       else
       {
-        double req = part.RequestResource("ElectricCharge", (double)ChargeRate * TimeWarp.fixedDeltaTime);
-        CurrentCharge = Mathf.MoveTowards(CurrentCharge, ChargeGoal, (float)req);
-
-        if (req > 0.0d)
-          ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Charging", ChargeRate.ToString("F2"));
-        else
-          ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_NoPower");
-
-        ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Normal", (CurrentCharge / ChargeGoal * 100.0f).ToString("F1"));
-
-        if (CurrentCharge >= ChargeGoal)
+        if (Charging)
         {
-          if (chargeState != ChargeState.Ready)
-          {
-            SetUIState(ChargeState.Ready);
-            Charged = true;
+          double req = part.RequestResource("ElectricCharge", (double)ChargeRate * TimeWarp.fixedDeltaTime);
+          CurrentCharge = Mathf.MoveTowards(CurrentCharge, ChargeGoal, (float)req);
 
-            ScreenMessages.PostScreenMessage(new ScreenMessage(Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Message_Ready",
-                                                                                part.partInfo.title),
-                                                                       5.0f,
-                                                                       ScreenMessageStyle.UPPER_CENTER));
+          if (req > 0.0d)
+            ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Charging", ChargeRate.ToString("F2"));
+          else
+            ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_NoPower");
+
+          ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Normal", (CurrentCharge / ChargeGoal * 100.0f).ToString("F1"));
+
+          if (CurrentCharge >= ChargeGoal)
+          {
+            if (chargeState != ChargeState.Ready)
+            {
+              SetUIState(ChargeState.Ready);
+              Charged = true;
+
+              ScreenMessages.PostScreenMessage(new ScreenMessage(Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Message_Ready",
+                                                                                  part.partInfo.title),
+                                                                         5.0f,
+                                                                         ScreenMessageStyle.UPPER_CENTER));
+            }
+            // ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Ready");
+
           }
-         // ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Ready");
-          
-        } else
-        {
-          if (chargeState != ChargeState.Charging)
+          else
           {
-            SetUIState(ChargeState.Charging);
+            if (chargeState != ChargeState.Charging)
+            {
+              SetUIState(ChargeState.Charging);
+            }
           }
         }
       }

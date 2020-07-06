@@ -82,9 +82,7 @@
     <Compile Include="ModuleFusionEngine.cs" />
     <Compile Include="ModuleMultiLengthEngine.cs" />
     <Compile Include="ModuleChargeableEngine.cs" />
-    <Compile Include="ModuleEngineHeatDisplay.cs" />
     <Compile Include="ModulePulseEngine.cs" />
-    <Compile Include="ModulePulseEngineAnimator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>

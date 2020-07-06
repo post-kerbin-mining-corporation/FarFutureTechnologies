@@ -1,7 +1,6 @@
 C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Release\FarFutureTechnologies.dll
 C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Release\FarFutureTechnologies.pdb
 C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Release\Assembly-CSharp.dll
-C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Release\SystemHeat.dll
 C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Release\UnityEngine.AnimationModule.dll
 C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Release\UnityEngine.CoreModule.dll
 C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Release\UnityEngine.dll

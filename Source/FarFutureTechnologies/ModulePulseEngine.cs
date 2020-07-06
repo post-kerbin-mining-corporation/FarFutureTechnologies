@@ -26,6 +26,18 @@ namespace FarFutureTechnologies
     [KSPField(isPersistant = false)]
     public float PulseDuration = 1.0f;
 
+    // Whether to apply thrust in pulses or not
+    [KSPField(isPersistant = false)]
+    public bool PulsedThrust = false;
+
+    // The time at which to apply thrust
+    [KSPField(isPersistant = false)]
+    public float PulseThrustTime = 1.0f;
+
+    // The time at which to apply thrust
+    [KSPField(isPersistant = false)]
+    public int PulseThrustFrameCount = 5;
+
     // Animation that plays
     [KSPField(isPersistant = false)]
     public string PulseAnimation = "";
@@ -57,7 +69,8 @@ namespace FarFutureTechnologies
     [KSPField(isPersistant = false)]
     public string emissiveColorAnimatorID;
 
-
+    private float savedThrust = 0f;
+    
     private float pulseProgress = 0f;
     private float scaledPulseInterval = 0f;
     private float scaledPulseSpeed = 1f;
@@ -82,6 +95,7 @@ namespace FarFutureTechnologies
         engine = this.GetComponents<ModuleEnginesFX>().ToList().First();
         waterfallEffect = this.GetComponents<ModuleWaterfallFX>().ToList().First();
       }
+      savedThrust = engine.maxThrust;
       multiEngine = this.GetComponent<MultiModeEngine>();
 
       emissiveAnimator = this.GetComponents<ModuleColorAnimator>().ToList().Find(x => x.moduleID == emissiveColorAnimatorID);
@@ -110,7 +124,62 @@ namespace FarFutureTechnologies
         } 
       }
     }
+    bool pulseFired = false;
 
+    int ticks = 0;
+    void FixedUpdate()
+    {
+      if (PulsedThrust)
+      {
+        if (HighLogic.LoadedSceneIsFlight)
+        {
+          float totalImpulse = (scaledPulseDuration + scaledPulseInterval) * savedThrust;
+          float momentumPerFrame = totalImpulse / (float)PulseThrustFrameCount;
+          if (engine.EngineIgnited)
+          {
+            if (engine.requestedThrottle > 0f && !engine.flameout)
+            {
+              if (pulseProgress < PulseThrustTime * scaledPulseSpeed)
+              {
+                pulseFired = false;
+                engine.maxThrust = 0f;
+                engine.maxFuelFlow = 0f;
+              }
+              else if (pulseProgress >= PulseThrustTime * scaledPulseSpeed && !pulseFired)
+              {
+
+                engine.maxThrust = momentumPerFrame / TimeWarp.fixedDeltaTime;
+                engine.maxFuelFlow = ((momentumPerFrame / TimeWarp.fixedDeltaTime) / (engine.realIsp * (float)PhysicsGlobals.GravitationalAcceleration));
+                //Utils.Log($"[ModulePulseEngine]: Pulse fired with impulse of {momentumPerFrame}, thrust {momentumPerFrame / TimeWarp.fixedDeltaTime} {engine.realIsp}, {PhysicsGlobals.GravitationalAcceleration}");
+
+                ticks++;
+                if (ticks >= PulseThrustFrameCount)
+                {
+                  ticks = 0;
+                  pulseFired = true;
+                }
+              }
+              else
+              {
+                engine.maxThrust = 0f;
+                engine.maxFuelFlow = 0f;
+              }
+            }
+            else
+            {
+              engine.maxThrust = savedThrust;
+              engine.maxFuelFlow = ((savedThrust) / (engine.realIsp * (float)PhysicsGlobals.GravitationalAcceleration));
+            }
+          }
+          else
+          {
+            engine.maxThrust = savedThrust;
+            engine.maxFuelFlow = ((savedThrust) / (engine.realIsp * (float)PhysicsGlobals.GravitationalAcceleration));
+          }
+        }
+      }
+            
+    }
     void Update()
     {
       if (HighLogic.LoadedSceneIsFlight)
@@ -121,6 +190,9 @@ namespace FarFutureTechnologies
         scaledPulseInterval = PulseInterval.Evaluate(engine.requestedThrottle);
         scaledPulseSpeed = PulseSpeed.Evaluate(engine.requestedThrottle);
         scaledPulseDuration = scaledPulseSpeed * PulseDuration;
+
+       
+
         if (engine.EngineIgnited)
         {
           if (engine.requestedThrottle > 0f && !engine.flameout)
@@ -138,10 +210,10 @@ namespace FarFutureTechnologies
                 }
               }
               part.Effect(engine.runningEffectName, 1f);
-              waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed));
-              waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed));
-              light.intensity = lightIntensityCurve.Evaluate(pulseProgress* scaledPulseSpeed);
-              emissiveAnimator.SetScalar(pulseProgress * scaledPulseSpeed);
+              waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(pulseProgress / scaledPulseSpeed));
+              waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(pulseProgress / scaledPulseSpeed));
+              light.intensity = lightIntensityCurve.Evaluate(pulseProgress/ scaledPulseSpeed);
+              emissiveAnimator.SetScalar(pulseProgress / scaledPulseSpeed);
               pulseProgress = pulseProgress + TimeWarp.deltaTime;
             }
             else if (pulseProgress <= scaledPulseDuration)
@@ -152,10 +224,10 @@ namespace FarFutureTechnologies
                 pulseState.speed = 1.0f / scaledPulseSpeed;
               }
               part.Effect(engine.runningEffectName, 1);
-              waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed));
-              waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed));
-              light.intensity = lightIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed);
-              emissiveAnimator.SetScalar(pulseProgress * scaledPulseSpeed);
+              waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(pulseProgress / scaledPulseSpeed));
+              waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(pulseProgress / scaledPulseSpeed));
+              light.intensity = lightIntensityCurve.Evaluate(pulseProgress / scaledPulseSpeed);
+              emissiveAnimator.SetScalar(pulseProgress / scaledPulseSpeed);
               pulseProgress = pulseProgress + TimeWarp.deltaTime;
             }
             else if (pulseProgress >= scaledPulseDuration && pulseProgress <= (scaledPulseDuration + scaledPulseInterval))
@@ -166,11 +238,11 @@ namespace FarFutureTechnologies
                 pulseState.speed = 0f;
               }
               part.Effect(engine.runningEffectName, 0f);
-              waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed));
-              waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed));
+              waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(pulseProgress / scaledPulseSpeed));
+              waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(pulseProgress / scaledPulseSpeed));
               pulseProgress = pulseProgress + TimeWarp.deltaTime;
-              light.intensity = lightIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed);
-              emissiveAnimator.SetScalar(pulseProgress * scaledPulseSpeed);
+              light.intensity = lightIntensityCurve.Evaluate(pulseProgress / scaledPulseSpeed);
+              emissiveAnimator.SetScalar(pulseProgress / scaledPulseSpeed);
             } 
             else
             {
@@ -181,10 +253,10 @@ namespace FarFutureTechnologies
                 pulseState.speed = 0f;
               }
               part.Effect(engine.runningEffectName, 0f);
-              waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed));
+              waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(pulseProgress / scaledPulseSpeed));
               pulseProgress = 0f;
-              light.intensity = lightIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed);
-              emissiveAnimator.SetScalar(pulseProgress * scaledPulseSpeed);
+              light.intensity = lightIntensityCurve.Evaluate(pulseProgress/ scaledPulseSpeed);
+              emissiveAnimator.SetScalar(pulseProgress / scaledPulseSpeed);
             }
           } else
           {
@@ -194,11 +266,11 @@ namespace FarFutureTechnologies
               pulseState.speed = 0f;
             }
             part.Effect(engine.runningEffectName, 0f);
-            waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed));
-            waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed));
+            waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(pulseProgress / scaledPulseSpeed));
+            waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(pulseProgress / scaledPulseSpeed));
             pulseProgress = 0f;
-            light.intensity = lightIntensityCurve.Evaluate(pulseProgress * scaledPulseSpeed);
-            emissiveAnimator.SetScalar(pulseProgress * scaledPulseSpeed);
+            light.intensity = lightIntensityCurve.Evaluate(pulseProgress / scaledPulseSpeed);
+            emissiveAnimator.SetScalar(pulseProgress / scaledPulseSpeed);
           } 
         }
         else
