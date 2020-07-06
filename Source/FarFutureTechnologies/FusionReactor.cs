@@ -52,7 +52,7 @@ namespace FarFutureTechnologies
     public float SystemPower;
 
     [KSPField(isPersistant = false)]
-    public float ShutdownTemperature;
+    public float ShutdownTemperature = 2000f;
 
     [KSPField(isPersistant = false)]
     public float SystemOutletTemperature;
@@ -85,26 +85,26 @@ namespace FarFutureTechnologies
     /// UI
     /// ---------------------
     /// // Current fuel mode
-    [KSPField(isPersistant = true, guiActive = true, guiActiveEditor = true, guiName = "Fuel Mode", groupName = "fusionreactor", groupDisplayName = "Fusion Reactor", groupStartCollapsed = false)]
+    [KSPField(isPersistant = true, guiActive = true, guiActiveEditor = true, guiName = "#LOC_FFT_ModuleFusionReactor_Field_CurrentModeIndex_Title", groupName = "fusionreactor", groupDisplayName = "#LOC_FFT_ModuleFusionReactor_UIGroup_Title", groupStartCollapsed = false)]
     [UI_ChooseOption(affectSymCounterparts = UI_Scene.None, scene = UI_Scene.All, suppressEditorShipModified = true)]
     public int currentModeIndex = 0;
 
     // Heat Status string
-    [KSPField(isPersistant = false, guiActive = true, guiName = "Heat Generated", groupName = "fusionreactor", groupDisplayName = "Fusion Reactor", groupStartCollapsed = true)]
+    [KSPField(isPersistant = false, guiActive = true, guiName = "#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Title", groupName = "fusionreactor", groupDisplayName = "#LOC_FFT_ModuleFusionReactor_UIGroup_Title", groupStartCollapsed = true)]
     public string HeatOutput;
 
     // Reactor Status string
-    [KSPField(isPersistant = false, guiActive = true, guiName = "Power Generated", groupName = "fusionreactor", groupDisplayName = "Fusion Reactor", groupStartCollapsed = false)]
+    [KSPField(isPersistant = false, guiActive = true, guiName = "#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput_Title", groupName = "fusionreactor", groupDisplayName = "#LOC_FFT_ModuleFusionReactor_UIGroup_Title", groupStartCollapsed = false)]
     public string ReactorOutput;
 
     // Fuel Status string
-    [KSPField(isPersistant = false, guiActive = true, guiName = "Fuel Usage", groupName = "fusionreactor", groupDisplayName = "Fusion Reactor", groupStartCollapsed = false)]
+    [KSPField(isPersistant = false, guiActive = true, guiName = "#LOC_FFT_ModuleFusionReactor_Field_FuelInput_Title", groupName = "fusionreactor", groupDisplayName = "#LOC_FFT_ModuleFusionReactor_UIGroup_Title", groupStartCollapsed = false)]
     public string FuelInput;
     // Vessel Temperature
-    [KSPField(isPersistant = false, guiActive = true, guiName = "System Temperature", groupName = "fusionreactor", groupDisplayName = "Fusion Reactor", groupStartCollapsed = false)]
+    [KSPField(isPersistant = false, guiActive = true, guiName = "#LOC_FFT_ModuleFusionReactor_Field_CoreTemp_Title", groupName = "fusionreactor", groupDisplayName = "#LOC_FFT_ModuleFusionReactor_UIGroup_Title", groupStartCollapsed = false)]
     public string CoreTemp;
 
-    [KSPField(isPersistant = false, guiActive = true, guiName = "Capacitors", groupName = "fusionreactor", groupDisplayName = "Fusion Reactor", groupStartCollapsed = false)]
+    [KSPField(isPersistant = false, guiActive = true, guiName = "#LOC_FFT_ModuleFusionReactor_Field_ChargeStatus_Title", groupName = "fusionreactor", groupDisplayName = "#LOC_FFT_ModuleFusionReactor_UIGroup_Title", groupStartCollapsed = false)]
     public string ChargeStatus = "N/A";
     
     /// KSPACTIONS
@@ -137,22 +137,22 @@ namespace FarFutureTechnologies
     /// KSPEVENTS
     /// ----------------------
 
-    [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Enable Startup Charging", active = true, groupName = "fusionreactor", groupDisplayName = "Fusion Reactor", groupStartCollapsed = false)]
+    [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "#LOC_FFT_ModuleFusionReactor_Event_EnableCharging_Title", active = true, groupName = "fusionreactor", groupDisplayName = "#LOC_FFT_ModuleFusionReactor_UIGroup_Title", groupStartCollapsed = false)]
     public void EnableCharging()
     {
       Charging = true;
     }
-    [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "Disable Startup Charging", active = false, groupName = "fusionreactor", groupDisplayName = "Fusion Reactor", groupStartCollapsed = false)]
+    [KSPEvent(guiActive = true, guiActiveEditor = true, guiName = "#LOC_FFT_ModuleFusionReactor_Event_DisableCharging_Title", active = false, groupName = "fusionreactor", groupDisplayName = "#LOC_FFT_ModuleFusionReactor_UIGroup_Title", groupStartCollapsed = false)]
     public void DisableCharging()
     {
       Charging = false;
     }
-    [KSPEvent(guiActive = true, guiActiveEditor = false, guiName = "Enable Reactor", active = true, groupName = "fusionreactor", groupDisplayName = "Fusion Reactor", groupStartCollapsed = false)]
+    [KSPEvent(guiActive = true, guiActiveEditor = false, guiName = "LOC_FFT_ModuleFusionReactor_Event_Enable_Title", active = true, groupName = "fusionreactor", groupDisplayName = "#LOC_FFT_ModuleFusionReactor_UIGroup_Title", groupStartCollapsed = false)]
     public void EnableReactor()
     {
       ReactorActivated();
     }
-    [KSPEvent(guiActive = true, guiActiveEditor = false, guiName = "Disable Reactor", active = false, groupName = "fusionreactor", groupDisplayName = "Fusion Reactor", groupStartCollapsed = false)]
+    [KSPEvent(guiActive = true, guiActiveEditor = false, guiName = "LOC_FFT_ModuleFusionReactor_Event_Disable_Title", active = false, groupName = "fusionreactor", groupDisplayName = "#LOC_FFT_ModuleFusionReactor_UIGroup_Title", groupStartCollapsed = false)]
     public void DisableReactor()
     {
       ReactorDeactivated();
@@ -296,21 +296,6 @@ namespace FarFutureTechnologies
       }
 
       
-
-      //Fields["currentModeIndex"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_CurrentModeIndex_Title");
-      //Fields["HeatOutput"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Title");
-      //Fields["ReactorOutput"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ReactorOutput_Title");
-      //Fields["FuelInput"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_FuelInput_Title");
-      //Fields["CoreTemp"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_CoreTemp_Title");
-      //Fields["ChargeStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ChargeStatus_Title");
-      //Fields["RechargeStatus"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_RechargeStatus_Title");
-
-      //Events["EnableCharging"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Event_Enable_Title");
-      //Events["DisableCharging"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Event_Disable_Title");
-
-      //Actions["EnableChargingAction"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Action_EnableAction_Title");
-      //Actions["DisableChargingAction"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Action_DisableAction_Title");
-      //Actions["ToggleChargingAction"].guiName = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Action_ToggleAction_Title");
     }
 
 
@@ -429,6 +414,15 @@ namespace FarFutureTechnologies
         heatModule.AddFlux(ModuleID, 0f, 0f);
         HeatOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Offline");
       }
+      if (HighLogic.LoadedSceneIsFlight)
+        if (heatModule.LoopTemperature >= ShutdownTemperature)
+        {
+          ReactorDeactivated();
+          ScreenMessages.PostScreenMessage(new ScreenMessage(Localizer.Format("#LOC_FFT_ModuleFusionReactor_Message_Overheat",
+                                                                              part.partInfo.title),
+                                                                     5.0f,
+                                                                     ScreenMessageStyle.UPPER_CENTER));
+        }
     }
 
 
@@ -538,6 +532,7 @@ namespace FarFutureTechnologies
           
           if (CurrentCharge >= ChargeGoal)
           {
+            ChargeStatus = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ChargeStatus_Ready");
             Charged = true;
             if (chargeState != ChargeState.Ready)
               SetChargeStateUI(ChargeState.Ready);
@@ -548,6 +543,10 @@ namespace FarFutureTechnologies
             if (chargeState != ChargeState.Charging)
               SetChargeStateUI(ChargeState.Charging);
           }
+        }
+        if (!Charging && CurrentCharge == 0f)
+        {
+          ChargeStatus = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_ChargeStatus_NotCharging");
         }
       }
 
