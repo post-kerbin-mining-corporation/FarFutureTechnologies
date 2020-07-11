@@ -10,6 +10,9 @@ namespace FarFutureTechnologies
   public class ModuleColorAnimator: PartModule, IScalarModule
   {
     [KSPField]
+    public float colorScale = 1f;
+
+    [KSPField]
     public string moduleID;
 
     [KSPField]
@@ -110,7 +113,7 @@ namespace FarFutureTechnologies
       if (HighLogic.LoadedSceneIsEditor && targetRenderers != null)
       {
         animationFraction = 0f;
-        Color c = new Color(redCurve.Evaluate(animationFraction), greenCurve.Evaluate(animationFraction), blueCurve.Evaluate(animationFraction), alphaCurve.Evaluate(animationFraction));
+        Color c = new Color(redCurve.Evaluate(animationFraction) * colorScale, greenCurve.Evaluate(animationFraction)*colorScale, blueCurve.Evaluate(animationFraction) * colorScale, alphaCurve.Evaluate(animationFraction) * colorScale);
         
         foreach (Renderer r in targetRenderers)
         {
@@ -126,7 +129,7 @@ namespace FarFutureTechnologies
       {
          animationFraction = Mathf.MoveTowards(animationFraction, animationGoal, TimeWarp.deltaTime * animRate);
         
-        Color c = new Color(redCurve.Evaluate(animationFraction), greenCurve.Evaluate(animationFraction), blueCurve.Evaluate(animationFraction), alphaCurve.Evaluate(animationFraction));
+        Color c = new Color(redCurve.Evaluate(animationFraction) * colorScale, greenCurve.Evaluate(animationFraction) * colorScale, blueCurve.Evaluate(animationFraction) * colorScale, alphaCurve.Evaluate(animationFraction) * colorScale);
      
         foreach (Renderer r in targetRenderers)
         {
