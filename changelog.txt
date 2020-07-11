@@ -1,3 +1,35 @@
+0.9.0
+-----
+- Updated ModuleManager to 4.
+- Updated B9PartSwitch to 2.
+- Updated CryoTanks to 1.
+- Removed all Antimatter, Z-pinch, Metallic H2 things
+- Rewrote plugin components completely
+- New engines
+ - JP-10 '' Magneto-Inertial Fusion Engine: entry level fusion engine with great impulse but poor thrust. Uses D-D or H-He3 fusion
+ - JR-15 'Jet' Spherical Tokamak Fusion Engine: workhorse fusion engine that can inject more propellant for more thrust. Built in power generation.
+ - JR-20A '' Torroidal Tokamak Fusion Engine: high tech fusion engine optimized for high thrust operations.
+ - JR-45 'Fresnel' Mirror Cell Fusion Engine: hugh tech fusion engine, optimized for vacuum operations. increase length for more capabilities. Built in power generation.
+ - K-80 'Hammertong' Inertial Confinement Fusion Engine: Very large high Isp laser fusion engine.
+ - X-2 'Heinlein' Nuclear Salt Water Rocket Engine:
+ - X-6 'Barracuda' Fission Fragment Rocket Engine: Unrefuelable engine with awesome Isp and piddly thrust. Generates good power.
+ - X-7 'Asimov' Afterburning Fission Fragment Rocket Engine: Super low thrust fission fragment engine with refuelability and the ability to use LH2 as an add-in for more thrust
+- New power generators
+ - FX-2 Fusion Reactor
+ - FX-3 Fusion Reactor
+- New fuel tanks
+ - ST-412 Fusion Fuel Tank
+ - ST-824 Fusion Fuel Tank
+ - ST-4L3 Fusion Fuel Tank
+ - ST-4L3R Fusion Fuel Tank
+ - NTS-001 Fissonables Tank
+ - NTS-002 Fissonables Tank
+ - NTS-003 Fissonables Tank
+ - NTR-001 Radial Fissonables Tank
+ - NTR-002 Radial Fissonables Tank
+ - NTR-003 Radial Fissonables Tank
+- New ISRU equipment
+
 0.3.1
 -----
 - Updated B9PartSwitch to 2.4.5
