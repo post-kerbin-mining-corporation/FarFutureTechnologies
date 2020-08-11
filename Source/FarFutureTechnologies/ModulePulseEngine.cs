@@ -181,9 +181,10 @@ namespace FarFutureTechnologies
 
                 engine.maxThrust = momentumPerFrame / TimeWarp.fixedDeltaTime;
                 engine.maxFuelFlow = ((momentumPerFrame / TimeWarp.fixedDeltaTime) / (engine.realIsp * (float)PhysicsGlobals.GravitationalAcceleration));
-                //Utils.Log($"[ModulePulseEngine]: Pulse fired with impulse of {momentumPerFrame}, thrust {momentumPerFrame / TimeWarp.fixedDeltaTime} {engine.realIsp}, {PhysicsGlobals.GravitationalAcceleration}");
+                if (FarFutureTechnologySettings.DebugModules)
+                  Utils.Log($"[ModulePulseEngine]: Pulse fired with impulse of {momentumPerFrame}, thrust {momentumPerFrame / TimeWarp.fixedDeltaTime} {engine.realIsp}, {PhysicsGlobals.GravitationalAcceleration}");
 
-                ticks++;
+                  ticks++;
                 if (ticks >= PulseThrustFrameCount)
                 {
                   ticks = 0;
@@ -348,10 +349,7 @@ namespace FarFutureTechnologies
     }
   }
 
-
-  /// <summary>
-  /// A class that holds information about a fusion reactor mode
-  /// </summary>
+  
   public class PulseEngineLaserEffect
   {
     public string name;

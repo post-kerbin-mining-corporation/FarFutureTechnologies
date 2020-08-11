@@ -120,7 +120,8 @@ namespace FarFutureTechnologies
           r.material.SetColor(shaderProperty, c);
         }
       }
-      Utils.Log($"[ModuleColorAnimator] {moduleID} Set up {targetRenderers.Count} renderers");
+      if (FarFutureTechnologySettings.DebugModules)
+        Utils.Log($"[ModuleColorAnimator] {moduleID} Set up {targetRenderers.Count} renderers");
     }
 
     protected void Update()

@@ -42,6 +42,10 @@ namespace FarFutureTechnologies
     [KSPField(isPersistant = true)]
     public float MinimumThrottleFraction = 0.05f;
 
+    // Persistent charge field
+    [KSPField(isPersistant = true)]
+    public float CurrentPowerConsumption = 0f;
+
     // --- Model Lights ---
     [KSPField(isPersistant = false)]
     public string ChargingLightRootTransformName;
@@ -155,7 +159,8 @@ namespace FarFutureTechnologies
     }
     void SetUIState(ChargeState newState, ModuleEnginesFX activeEngine, ModuleEnginesFX otherEngine)
     {
-      Utils.Log($"[ModuleChargeableEngine] Setting UI state to {newState.ToString()}");
+      if (FarFutureTechnologySettings.DebugModules)
+        Utils.Log($"[ModuleChargeableEngine] Setting UI state to {newState.ToString()}");
       chargeState = newState;
 
       if (newState == ChargeState.Ready)
@@ -219,6 +224,7 @@ namespace FarFutureTechnologies
         chargeLights = new List<Renderer>();
         Transform chargeLightParent = part.FindModelTransform(ChargingLightRootTransformName);
         if (!chargeLightParent)
+          if (FarFutureTechnologySettings.DebugModules)
           Utils.Log($"[ModuleChargeableEngine] Couldn't find ChargingLightRootTransformName {ChargingLightRootTransformName}");
         else
           foreach (Transform child in chargeLightParent)
@@ -269,11 +275,16 @@ namespace FarFutureTechnologies
         }
 
       }
+      else
+      {
+        CurrentPowerConsumption = 0f;
+      }
     }
 
     void EvaluateEngineModeChange()
     {
-      Utils.Log($"[ModuleChargeableEngine] Handling multi engine switch activation, primary is {multiEngine.primaryEngineID}");
+      if (FarFutureTechnologySettings.DebugModules)
+        Utils.Log($"[ModuleChargeableEngine] Handling multi engine switch activation, primary is {multiEngine.primaryEngineID}");
 
       SetUIState(chargeState);
       multiEngineRunningPrimary = multiEngine.runningPrimary;
@@ -300,7 +311,8 @@ namespace FarFutureTechnologies
 
     void HandleActivateEngine(ModuleEnginesFX engine)
     {
-      Utils.Log($"[ModuleChargeableEngine] Handling engine activation");
+      if (FarFutureTechnologySettings.DebugModules)
+        Utils.Log($"[ModuleChargeableEngine] Handling engine activation");
       // If system is charged, enable 
       if (Charged && engine.EngineIgnited)
       {
@@ -322,7 +334,8 @@ namespace FarFutureTechnologies
     }
     void HandleShutdownEngine(ModuleEnginesFX engine)
     {
-      Utils.Log($"[ModuleChargeableEngine] Handling engine shutdown");
+      if (FarFutureTechnologySettings.DebugModules)
+        Utils.Log($"[ModuleChargeableEngine] Handling engine shutdown");
       engineStates[engine] = false;
       Charged = false;
       CurrentCharge = 0f;
@@ -349,7 +362,7 @@ namespace FarFutureTechnologies
     {
       if (IsEngineRunning())
       {
-
+        CurrentPowerConsumption = 0f;
         if (chargeState != ChargeState.Running)
         {
           SetUIState(ChargeState.Running);
@@ -362,8 +375,10 @@ namespace FarFutureTechnologies
         {
           double req = part.RequestResource("ElectricCharge", (double)ChargeRate * TimeWarp.fixedDeltaTime);
           CurrentCharge = Mathf.MoveTowards(CurrentCharge, ChargeGoal, (float)req);
+          CurrentPowerConsumption = -ChargeRate;
 
           if (req > 0.0d)
+
             ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Charging", ChargeRate.ToString("F2"));
           else
             ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_NoPower");
@@ -382,8 +397,6 @@ namespace FarFutureTechnologies
                                                                          5.0f,
                                                                          ScreenMessageStyle.UPPER_CENTER));
             }
-            // ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Ready");
-
           }
           else
           {
@@ -392,6 +405,10 @@ namespace FarFutureTechnologies
               SetUIState(ChargeState.Charging);
             }
           }
+        } 
+        else
+        {
+          CurrentPowerConsumption = 0f;
         }
       }
       if (chargeLights.Count > 0)
