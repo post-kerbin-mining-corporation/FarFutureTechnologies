@@ -29,7 +29,7 @@ namespace FarFutureTechnologies
     {
       ConfigNode settingsNode;
 
-      Utils.Log("[FFT Settings]: Started loading");
+      Utils.Log("[FFT Settings]: Started loading"); 
       if (GameDatabase.Instance.ExistsConfigNode("FarFutureTechnologies/FFTSETTINGS"))
       {
         Utils.Log("[FFT Settings]: Located settings file");
