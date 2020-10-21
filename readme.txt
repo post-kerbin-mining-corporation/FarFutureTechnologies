@@ -15,8 +15,8 @@ Required:
 - CryoTanks (1.5.2)
 - DynamicBatteryStorage (2.1.8)
 - SystemHeat (0.1.0)
-- Waterfall (0.2.0)
-- SpaceDust (TBD)
+- Waterfall (0.2.1)
+- SpaceDust (0.1.0)
 
 Recommended
 - Community Tech Tree (v2.2+)
