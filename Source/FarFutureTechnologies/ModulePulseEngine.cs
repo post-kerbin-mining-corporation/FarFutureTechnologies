@@ -143,6 +143,10 @@ namespace FarFutureTechnologies
           light = lightXform.gameObject.GetComponent<Light>();
           light.intensity = 0f;
         }
+        if (light == null)
+  
+              Debug.LogError($"[ModulePulseEngine] No light was found on  {lightTransformName}");
+            
       }
     }
 
@@ -301,8 +305,6 @@ namespace FarFutureTechnologies
             {
               laserFX[laserAnimatorIndex].Set(this.part, curveValue);
             }
-
-
           }
           else
           {

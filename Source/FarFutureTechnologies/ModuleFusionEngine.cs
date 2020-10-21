@@ -185,14 +185,19 @@ namespace FarFutureTechnologies
     {
       if (engines[engineIndex] != null)
       {
+        
         engineOnStates[engineIndex] = false;
-        engines[engineIndex].Events["Shutdown"].Invoke();
-        engines[engineIndex].currentThrottle = 0;
-        engines[engineIndex].requestedThrottle = 0;
-        ScreenMessages.PostScreenMessage(new ScreenMessage(Localizer.Format("#LOC_FFT_ModuleFusionEngine_Message_ReactorNotReady",
-                                                                            part.partInfo.title),
-                                                                   5.0f,
-                                                                   ScreenMessageStyle.UPPER_CENTER));
+
+        if (engines[engineIndex].EngineIgnited)
+        {
+          engines[engineIndex].Events["Shutdown"].Invoke();
+          engines[engineIndex].currentThrottle = 0;
+          engines[engineIndex].requestedThrottle = 0;
+          ScreenMessages.PostScreenMessage(new ScreenMessage(Localizer.Format("#LOC_FFT_ModuleFusionEngine_Message_ReactorNotReady",
+                                                                              part.partInfo.title),
+                                                                     5.0f,
+                                                                     ScreenMessageStyle.UPPER_CENTER));
+        }
       }
     }
   }

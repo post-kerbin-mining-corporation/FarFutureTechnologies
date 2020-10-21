@@ -152,13 +152,13 @@ namespace FarFutureTechnologies
     {
       Charging = false;
     }
-    [KSPEvent(guiActive = true, guiActiveEditor = false, guiName = "LOC_FFT_ModuleFusionReactor_Event_Enable_Title", active = true,
+    [KSPEvent(guiActive = true, guiActiveEditor = false, guiName = "#LOC_FFT_ModuleFusionReactor_Event_Enable_Title", active = true,
       groupName = "fusionreactor", groupDisplayName = "#LOC_FFT_ModuleFusionReactor_UIGroup_Title", groupStartCollapsed = false)]
     public void EnableReactor()
     {
       ReactorActivated();
     }
-    [KSPEvent(guiActive = true, guiActiveEditor = false, guiName = "LOC_FFT_ModuleFusionReactor_Event_Disable_Title", active = false,
+    [KSPEvent(guiActive = true, guiActiveEditor = false, guiName = "#LOC_FFT_ModuleFusionReactor_Event_Disable_Title", active = false,
       groupName = "fusionreactor", groupDisplayName = "#LOC_FFT_ModuleFusionReactor_UIGroup_Title", groupStartCollapsed = false)]
     public void DisableReactor()
     {
