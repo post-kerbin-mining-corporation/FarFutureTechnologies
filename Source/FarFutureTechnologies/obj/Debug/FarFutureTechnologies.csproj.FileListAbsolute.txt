@@ -24,3 +24,10 @@ G:/KSP Modding/repositories/FarFutureTechnologies/GameData/FarFutureTechnologies
 /github/FarFutureTechnologies/Source/FarFutureTechnologies/obj/Debug/FarFutureTechnologies.csproj.CoreCompileInputs.cache
 /github/FarFutureTechnologies/Source/FarFutureTechnologies/obj/Debug/FarFutureTechnologies.dll
 /github/FarFutureTechnologies/Source/FarFutureTechnologies/obj/Debug/FarFutureTechnologies.pdb
+C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Debug\FarFutureTechnologies.csprojAssemblyReference.cache
+C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Debug\FarFutureTechnologies.csproj.CoreCompileInputs.cache
+C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Debug\FarFutureTechnologies.dll
+C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Debug\FarFutureTechnologies.pdb
+C:\Users\Chris\KSP\Repos\FarFutureTechnologies\GameData\FarFutureTechnologies\Plugins\FarFutureTechnologies.dll
+C:\Users\Chris\KSP\Repos\FarFutureTechnologies\GameData\FarFutureTechnologies\Plugins\FarFutureTechnologies.pdb
+C:\Users\Chris\KSP\Repos\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Debug\FarFutureTechnologies.csproj.CopyComplete
