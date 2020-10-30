@@ -10,13 +10,13 @@ DEPENDENCIES
 
 Required:
 - B9PartSwitch (2.17.0)
-- Community Resource Pack (1.3.0)
+- Community Resource Pack (1.4.1)
 - ModuleManager (4.1.4)
-- CryoTanks (1.5.2)
-- DynamicBatteryStorage (2.1.8)
+- CryoTanks (1.5.3)
+- DynamicBatteryStorage (2.1.10)
 - SystemHeat (0.1.0)
-- Waterfall (0.2.1)
-- SpaceDust (0.1.0)
+- Waterfall (0.2.2)
+- SpaceDust (0.1.2)
 
 Recommended
 - Community Tech Tree (v2.2+)
