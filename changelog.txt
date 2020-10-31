@@ -1,3 +1,58 @@
+0.9.0
+-----
+- KSP 1.10.1+
+- Updated ModuleManager to 4.1.4
+- Updated B9PartSwitch to 2.17.0
+- Updated CryoTanks to 1.5.3
+- Updated CRP to 1.4.1
+- Updated DyanmicBatteryStorage to 2.1.10
+- REMOVED ALL OLD PARTS!
+- Rewrote plugin components completely. Some highlights
+ - Better UI and UX overall
+ - Plugin stability and robustness is improved
+ - Antimatter system is simplified; pay Science to load onto your ship at launch
+ - Integration with SystemHeat to drive thermal gameplay
+ - Integration with SpaceDust to drive atmospheric ISRU
+ - Integration with Waterfall to drive all engine effects
+- New engines
+ - JP-10 'Impulse' Magneto-Inertial Fusion Engine: entry level fusion engine with great impulse but poor thrust. Uses D-D or H-He3 fusion
+ - JR-15 'Jet' Spherical Tokamak Fusion Engine: workhorse fusion engine that can inject more propellant for more thrust. Built in power generation.
+ - JR-20A 'Ouroboros' Torroidal Tokamak Fusion Engine: high tech fusion engine optimized for high thrust operations.
+ - JR-45 'Fresnel' Mirror Cell Fusion Engine: hugh tech fusion engine, optimized for vacuum operations. increase length for more capabilities. Built in power generation.
+ - K-80 'Hammertong' Inertial Confinement Fusion Engine: Very large high Isp laser fusion engine.
+ - X-2 'Heinlein' Nuclear Salt Water Rocket Engine:
+ - X-6 'Clarke' Fission Fragment Rocket Engine: Unrefuelable engine with awesome Isp and piddly thrust. Generates good power.
+ - X-7 'Asimov' Afterburning Fission Fragment Rocket Engine: Super low thrust fission fragment engine with refuelability and the ability to use LH2 as an add-in for more thrust
+ - X-20 'Verne' X-20 'Verne' Pulsed Fission Engine: Z-pinch fission pulse engine, lower impulse, higher thrust
+ - A-134NG 'Casaba' Antimatter Catalyzed Fission Engine: antimatter + fission pellets + ablator = kaboom
+- New power generators
+ - FX-2 Fusion Reactor: 2.5m fusion reactor, can run on D-D or D-He3 fusion
+ - FX-3 Fusion Reactor: 3.75m fusion reactor, can run on D-D or D-He3 fusion
+- New fuel tanks
+ - ST-412 Fusion Fuel Tank: small 2.5m fusion fuel tank storing Deuterium, Helium3 or both
+ - ST-824 Fusion Fuel Tank: medium 2.5m fusion fuel tank storing Deuterium, Helium3 or both
+ - ST-4L3 Fusion Fuel Tank: small 3.75m fusion fuel tank storing Deuterium, Helium3 or both
+ - ST-4L3R Fusion Fuel Tank: medium 3.75m fusion fuel tank storing Deuterium, Helium3 or both
+ - NTS-001 Fissonables Tank: big 2.5m fission fuel tank storing Nuclear Salt Water or Fission Particles
+ - NTS-002 Fissonables Tank: medium 2.5m fission fuel tank storing Nuclear Salt Water or Fission Particles
+ - NTS-003 Fissonables Tank: small 2.5m fission fuel tank storing Nuclear Salt Water or Fission Particles
+ - NTR-001 Radial Fissonables Tank: big radial fission fuel tank storing Nuclear Salt Water or Fission Particles
+ - NTR-002 Radial Fissonables Tank: medium radial fission fuel tank storing Nuclear Salt Water or Fission Particles
+ - NTR-003 Radial Fissonables Tank: small radial fission fuel tank storing Nuclear Salt Water or Fission Particles
+ - LFT-A40 Lithium Tank: big 2.5m lithium tank
+ - LFT-A20 Lithium Tank: medium 2.5m lithium tank
+ - LFT-A10 Lithium Tank: small 2.5m lithium tank
+ - LFR-08 Lithium Tank: medium radial lithium tank
+ - LFR-01 Lithium Tank: small radial lithium tank
+ - PW x4 Nuclear Pellet Storage Container: 5m fission pellet storage
+ - A-R7 Antiproton Storage Ring: 7.5m antiproton storage
+- New ISRU equipment
+ - CRANE Gamma Ray Spectrometer: scanner for detecting antimatter
+ - CHROMA Imaging Spectrometer: scanner for detecting light elements in atmospheres and exospheres
+ - PK-1 'Vulcan' Nuclear Smelter: ISRU tool for generating fission particles, nuclear salt water
+ - PK-ATMO 'Hoover' Atmospheric Ramscoop: Atmospheric scoop for scooping resources
+ - PK-EXO 'Bussard' Particle Scoop: particle scoop for scooping exospheric resources
+
 0.3.1
 -----
 - Updated B9PartSwitch to 2.4.5
