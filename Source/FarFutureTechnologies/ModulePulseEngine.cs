@@ -95,7 +95,9 @@ namespace FarFutureTechnologies
     {
       if (engineID != "")
       {
+        //Utils.Log($"{engineID} , {this.GetComponents<ModuleEnginesFX>().ToList().Count}, {this.GetComponents<ModuleEnginesFX>().ToList().Find(x => x.engineID == engineID)}");
         engine = this.GetComponents<ModuleEnginesFX>().ToList().Find(x => x.engineID == engineID);
+        //Utils.Log($"{engineID} , {this.GetComponents<ModuleWaterfallFX>().ToList().Count}, {this.GetComponents<ModuleWaterfallFX>().ToList().Find(x => x.engineID == engineID)}");
         waterfallEffect = this.GetComponents<ModuleWaterfallFX>().ToList().Find(x => x.engineID == engineID);
       }
       else
@@ -127,7 +129,7 @@ namespace FarFutureTechnologies
 
           ConfigNode node = GameDatabase.Instance.GetConfigs("PART").
               Single(c => part.partInfo.name == c.name).config.
-              GetNodes("MODULE").Single(n => n.GetValue("name") == moduleName);
+              GetNodes("MODULE").Single(n => n.GetValue("name") == moduleName && n.GetValue("engineID") == engineID);
           OnLoad(node);
         }
       }
