@@ -56,8 +56,10 @@ namespace FarFutureTechnologies
     // FX intensity along the pulse
     [KSPField(isPersistant = false)]
     public FloatCurve plumeFXIntensityCurve = new FloatCurve();
+    // FX intensity along the pulse
+    [KSPField(isPersistant = false)]
+    public FloatCurve soundIntensityCurve = new FloatCurve();
 
-    // 
     [KSPField(isPersistant = false)]
     public string plumeFXControllerID = "throttle";
     // FX intensity along the pulse
@@ -247,7 +249,7 @@ namespace FarFutureTechnologies
                   pulseState.speed = 1.0f / scaledPulseSpeed;
                 }
               }
-              part.Effect(engine.runningEffectName, 1f);
+              //part.Effect(engine.runningEffectName, 1f);
               pulseProgress = pulseProgress + TimeWarp.deltaTime;
               if (laserPulseDone)
               {
@@ -263,7 +265,7 @@ namespace FarFutureTechnologies
                 //pulseState.normalizedTime = Mathf.MoveTowards(pulseState.normalizedTime, 1.0f, TimeWarp.fixedDeltaTime * scaledPulseSpeed);
                 pulseState.speed = 1.0f / scaledPulseSpeed;
               }
-              part.Effect(engine.runningEffectName, 1);
+              //part.Effect(engine.runningEffectName, 1);
 
               pulseProgress = pulseProgress + TimeWarp.deltaTime;
             }
@@ -275,7 +277,7 @@ namespace FarFutureTechnologies
                 pulseState.normalizedTime = 0f;
                 pulseState.speed = 0f;
               }
-              part.Effect(engine.runningEffectName, 0f);
+              //part.Effect(engine.runningEffectName, 0f);
               pulseProgress = pulseProgress + TimeWarp.deltaTime;
 
               
@@ -289,7 +291,7 @@ namespace FarFutureTechnologies
                 pulseState.normalizedTime = 0f;
                 pulseState.speed = 0f;
               }
-              part.Effect(engine.runningEffectName, 0f);
+             // part.Effect(engine.runningEffectName, 0f);
               pulseProgress = 0f;
               if (!laserPulseDone)
               {
@@ -298,6 +300,7 @@ namespace FarFutureTechnologies
                 if (laserAnimatorIndex > laserFX.Count - 1) laserAnimatorIndex = 0;
               }
             }
+            part.Effect(engine.runningEffectName, soundIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
             light.intensity = lightIntensityCurve.Evaluate(curveValue);
@@ -337,7 +340,7 @@ namespace FarFutureTechnologies
               pulseState.speed = 0f;
             }
             pulseProgress = 0f;
-            part.Effect(engine.runningEffectName, 0f);
+            part.Effect(engine.runningEffectName, soundIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
 
