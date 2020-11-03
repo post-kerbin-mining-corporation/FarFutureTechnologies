@@ -76,7 +76,7 @@ namespace FarFutureTechnologies
     [KSPAction("Enable Startup Charging", guiName = "#LOC_FFT_ModuleChargeableEngine_Action_EnableAction_Title")]
     public void EnableChargingAction(KSPActionParam param) { EnableCharging(); }
 
-    [KSPAction("Disable Startup Charging", guiName = "#LOC_FFT_ModuleChargeableEngine_Action_DiableAction_Title")]
+    [KSPAction("Disable Startup Charging", guiName = "#LOC_FFT_ModuleChargeableEngine_Action_DisableAction_Title")]
     public void DisableChargingAction(KSPActionParam param) { DisableCharging(); }
 
     [KSPAction("Toggle Startup Charging", guiName = "#LOC_FFT_ModuleChargeableEngine_Action_ToggleAction_Title")]
@@ -373,18 +373,7 @@ namespace FarFutureTechnologies
       {
         if (Charging)
         {
-          double req = part.RequestResource("ElectricCharge", (double)ChargeRate * TimeWarp.fixedDeltaTime);
-          CurrentCharge = Mathf.MoveTowards(CurrentCharge, ChargeGoal, (float)req);
-          CurrentPowerConsumption = -ChargeRate;
-
-          if (req > 0.0d)
-
-            ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Charging", ChargeRate.ToString("F2"));
-          else
-            ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_NoPower");
-
-          ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Normal", (CurrentCharge / ChargeGoal * 100.0f).ToString("F1"));
-
+         
           if (CurrentCharge >= ChargeGoal)
           {
             if (chargeState != ChargeState.Ready)
@@ -400,12 +389,25 @@ namespace FarFutureTechnologies
           }
           else
           {
+            double req = part.RequestResource("ElectricCharge", (double)ChargeRate * TimeWarp.fixedDeltaTime);
+            CurrentCharge = Mathf.MoveTowards(CurrentCharge, ChargeGoal, (float)req);
+            CurrentPowerConsumption = -ChargeRate;
+
+            if (req > 0.0d)
+
+              ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_Charging", ChargeRate.ToString("F2"));
+            else
+              ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_RechargeStatus_NoPower");
             if (chargeState != ChargeState.Charging)
             {
               SetUIState(ChargeState.Charging);
             }
           }
-        } 
+          
+
+          ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Normal", (CurrentCharge / ChargeGoal * 100.0f).ToString("F1"));
+
+        }
         else
         {
           CurrentPowerConsumption = 0f;
