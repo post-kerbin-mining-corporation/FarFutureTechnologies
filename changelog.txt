@@ -1,3 +1,13 @@
+0.9.3
+-----
+- Udpated SystemHeat to 0.1.4
+- Udpated Waterfall to 0.2.4
+- Clarke FFRE can no longer pull fuel from Uranium containers elsewhere on the ship
+- Fixed fusion reactor thermal properties (outlet temperatures to 1600K, made thermal output consistent)
+- Fixed fusion reactors showing the wrong icon in the thermal overlay
+- Fixed fusion reactors not generating heat in the VAB simulator
+- Fixed NSWR meshes again
+
 0.9.2
 -----
 - Udpated SystemHeat to 0.1.3

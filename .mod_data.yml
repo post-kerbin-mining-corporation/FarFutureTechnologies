@@ -29,11 +29,11 @@ dependencies:  # Configure dependencies
     location: github
     repository: ChrisAdderley/CryoTanks
   Waterfall:
-    tag: 0.2.3
+    tag: 0.2.4
     location: github
     repository: ChrisAdderley/Waterfall
   SystemHeat:
-    tag: 0.1.3
+    tag: 0.1.4
     location: github
     repository: ChrisAdderley/SystemHeat
   SpaceDust:
