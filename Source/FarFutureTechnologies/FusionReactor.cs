@@ -414,7 +414,8 @@ namespace FarFutureTechnologies
     /// </summary>
     void GenerateHeat()
     {
-      if (Enabled)
+      
+      if (HighLogic.LoadedSceneIsFlight && Enabled || HighLogic.LoadedSceneIsEditor)
       {
 
         HeatOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Running", (SystemPower).ToString("F0"));
