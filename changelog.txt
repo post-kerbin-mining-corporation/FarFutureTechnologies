@@ -1,7 +1,8 @@
 0.9.4
 -----
-- Udpated SystemHeat to 0.1.5
-- Udpated Waterfall to 0.2.6
+- Updated SystemHeat to 0.1.5
+- Updated SpaceDust to 0.1.5
+- Updated Waterfall to 0.2.6
 - Added A-834M 'Frisbee' Antimatter Engine: beam core engine, tons of Isp, pretty good thrust, gigawatts of heat.
 - Added A-CY1-5 Antimatter Storage Container: 5m antimatter storage tank
 - Added A-CY1-25XL Antimatter Storage Container: 2.5m long antimatter storage
