@@ -1,3 +1,22 @@
+0.9.4
+-----
+- Udpated SystemHeat to 0.1.5
+- Udpated Waterfall to 0.2.6
+- Added A-834M 'Frisbee' Antimatter Engine: beam core engine, tons of Isp, pretty good thrust, gigawatts of heat.
+- Added A-CY1-5 Antimatter Storage Container: 5m antimatter storage tank
+- Added A-CY1-25XL Antimatter Storage Container: 2.5m long antimatter storage
+- Added A-CY1-25 Antimatter Storage Container: 2.5m antimattery storage
+- Added PK-50 'Nova' Antimatter Facility: huge, unwieldy reactor for generating antimatter 
+- Fixed ModulePulseEngine's handling of secondary engine modes such that the secondary mode's effects won't get stuck
+- ModuleAntimatterTank now supports some indicator lights when on/off/leaking
+- Changed Hammertong second mode name from Low Density to Deuterium Rich
+- Balance adjustments
+ - Reduced Clarke thrust from 50 to 20 kN
+ - Moved Fresnel from Exotic Fusion Reactions to Advanced Fusion Reactions
+ - Moved Hammertong from Advanced Fusion Reactions to Exotic Fusion Reactions 
+ - Moved Verne from Experimental Nuclear Propulsion to Exotic Nuclear Propulsion
+ - Rebalanced Antimatter tankage mass and cost ratios
+
 0.9.3
 -----
 - Udpated SystemHeat to 0.1.4
