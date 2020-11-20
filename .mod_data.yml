@@ -29,17 +29,17 @@ dependencies:  # Configure dependencies
     location: github
     repository: ChrisAdderley/CryoTanks
   Waterfall:
-    tag: 0.2.4
+    tag: 0.2.6
     location: github
-    repository: ChrisAdderley/Waterfall
+    repository: post-kerbin-mining-corporation/Waterfall
   SystemHeat:
-    tag: 0.1.4
+    tag: 0.1.5
     location: github
-    repository: ChrisAdderley/SystemHeat
+    repository: post-kerbin-mining-corporation/SystemHeat
   SpaceDust:
-    tag: 0.1.4
+    tag: 0.1.5
     location: github
-    repository: ChrisAdderley/SpaceDust
+    repository: post-kerbin-mining-corporation/SpaceDust
 deploy:
   SpaceDock:
     enabled: false  # activate/deactivate this deployment script

@@ -1,7 +1,7 @@
 ﻿using KSP.Localization;
 using System;
-using UnityEngine;
-using KSP.UI.Screens;
+using System.Linq;
+using System.Collections.Generic;
 using FarFutureTechnologies.UI;
 
 namespace FarFutureTechnologies
@@ -33,20 +33,34 @@ namespace FarFutureTechnologies
     [KSPField(isPersistant = true)]
     public bool DetonationOccuring = false;
 
+    [KSPField(isPersistant = false)]
+    public float AlertRate = 5f;
 
     [KSPField(isPersistant = true)]
     public float ContainmentCostCurrent = 0f;
 
+    [KSPField(isPersistant = false)]
+    public string OnLightAnimatorName = "";
+
+    [KSPField(isPersistant = false)]
+    public string OffLightAnimatorName = "";
+
+    [KSPField(isPersistant = false)]
+    public string AlertLightAnimatorName = "";
 
 
     // PRIVATE
     private double fuelAmount = 0.0;
     private double maxFuelAmount = 0.0;
+    private ModuleColorAnimator onAnimator;
+    private ModuleColorAnimator offAnimator;
+    private ModuleColorAnimator alertAnimator;
+    private float alertDirection = 1f;
 
     // UI FIELDS/ BUTTONS
     // Status string
     [KSPField(isPersistant = false, guiActive = true, guiName = "#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Title",
-      groupName = "antimatterTank", groupDisplayName ="#LOC_FFT_ModuleAntimatterTank_UIGroup_Title", groupStartCollapsed=false)]
+      groupName = "antimatterTank", groupDisplayName = "#LOC_FFT_ModuleAntimatterTank_UIGroup_Title", groupStartCollapsed = false)]
     public string DetonationStatus = "N/A";
 
     [KSPField(isPersistant = false, guiActive = true, guiName = "#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Title",
@@ -102,7 +116,7 @@ namespace FarFutureTechnologies
           DetonationOccuring = false;
           DetonationStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Contained");
           ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Contained", ContainmentCost.ToString("F2"));
-          ContainmentCostCurrent = -1f* ContainmentCost;
+          ContainmentCostCurrent = -1f * ContainmentCost;
         }
         else
         {
@@ -123,7 +137,7 @@ namespace FarFutureTechnologies
 
       if (HighLogic.LoadedSceneIsFlight || HighLogic.LoadedSceneIsEditor)
       {
-      
+
         fuelAmount = GetResourceAmount(FuelName);
         maxFuelAmount = GetMaxResourceAmount(FuelName);
 
@@ -134,6 +148,13 @@ namespace FarFutureTechnologies
       {
         GameEvents.OnVesselRollout.Add(new EventData<ShipConstruct>.OnEvent(OnVesselRollout));
         DoCatchup();
+
+        if (OnLightAnimatorName != "")
+          onAnimator = this.GetComponents<ModuleColorAnimator>().ToList().Find(x => x.moduleID == OnLightAnimatorName);
+        if (OffLightAnimatorName != "")
+          offAnimator = this.GetComponents<ModuleColorAnimator>().ToList().Find(x => x.moduleID == OffLightAnimatorName);
+        if (AlertLightAnimatorName != "")
+          alertAnimator = this.GetComponents<ModuleColorAnimator>().ToList().Find(x => x.moduleID == AlertLightAnimatorName);
       }
     }
 
@@ -182,7 +203,7 @@ namespace FarFutureTechnologies
     {
       if (part.vessel.missionTime > 0.0)
       {
-        if (part.RequestResource("ElectricCharge", (double) ContainmentCost * TimeWarp.fixedDeltaTime) < ContainmentCost * TimeWarp.fixedDeltaTime)
+        if (part.RequestResource("ElectricCharge", (double)ContainmentCost * TimeWarp.fixedDeltaTime) < ContainmentCost * TimeWarp.fixedDeltaTime)
         {
         }
       }
@@ -223,10 +244,16 @@ namespace FarFutureTechnologies
       if (HighLogic.LoadedSceneIsFlight)
       {
         fuelAmount = GetResourceAmount(FuelName);
-        
+
         // If we have no fuel, no need to do any calculations
         if (fuelAmount == 0.0)
         {
+          if (offAnimator)
+          offAnimator.SetScalar(1f);
+          if (onAnimator)
+            onAnimator.SetScalar(0f);
+          if (alertAnimator)
+          alertAnimator.SetScalar(0f);
           ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_None");
           return;
         }
@@ -234,6 +261,12 @@ namespace FarFutureTechnologies
         // If the cooling cost is zero, we must boil off
         if (ContainmentCost == 0f)
         {
+          if (offAnimator)
+            offAnimator.SetScalar(1f);
+          if (onAnimator)
+          onAnimator.SetScalar(0f);
+
+
           DetonationOccuring = true;
           DetonationStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Uncontained", DetonationRate.ToString("F2"));
         }
@@ -242,9 +275,20 @@ namespace FarFutureTechnologies
         {
           if (!ContainmentEnabled)
           {
+            if (offAnimator)
+              offAnimator.SetScalar(1f);
+            if (onAnimator)
+              onAnimator.SetScalar(0f);
             DetonationOccuring = true;
             DetonationStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Uncontained", DetonationRate.ToString("F2"));
             ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Disabled");
+          }
+          else
+          {
+            if (offAnimator)
+              offAnimator.SetScalar(0f);
+            if (onAnimator)
+              onAnimator.SetScalar(1f);
           }
         }
 
@@ -252,7 +296,23 @@ namespace FarFutureTechnologies
 
         if (DetonationOccuring)
         {
+          if (alertAnimator)
+          {
+            if (alertAnimator.GetScalar > 1f)
+            {
+              alertDirection = -1f;
+            }
+            if (alertAnimator.GetScalar < 0f)
+              alertDirection = 1f;
+
+            alertAnimator.SetScalar(alertAnimator.GetScalar + TimeWarp.fixedDeltaTime * AlertRate * alertDirection);
+          }
           DoDetonation();
+        }
+        else
+        {
+          if (alertAnimator)
+            alertAnimator.SetScalar(0f);
         }
         if (part.vessel.missionTime > 0.0)
         {

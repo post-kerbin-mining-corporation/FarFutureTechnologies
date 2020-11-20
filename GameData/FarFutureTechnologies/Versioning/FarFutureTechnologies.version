@@ -1,12 +1,12 @@
 {
     "NAME":"FarFutureTechnologies",
-    "URL":"https://raw.githubusercontent.com/ChrisAdderley/FarFutureTechnologies/master/GameData/FarFutureTechnologies/Versioning/FarFutureTechnologies.version",
-    "DOWNLOAD":"http://forum.kerbalspaceprogram.com/threads/52042",
+    "URL":"https://raw.githubusercontent.com/post-kerbin-mining-corporation/FarFutureTechnologies/master/GameData/FarFutureTechnologies/Versioning/FarFutureTechnologies.version",
+    "DOWNLOAD":"https://github.com/post-kerbin-mining-corporation/FarFutureTechnologies/releases",
     "VERSION":
     {
         "MAJOR":0,
         "MINOR":9,
-        "PATCH":3,
+        "PATCH":4,
         "BUILD":0
     },
     "KSP_VERSION":

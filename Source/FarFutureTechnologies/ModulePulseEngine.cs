@@ -318,10 +318,11 @@ namespace FarFutureTechnologies
               pulseState.normalizedTime = 0f;
               pulseState.speed = 0f;
             }
+            pulseProgress = 0f;
             part.Effect(engine.runningEffectName, 0f);
             waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
-            pulseProgress = 0f;
+            
             light.intensity = lightIntensityCurve.Evaluate(curveValue);
             emissiveAnimator.SetScalar(lightIntensityCurve.Evaluate(curveValue));
             if (LaserAnimations)
@@ -332,7 +333,7 @@ namespace FarFutureTechnologies
         }
         else
         {
-          if (multiEngine == null || (multiEngine && multiEngine.runningPrimary && multiEngine.primaryEngineID == engineID))
+          if (multiEngine == null || (multiEngine && multiEngine.runningPrimary && multiEngine.primaryEngineID == engineID) || (multiEngine && !multiEngine.runningPrimary && multiEngine.secondaryEngineID == engineID))
           {
             foreach (AnimationState pulseState in pulseStates)
             {
@@ -351,6 +352,7 @@ namespace FarFutureTechnologies
               laserFX[laserAnimatorIndex].Set(this.part, curveValue);
             }
           }
+
         }
       }
     }
