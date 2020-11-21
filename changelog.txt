@@ -1,3 +1,14 @@
+0.9.5 
+-----
+- Fixed A-CY1-25 and A-CY1-25XL stack nodes being swapped
+- Adjusted attach nodes for A-CY1-5 ,A-CY1-25 and A-CY1-25XL
+- Disabled the ability to surface attach the Nova
+- Increased Clarke heat generation to 16MW from 13 MW
+- Reduced mass of Casaba from 22 to 15 t
+- Increased thrust of Casaba from 310 to 420 kN
+- Reduced power usage of Impulse to 150 kW
+- Considerably reduced the heat generation of extended Fresnel lengths
+
 0.9.4
 -----
 - Updated SystemHeat to 0.1.5
