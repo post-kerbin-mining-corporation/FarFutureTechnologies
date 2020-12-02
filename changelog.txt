@@ -1,3 +1,25 @@
+0.9.6
+-----
+- Updated SystemHeat to 0.2.0
+- Updated SpaceDust to 0.2.1
+- Updated Waterfall to 0.2.7
+- Added PK-DUST Regolith Processing System: drilling system for collecting Helium 3
+- Aligned some localization terminology with SystemHeat
+- Renamed Fissionable Particles to Fission Fragments (Frag) to reduce confusion
+- Renamed Low Thrust mode on Fresnel to Afterburner to reduce confusion
+- Fixed Nova using obsolete FissionTargets insteat of FissionPellets
+- Capped Shock Cone intake levels on Hoover
+- Hoover can now be surface attached
+- Adjusted Frisbee heat levels, now about 25% of previous and are completely eliminated with 15 radiator segments
+- Added description notes to indicate radiator scaling to Frisbee
+- Tuned heat on all engines: scaled in distinct bins to engine mass ratios depending on nature of the engine:
+ - Most low mass flow engines require 40% of their mass in radiator capacity 
+ - Higher mass flow engines require 25% of their mass
+ - 'Thermal' fission engines (FFRE/NSWR) require 60% of their mass
+- Reduced Clarke thrust to 12 kN from 20 kN
+- Reduced Asimov mass from 22 to 18 t
+- Added Lithium refinement to ISRUs, disabled when NFP is installed
+
 0.9.5 
 -----
 - Fixed A-CY1-25 and A-CY1-25XL stack nodes being swapped

@@ -190,7 +190,7 @@ namespace FarFutureTechnologies
 
     public override string GetInfo()
     {
-      string msg = Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo", (SystemPower).ToString());
+      string msg = Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo", (SystemPower).ToString("F0"), SystemOutletTemperature.ToString("F0"));
       foreach (FusionReactorMode mode in modes)
       {
         msg += Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo_Mode",
