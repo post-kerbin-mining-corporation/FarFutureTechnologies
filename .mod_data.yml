@@ -29,11 +29,11 @@ dependencies:  # Configure dependencies
     location: github
     repository: ChrisAdderley/CryoTanks
   Waterfall:
-    tag: 0.2.7
+    tag: 0.2.8
     location: github
     repository: post-kerbin-mining-corporation/Waterfall
   SystemHeat:
-    tag: 0.2.0
+    tag: 0.2.2
     location: github
     repository: post-kerbin-mining-corporation/SystemHeat
   SpaceDust:

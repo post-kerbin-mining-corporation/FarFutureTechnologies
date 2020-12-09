@@ -90,7 +90,6 @@
     <Compile Include="FarFutureTechnologySettings.cs" />
     <Compile Include="FusionReactorMode.cs" />
     <Compile Include="FusionReactor.cs" />
-    <Compile Include="ModuleAnimationGroupLimiter.cs" />
     <Compile Include="ModuleAntimatterTank.cs" />
     <Compile Include="ModuleColorAnimator.cs" />
     <Compile Include="ModuleFusionEngine.cs" />
