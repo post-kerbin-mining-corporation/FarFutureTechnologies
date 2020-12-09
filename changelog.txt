@@ -1,3 +1,23 @@
+0.9.7
+-----
+- Updated SystemHeat to 0.2.2
+- Updated Waterfall to 0.2.8
+- Added JX-200 'Cascade' Axial Flow Z-Pinch Fusion Engine: endgame fusion engine with low and high thrust modes
+- Added an override to He3 concentrations from CRP
+- PK-DUST Regolith Processing System has been changed to use B9PS-based mirroring rather than stock, which should fix many issues
+- Fixed configurations of the Nuclear Smelter converter modules
+- Fixed missing ablator refurbish module on Nuclear Smelter
+- Fixed Discovery heat engine module duplication
+- Adjusted NSWR flare to use new Waterfall features and clip less
+- Added SystemHeat configs to the PK-ATMO and PK-EXO
+- Fixed some effects on the Frisbee
+- Increased Frisbee Antimatter:LH2 ratio from 1:1 to 2:1
+- Increased heat production of Asimov Afterbuner mode to 12.5 MW from 8 MW
+- Decreased thrust of Asimov Afterbuner mode to 250 kW from 300 kN
+- Moved Verne from Exotic Nuclear Propulsion to Experimental Nuclear Propulsion
+- Increased Verne thrust to 640 from 520 kN
+- Decreased Verne mass to 28 from 30t
+
 0.9.6
 -----
 - Updated SystemHeat to 0.2.0
