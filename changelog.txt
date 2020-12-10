@@ -1,3 +1,7 @@
+0.9.8
+-----
+- Fix Cascade heat generation
+
 0.9.7
 -----
 - Updated SystemHeat to 0.2.2
