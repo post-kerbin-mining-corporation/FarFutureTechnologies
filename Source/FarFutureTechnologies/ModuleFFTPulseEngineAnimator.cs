@@ -2,7 +2,7 @@
 
 namespace FarFutureTechnologies
 {
-  public class ModulePulseEngineAnimator : PartModule
+  public class ModuleFFTPulseEngineAnimator : PartModule
   {
     // Animation that plays
     [KSPField(isPersistant = false)]
@@ -66,7 +66,7 @@ namespace FarFutureTechnologies
 
       if (engineModule == null)
       {
-        Utils.LogError("[ModulePulseEngineAnimator]: No ModuleEnginesFX found on part!");
+        Utils.LogError("[ModuleFFTPulseEngineAnimator]: No ModuleEnginesFX found on part!");
       }
       // Set up animations
       if (PulseAnimation != "")
