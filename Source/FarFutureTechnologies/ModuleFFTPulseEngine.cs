@@ -6,7 +6,7 @@ using Waterfall;
 
 namespace FarFutureTechnologies
 {
-  public class ModulePulseEngine : PartModule
+  public class ModuleFFTPulseEngine : PartModule
   {
 
     [KSPField(isPersistant = false)]
@@ -149,7 +149,7 @@ namespace FarFutureTechnologies
         }
         if (light == null)
   
-              Debug.LogError($"[ModulePulseEngine] No light was found on  {lightTransformName}");
+              Debug.LogError($"[ModuleFFTPulseEngine] No light was found on  {lightTransformName}");
             
       }
     }
