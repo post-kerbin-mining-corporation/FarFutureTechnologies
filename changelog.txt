@@ -3,6 +3,7 @@
 - Updated SystemHeat to 0.2.3
 - Updated SpaceDust to 0.2.2
 - Updated Waterfall to 0.2.9
+- Updated Russian localization  (Egor Kosyakov)
 - Changed name of ModulePulseEngine module to ModulePulseEngineAnimator (avoids conflict with Stockish Project Orion)
 - Minor localization fixes
 - Moved Cascade to Unified Field Theory
