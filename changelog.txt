@@ -1,3 +1,18 @@
+0.9.9
+-----
+- Updated SystemHeat to 0.2.3
+- Updated SpaceDust to 0.2.2
+- Updated Waterfall to 0.2.9
+- Updated Russian localization  (Egor Kosyakov)
+- Changed name of ModulePulseEngine module to ModulePulseEngineAnimator (avoids conflict with Stockish Project Orion)
+- Minor localization fixes
+- Moved Cascade to Unified Field Theory
+- Tripled extraction rate of PK-DUST
+- Increased power cost of PK-DUST smelting to 60 from 15 kW
+- Added patch for stock scanners to enable LqdHe3 scanning
+- Added patch for SCANsat to enable LqdHe3 scanning 
+- Reworked LqdHe3 ore distribution to be interestingly scattered across the inner planets
+
 0.9.8
 -----
 - Fix Cascade heat generation
@@ -65,7 +80,7 @@
 - Added A-CY1-25XL Antimatter Storage Container: 2.5m long antimatter storage
 - Added A-CY1-25 Antimatter Storage Container: 2.5m antimattery storage
 - Added PK-50 'Nova' Antimatter Facility: huge, unwieldy reactor for generating antimatter 
-- Fixed ModulePulseEngine's handling of secondary engine modes such that the secondary mode's effects won't get stuck
+- Fixed ModulePulseEngineAnimator's handling of secondary engine modes such that the secondary mode's effects won't get stuck
 - ModuleAntimatterTank now supports some indicator lights when on/off/leaking
 - Changed Hammertong second mode name from Low Density to Deuterium Rich
 - Balance adjustments
@@ -90,7 +105,7 @@
 - Udpated SystemHeat to 0.1.3
 - Udpated SpaceDust to 0.1.4
 - Added engine nicknames to part tags
-- Added ability to specify a sound curve to ModulePulseEngine and set it up for Casaba, Verne, Hammertong, Impulse; should resolve most sound issues
+- Added ability to specify a sound curve to ModulePulseEngineAnimator and set it up for Casaba, Verne, Hammertong, Impulse; should resolve most sound issues
 - Fixed stock heat production of Fresnel engine being enabled in Reaction Products mode
 - Fixed beam glow directionality on Clarke FFRE
 - Fixed typo in Action group localization for Chargeable Engines
