@@ -1,3 +1,11 @@
+0.9.10
+------
+- Updated SpaceDust to 0.2.3
+- Added A-7007 'Dirac' Antimatter Initiated Microfusion Engine: small lightweight antimatter fusion engine with great impulse, lower thrust. Generates power. 
+- Fixed fusion reactors turning off on game load
+- Corrected fuel usage of D/He3 fusion reactors being way too high (applies to reactors and integrated reactor in Discovery, Fresnel)
+- Minor fixes to ACMF engine FX
+
 0.9.9
 -----
 - Updated SystemHeat to 0.2.3

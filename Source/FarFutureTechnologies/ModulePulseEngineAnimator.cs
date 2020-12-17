@@ -6,7 +6,7 @@ using Waterfall;
 
 namespace FarFutureTechnologies
 {
-  public class ModulePulseEngineAnimatorAnimator : PartModule
+  public class ModulePulseEngineAnimator : PartModule
   {
 
     [KSPField(isPersistant = false)]
@@ -148,9 +148,9 @@ namespace FarFutureTechnologies
           light.intensity = 0f;
         }
         if (light == null)
-  
-              Debug.LogError($"[ModulePulseEngineAnimator] No light was found on  {lightTransformName}");
-            
+
+          Debug.LogError($"[ModulePulseEngineAnimator] No light was found on  {lightTransformName}");
+
       }
     }
 
@@ -192,7 +192,7 @@ namespace FarFutureTechnologies
                 if (FarFutureTechnologySettings.DebugModules)
                   Utils.Log($"[ModulePulseEngineAnimator]: Pulse fired with impulse of {momentumPerFrame}, thrust {momentumPerFrame / TimeWarp.fixedDeltaTime} {engine.realIsp}, {PhysicsGlobals.GravitationalAcceleration}");
 
-                  ticks++;
+                ticks++;
                 if (ticks >= PulseThrustFrameCount)
                 {
                   ticks = 0;
@@ -231,6 +231,7 @@ namespace FarFutureTechnologies
         scaledPulseSpeed = PulseSpeed.Evaluate(engine.requestedThrottle);
         scaledPulseDuration = scaledPulseSpeed * PulseDuration;
 
+
         float curveValue = pulseProgress / scaledPulseSpeed;
 
         if (engine.EngineIgnited)
@@ -260,40 +261,41 @@ namespace FarFutureTechnologies
             // During pulse
             else if (pulseProgress < scaledPulseDuration)
             {
-              foreach (AnimationState pulseState in pulseStates)
-              {
-                //pulseState.normalizedTime = Mathf.MoveTowards(pulseState.normalizedTime, 1.0f, TimeWarp.fixedDeltaTime * scaledPulseSpeed);
-                pulseState.speed = 1.0f / scaledPulseSpeed;
-              }
-              //part.Effect(engine.runningEffectName, 1);
+              if (PulseAnimation != "")
+                foreach (AnimationState pulseState in pulseStates)
+                {
+                  //pulseState.normalizedTime = Mathf.MoveTowards(pulseState.normalizedTime, 1.0f, TimeWarp.fixedDeltaTime * scaledPulseSpeed);
+                  pulseState.speed = 1.0f / scaledPulseSpeed;
+                }
 
               pulseProgress = pulseProgress + TimeWarp.deltaTime;
             }
             // after pulse but during wait period
             else if (pulseProgress >= scaledPulseDuration && pulseProgress < (scaledPulseDuration + scaledPulseInterval))
             {
-              foreach (AnimationState pulseState in pulseStates)
-              {
-                pulseState.normalizedTime = 0f;
-                pulseState.speed = 0f;
-              }
+              if (PulseAnimation != "")
+                foreach (AnimationState pulseState in pulseStates)
+                {
+                  pulseState.normalizedTime = 0f;
+                  pulseState.speed = 0f;
+                }
               //part.Effect(engine.runningEffectName, 0f);
               pulseProgress = pulseProgress + TimeWarp.deltaTime;
 
-              
+
             }
             // After pulse wait period
             else
             {
-
-              foreach (AnimationState pulseState in pulseStates)
-              {
-                pulseState.normalizedTime = 0f;
-                pulseState.speed = 0f;
-              }
-             // part.Effect(engine.runningEffectName, 0f);
+              if (PulseAnimation != "")
+                foreach (AnimationState pulseState in pulseStates)
+                {
+                  pulseState.normalizedTime = 0f;
+                  pulseState.speed = 0f;
+                }
+              // part.Effect(engine.runningEffectName, 0f);
               pulseProgress = 0f;
-              if (!laserPulseDone)
+              if (LaserAnimations && !laserPulseDone)
               {
                 laserPulseDone = true;
                 laserAnimatorIndex++;
@@ -303,7 +305,8 @@ namespace FarFutureTechnologies
             part.Effect(engine.runningEffectName, soundIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
-            light.intensity = lightIntensityCurve.Evaluate(curveValue);
+            if (light != null)
+              light.intensity = lightIntensityCurve.Evaluate(curveValue);
             emissiveAnimator.SetScalar(lightIntensityCurve.Evaluate(curveValue));
 
             if (LaserAnimations)
@@ -313,17 +316,18 @@ namespace FarFutureTechnologies
           }
           else
           {
-            foreach (AnimationState pulseState in pulseStates)
-            {
-              pulseState.normalizedTime = 0f;
-              pulseState.speed = 0f;
-            }
+            if (PulseAnimation != "")
+              foreach (AnimationState pulseState in pulseStates)
+              {
+                pulseState.normalizedTime = 0f;
+                pulseState.speed = 0f;
+              }
             pulseProgress = 0f;
             part.Effect(engine.runningEffectName, 0f);
             waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
-            
-            light.intensity = lightIntensityCurve.Evaluate(curveValue);
+            if (light != null)
+              light.intensity = lightIntensityCurve.Evaluate(curveValue);
             emissiveAnimator.SetScalar(lightIntensityCurve.Evaluate(curveValue));
             if (LaserAnimations)
             {
@@ -335,17 +339,19 @@ namespace FarFutureTechnologies
         {
           if (multiEngine == null || (multiEngine && multiEngine.runningPrimary && multiEngine.primaryEngineID == engineID) || (multiEngine && !multiEngine.runningPrimary && multiEngine.secondaryEngineID == engineID))
           {
-            foreach (AnimationState pulseState in pulseStates)
-            {
-              pulseState.normalizedTime = 0f;
-              pulseState.speed = 0f;
-            }
+            if (PulseAnimation != "")
+              foreach (AnimationState pulseState in pulseStates)
+              {
+                pulseState.normalizedTime = 0f;
+                pulseState.speed = 0f;
+              }
             pulseProgress = 0f;
             part.Effect(engine.runningEffectName, soundIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
+            if (light != null)
+              light.intensity = lightIntensityCurve.Evaluate(curveValue);
 
-            light.intensity = lightIntensityCurve.Evaluate(curveValue);
             emissiveAnimator.SetScalar(lightIntensityCurve.Evaluate(curveValue));
             if (LaserAnimations)
             {
@@ -358,7 +364,7 @@ namespace FarFutureTechnologies
     }
   }
 
-  
+
   public class PulseEngineLaserEffect
   {
     public string name;
