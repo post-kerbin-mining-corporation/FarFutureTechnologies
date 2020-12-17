@@ -37,7 +37,7 @@ dependencies:  # Configure dependencies
     location: github
     repository: post-kerbin-mining-corporation/SystemHeat
   SpaceDust:
-    tag: 0.2.2
+    tag: 0.2.3
     location: github
     repository: post-kerbin-mining-corporation/SpaceDust
 deploy:

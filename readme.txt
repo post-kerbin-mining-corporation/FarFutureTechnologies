@@ -16,7 +16,7 @@ Required:
 - DynamicBatteryStorage (2.1.10)
 - SystemHeat (0.2.3)
 - Waterfall (0.2.9)
-- SpaceDust (0.2.2)
+- SpaceDust (0.2.3)
 
 Recommended
 - Community Tech Tree (v2.2+)

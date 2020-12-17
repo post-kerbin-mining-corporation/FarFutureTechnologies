@@ -228,15 +228,14 @@ namespace FarFutureTechnologies
               GetNodes("MODULE").Single(n => n.GetValue("name") == moduleName);
           OnLoad(node);
         }
-      }
+      } 
       SetupUI();
       SetupAnimations();
       SetupHeat();
       SetupRecharge();
 
-      ChangeMode(currentModeIndex);
-
-    }
+      modeLight.material.SetColor("_TintColor", modes[currentModeIndex].modeColor);
+          }
 
     public virtual void FixedUpdate()
     {
