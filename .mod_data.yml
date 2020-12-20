@@ -17,11 +17,11 @@ dependencies:  # Configure dependencies
     version: 1.4.1
     location: s3
   DynamicBatteryStorage:
-    tag: 2.1.10
+    tag: 2.2.1
     location: github
     repository: post-kerbin-mining-corporation/DynamicBatteryStorage
   DeployableEngines:
-    tag: 1.2.2
+    tag: 1.2.3
     location: github
     repository: post-kerbin-mining-corporation/DeployableEngines
   CryoTanks:
