@@ -142,3 +142,4 @@ C:\Users\Chris\KSP\Repositories\FarFutureTechnologies\Source\FarFutureTechnologi
 C:\Users\Chris\KSP\Repositories\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Release\FarFutureTechnologies.csproj.CopyComplete
 C:\Users\Chris\KSP\Repositories\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Release\FarFutureTechnologies.dll
 C:\Users\Chris\KSP\Repositories\FarFutureTechnologies\Source\FarFutureTechnologies\obj\Release\FarFutureTechnologies.pdb
+C:\Users\Chris\KSP\Repositories\FarFutureTechnologies\Source\FarFutureTechnologies\bin\Release\UnityEngine.dll
