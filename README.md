@@ -19,12 +19,12 @@ This is a pack containing far-future but likely possible spacecraft technologies
 These components are required for the mod to function and are bundled as part of any download:
 * [ModuleManager (4.1.4)](https://github.com/sarbian/ModuleManager)
 * [B9PartSwitch (2.1.7)](https://github.com/blowfishpro/B9PartSwitch)
-* [SpaceDust (0.1.3)](https://github.com/ChrisAdderley/SpaceDust)
-* [Waterfall (0.2.3)](https://github.com/ChrisAdderley/Waterfall)
-* [SystemHeat (0.1.1)](https://github.com/ChrisAdderley/SystemHeat)
-* [DeployableEngines (4.1.4)](https://github.com/ChrisAdderley/DeployableEngines)
-* [DynamicBatteryStorage (2.1.10)](https://github.com/ChrisAdderley/DynamicBatteryStorage)
-* [CryoTanks (1.5.3)](https://github.com/ChrisAdderley/CryoTanks)
+* [SpaceDust (0.3.0)](https://github.com/post-kerbin-mining-corporation/SpaceDust)
+* [Waterfall (0.2.10)](https://github.com/post-kerbin-mining-corporation/Waterfall)
+* [SystemHeat (0.3.0)](https://github.com/post-kerbin-mining-corporation/SystemHeat)
+* [DeployableEngines (1.2.3)](https://github.com/post-kerbin-mining-corporation/DeployableEngines)
+* [DynamicBatteryStorage (2.2.1)](https://github.com/post-kerbin-mining-corporation/DynamicBatteryStorage)
+* [CryoTanks (1.5.4)](https://github.com/post-kerbin-mining-corporation/CryoTanks)
 
 ## Installation
 

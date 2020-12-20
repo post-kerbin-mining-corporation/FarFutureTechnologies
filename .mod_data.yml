@@ -19,25 +19,25 @@ dependencies:  # Configure dependencies
   DynamicBatteryStorage:
     tag: 2.1.10
     location: github
-    repository: ChrisAdderley/DynamicBatteryStorage
+    repository: post-kerbin-mining-corporation/DynamicBatteryStorage
   DeployableEngines:
     tag: 1.2.2
     location: github
-    repository: ChrisAdderley/DeployableEngines
+    repository: post-kerbin-mining-corporation/DeployableEngines
   CryoTanks:
-    tag: 1.5.3
+    tag: 1.5.4
     location: github
-    repository: ChrisAdderley/CryoTanks
+    repository: post-kerbin-mining-corporation/CryoTanks
   Waterfall:
-    tag: 0.2.9
+    tag: 0.2.10
     location: github
     repository: post-kerbin-mining-corporation/Waterfall
   SystemHeat:
-    tag: 0.2.3
+    tag: 0.3.0
     location: github
     repository: post-kerbin-mining-corporation/SystemHeat
   SpaceDust:
-    tag: 0.2.3
+    tag: 0.3.0
     location: github
     repository: post-kerbin-mining-corporation/SpaceDust
 deploy:
