@@ -1,3 +1,13 @@
+0.9.12
+------
+- Updated CryoTanks to 1.5.5
+- Updated SystemHeat to 0.3.1
+- Updated CRP to 1.4.2
+- Updated SpaceDust to 0.3.0
+- Updated Waterfall to 0.3.0
+- Minor bugfixes across the board
+- Russian localization fixes
+
 0.9.11
 ------
 - Updated DynamicBatteryStorage to 2.2.1
