@@ -1,6 +1,6 @@
-==============================
-FAR FUTURE TECHNOLOGIES 0.9.12
-==============================
+=============================
+FAR FUTURE TECHNOLOGIES 1.0.0
+=============================
 
 This is a pack containing far-future but likely possible spacecraft technologies. These might not be possible today, but the physics works out, and might be feasible within the next 100 years.
 
@@ -14,7 +14,7 @@ Required:
 - ModuleManager (4.1.4)
 - CryoTanks (1.5.5)
 - DynamicBatteryStorage (2.2.1)
-- SystemHeat (0.3.1)
+- SystemHeat (0.3.2)
 - Waterfall (0.3.0)
 - SpaceDust (0.3.0)
 

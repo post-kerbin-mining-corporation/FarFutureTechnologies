@@ -4,9 +4,9 @@
     "DOWNLOAD":"https://github.com/post-kerbin-mining-corporation/FarFutureTechnologies/releases",
     "VERSION":
     {
-        "MAJOR":0,
-        "MINOR":9,
-        "PATCH":12,
+        "MAJOR":1,
+        "MINOR":0,
+        "PATCH":0,
         "BUILD":0
     },
     "KSP_VERSION":
