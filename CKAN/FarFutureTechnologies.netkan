@@ -8,7 +8,7 @@
     "author": "Nertea (Chris Adderley)",
     "license":      "restricted",
     "resources": {
-        "homepage":   "https://forum.kerbalspaceprogram.com/index.php?/topic/197723-1",
+        "homepage":   "https://forum.kerbalspaceprogram.com/index.php?/topic/199070-1",
         "repository": "https://github.com/post-kerbin-mining-corporation/FarFutureTechnologies"
     },
     "depends": [
@@ -22,18 +22,18 @@
         { "name": "SpaceDust"   },
         { "name": "Waterfall"   }
     ],
-    "recommends": {
+    "recommends": [
       { "name": "HeatControl"   },
       { "name": "CommunityTechTree"   }
-    },
-    "suggests": {
+    ],
+    "suggests": [
       { "name": "NearFutureConstruction"   },
       { "name": "NearFutureElectrical"   },
       { "name": "SystemHeat-FissionReactors"   },
       { "name": "SystemHeat-Converters"   },
       { "name": "SystemHeat-Harvesters"   },
       { "name": "SystemHeat-FissionEngines"   }
-    },
+    ],
     "install": [ {
         "find":       "FarFutureTechnologies",
         "install_to": "GameData"
