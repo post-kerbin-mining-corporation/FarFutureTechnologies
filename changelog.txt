@@ -1,3 +1,10 @@
+1.0.0
+-----
+- Updated SystemHeat to 0.3.2
+- Minor bugfixes across the board
+- Fixed issue with ACMF laser effects
+- Fixed harvester tga texture
+
 0.9.12
 ------
 - Updated CryoTanks to 1.5.5
