@@ -29,23 +29,23 @@ dependencies:  # Configure dependencies
     location: github
     repository: post-kerbin-mining-corporation/CryoTanks
   Waterfall:
-    tag: 0.3.0
+    tag: 0.4.1
     location: github
     repository: post-kerbin-mining-corporation/Waterfall
   SystemHeat:
-    tag: 0.3.2
+    tag: 0.3.4
     location: github
     repository: post-kerbin-mining-corporation/SystemHeat
   SpaceDust:
-    tag: 0.3.0
+    tag: 0.3.3
     location: github
     repository: post-kerbin-mining-corporation/SpaceDust
 deploy:
   SpaceDock:
-    enabled: false  # activate/deactivate this deployment script
-    mod-id: 537  # The Spacedock mod ID for deployment
+    enabled: true  # activate/deactivate this deployment script
+    mod-id: 2603  # The Spacedock mod ID for deployment
   CurseForge:
-    enabled: false  # activate/deactivate this deployment script
-    mod-id: 231670  # The CurseForge mod ID for deployment
+    enabled: true  # activate/deactivate this deployment script
+    mod-id: 432210  # The CurseForge mod ID for deployment
   GitHub:
     enabled: true  # activate/deactivate this deployment script

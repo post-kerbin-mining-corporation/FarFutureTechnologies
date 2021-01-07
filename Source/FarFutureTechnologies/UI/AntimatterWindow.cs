@@ -38,6 +38,7 @@ namespace FarFutureTechnologies.UI
       cancelButton = transform.FindDeepChild("CancelButton").GetComponent<Button>();
 
       cancelButton.onClick.AddListener(delegate { SetVisible(false); });
+
       okbutton.onClick.AddListener(delegate { LoadAntimatter(); });
 
       titleText.text = Localizer.Format("#LOC_FFT_AntimatterManager_PanelTitle");
@@ -65,8 +66,9 @@ namespace FarFutureTechnologies.UI
       
       totalAntimatterLoad += amount;
       totalScienceCost = FarFutureTechnologySettings.antimatterScienceCostPerUnit * totalAntimatterLoad;
-      scienceText.text = Localizer.Format("#LOC_FFT_AntimatterManager_ScienceText", totalScienceCost.ToString());
-      antimatterText.text = Localizer.Format("#LOC_FFT_AntimatterManager_AntimatterText", totalAntimatterLoad.ToString());
+
+      scienceText.text = Localizer.Format("#LOC_FFT_AntimatterManager_ScienceText", totalScienceCost.ToString("+F0;-F0;0"));
+      antimatterText.text = Localizer.Format("#LOC_FFT_AntimatterManager_AntimatterText", totalAntimatterLoad.ToString("+0;-0;0"));
       descriptionText.text = Localizer.Format("#LOC_FFT_AntimatterManager_DescriptionText", totalScienceCost.ToString());
     }
   }

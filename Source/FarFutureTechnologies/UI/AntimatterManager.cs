@@ -19,7 +19,7 @@ namespace FarFutureTechnologies.UI
     protected AntimatterWindow amWindow;
 
     protected float totalScienceCost = 0f;
-    protected float totalAntimatterLoad = 0f;
+    protected double totalAntimatterLoad = 0f;
     protected List<ModuleAntimatterTank> tanks;
     protected void Awake()
     {
@@ -68,27 +68,32 @@ namespace FarFutureTechnologies.UI
 
       foreach (ModuleAntimatterTank tank in tanks)
       {
-        double partAM = 0d;
-        double partMaxAM = 0d;
-        // Determine need for power
-        tank.part.GetConnectedResourceTotals(PartResourceLibrary.Instance.GetDefinition(tank.FuelName).id, 
-          ResourceFlowMode.NO_FLOW, out partAM, out partMaxAM, true);
+        if (totalAntimatterLoad > 0d)
+        {
+          double toLoad = 0d;
+          double partAM = 0d;
+          double partMaxAM = 0d;
 
-        float cost = (float)partMaxAM * FarFutureTechnologySettings.antimatterScienceCostPerUnit;
-        double toAdd = 0d;
-        if (availableScience - cost > 0f)
-        {
-          ResearchAndDevelopment.Instance.AddScience(-cost, TransactionReasons.RnDPartPurchase);
-          availableScience = availableScience - cost;
-          toAdd = partMaxAM;
-        } else
-        {
-          toAdd = availableScience / FarFutureTechnologySettings.antimatterScienceCostPerUnit;
-          ResearchAndDevelopment.Instance.AddScience(-availableScience, TransactionReasons.RnDPartPurchase);
-          availableScience = 0f;
+          double scienceMaxAM = ResearchAndDevelopment.Instance.Science * FarFutureTechnologySettings.antimatterScienceCostPerUnit;
+          // Find tank capacities
+          tank.part.GetConnectedResourceTotals(PartResourceLibrary.Instance.GetDefinition(tank.FuelName).id,
+            ResourceFlowMode.NO_FLOW, out partAM, out partMaxAM, true);
+
+          if (totalAntimatterLoad < partMaxAM)
+            toLoad = partMaxAM - totalAntimatterLoad;
+          else
+            toLoad = partMaxAM;
+
+
+          float cost = (float)toLoad * FarFutureTechnologySettings.antimatterScienceCostPerUnit;
+
+          double toLoadAgain = Math.Min(scienceMaxAM, toLoad);
+
+          ResearchAndDevelopment.Instance.AddScience((float)-toLoadAgain* FarFutureTechnologySettings.antimatterScienceCostPerUnit, TransactionReasons.RnDPartPurchase);
+          totalAntimatterLoad -= toLoadAgain;
+         
+          tank.part.RequestResource(tank.FuelName, -toLoadAgain, ResourceFlowMode.NO_FLOW);
         }
-        
-        tank.part.RequestResource(tank.FuelName, -toAdd, ResourceFlowMode.NO_FLOW);
       }
     }
   }
