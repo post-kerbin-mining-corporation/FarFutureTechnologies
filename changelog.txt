@@ -1,3 +1,12 @@
+1.0.1
+-----
+- Updated SystemHeat to 0.3.5
+- Updated SpaceDust to 0.3.3
+- Updated Waterfall to 0.4.1
+- Fixed localization of small radial fission tank
+- Fixed mesh offset of medium radial fission tank
+- Fixed a number of science point and antimatter tank loading bugs
+
 1.0.0
 -----
 - Updated SystemHeat to 0.3.2
