@@ -33,7 +33,7 @@ dependencies:  # Configure dependencies
     location: github
     repository: post-kerbin-mining-corporation/Waterfall
   SystemHeat:
-    tag: 0.3.4
+    tag: 0.3.7
     location: github
     repository: post-kerbin-mining-corporation/SystemHeat
   SpaceDust:

@@ -70,29 +70,29 @@ namespace FarFutureTechnologies.UI
       {
         if (totalAntimatterLoad > 0d)
         {
-          double toLoad = 0d;
-          double partAM = 0d;
-          double partMaxAM = 0d;
+          double goalAntimatterToLoad = 0d;
 
-          double scienceMaxAM = ResearchAndDevelopment.Instance.Science * FarFutureTechnologySettings.antimatterScienceCostPerUnit;
+          double partAntimatter = 0d;
+          double partAntimatterCapacity = 0d;
+
+          double maxPurchaseableAM = ResearchAndDevelopment.Instance.Science * FarFutureTechnologySettings.antimatterScienceCostPerUnit;
           // Find tank capacities
           tank.part.GetConnectedResourceTotals(PartResourceLibrary.Instance.GetDefinition(tank.FuelName).id,
-            ResourceFlowMode.NO_FLOW, out partAM, out partMaxAM, true);
+            ResourceFlowMode.NO_FLOW, out partAntimatter, out partAntimatterCapacity, true);
 
-          if (totalAntimatterLoad < partMaxAM)
-            toLoad = partMaxAM - totalAntimatterLoad;
+          if (totalAntimatterLoad < partAntimatterCapacity)
+            goalAntimatterToLoad = partAntimatterCapacity - totalAntimatterLoad;
           else
-            toLoad = partMaxAM;
+            goalAntimatterToLoad = partAntimatterCapacity;
 
 
-          float cost = (float)toLoad * FarFutureTechnologySettings.antimatterScienceCostPerUnit;
+          double antimatterToLoad = Math.Min(maxPurchaseableAM, goalAntimatterToLoad);
+          if (FarFutureTechnologySettings.antimatterScienceCostPerUnit > 0)
+            ResearchAndDevelopment.Instance.AddScience((float)-antimatterToLoad / FarFutureTechnologySettings.antimatterScienceCostPerUnit, TransactionReasons.RnDPartPurchase);
 
-          double toLoadAgain = Math.Min(scienceMaxAM, toLoad);
-
-          ResearchAndDevelopment.Instance.AddScience((float)-toLoadAgain* FarFutureTechnologySettings.antimatterScienceCostPerUnit, TransactionReasons.RnDPartPurchase);
-          totalAntimatterLoad -= toLoadAgain;
+          totalAntimatterLoad -= antimatterToLoad;
          
-          tank.part.RequestResource(tank.FuelName, -toLoadAgain, ResourceFlowMode.NO_FLOW);
+          tank.part.RequestResource(tank.FuelName, -antimatterToLoad, ResourceFlowMode.NO_FLOW);
         }
       }
     }
