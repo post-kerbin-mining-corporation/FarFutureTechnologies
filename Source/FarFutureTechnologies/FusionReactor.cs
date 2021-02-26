@@ -425,7 +425,7 @@ namespace FarFutureTechnologies
         heatModule.AddFlux(ModuleID, 0f, 0f);
         HeatOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Offline");
       }
-      if (HighLogic.LoadedSceneIsFlight)
+      if (HighLogic.LoadedSceneIsFlight && Enabled)
         if (heatModule.LoopTemperature >= ShutdownTemperature)
         {
           ReactorDeactivated();

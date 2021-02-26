@@ -20,11 +20,11 @@ These components are required for the mod to function and are bundled as part of
 * [ModuleManager (4.1.4)](https://github.com/sarbian/ModuleManager)
 * [B9PartSwitch (2.17)](https://github.com/blowfishpro/B9PartSwitch)
 * [SpaceDust (0.3.0)](https://github.com/post-kerbin-mining-corporation/SpaceDust)
-* [Waterfall (0.3.0)](https://github.com/post-kerbin-mining-corporation/Waterfall)
-* [SystemHeat (0.3.2)](https://github.com/post-kerbin-mining-corporation/SystemHeat)
-* [DeployableEngines (1.2.3)](https://github.com/post-kerbin-mining-corporation/DeployableEngines)
-* [DynamicBatteryStorage (2.2.1)](https://github.com/post-kerbin-mining-corporation/DynamicBatteryStorage)
-* [CryoTanks (1.5.5)](https://github.com/post-kerbin-mining-corporation/CryoTanks)
+* [Waterfall (0.5.0)](https://github.com/post-kerbin-mining-corporation/Waterfall)
+* [SystemHeat (0.3.7)](https://github.com/post-kerbin-mining-corporation/SystemHeat)
+* [DeployableEngines (1.3.0)](https://github.com/post-kerbin-mining-corporation/DeployableEngines)
+* [DynamicBatteryStorage (2.2.2)](https://github.com/post-kerbin-mining-corporation/DynamicBatteryStorage)
+* [CryoTanks (1.6.6)](https://github.com/post-kerbin-mining-corporation/CryoTanks)
 
 ## Installation
 
