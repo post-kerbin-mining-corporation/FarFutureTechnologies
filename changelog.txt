@@ -1,5 +1,9 @@
 1.1.0
 -----
+- Updated DynamicBatteryStorage to 2.2.2
+- Updated DeployableEngines to 1.3.0
+- Updated CryoTanks to 1.6.0
+- Updated Waterfall to 0.5.0
 - Updated SystemHeat to 0.3.7
 - CHANGED ALL FUSION FUEL RATIOS
  - 2u LqdDeuterium : 3u LqdHe3 -> 1u LqdDeuterium: 4u LqdHe3
@@ -11,6 +15,7 @@
 - Corrected a missing bracket in the stock scanner patch
 - Rewrote some logic in the antimatter handling code
 - Fixed fusion reactor overheat message sticking aorund forever
+- Fixed 2.5m fusion reactor bottom node not moving with variant
 
 1.0.1
 -----
