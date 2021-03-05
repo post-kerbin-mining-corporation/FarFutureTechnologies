@@ -17,7 +17,7 @@ dependencies:  # Configure dependencies
     version: 1.4.2
     location: s3
   DynamicBatteryStorage:
-    tag: 2.2.1
+    tag: 2.2.2
     location: github
     repository: post-kerbin-mining-corporation/DynamicBatteryStorage
   DeployableEngines:
@@ -29,11 +29,11 @@ dependencies:  # Configure dependencies
     location: github
     repository: post-kerbin-mining-corporation/CryoTanks
   Waterfall:
-    tag: 0.4.1
+    tag: 0.6.0
     location: github
     repository: post-kerbin-mining-corporation/Waterfall
   SystemHeat:
-    tag: 0.3.7
+    tag: 0.3.8
     location: github
     repository: post-kerbin-mining-corporation/SystemHeat
   SpaceDust:

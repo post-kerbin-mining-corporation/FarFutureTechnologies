@@ -1,3 +1,10 @@
+1.1.1
+-----
+- Updated DynamicBatteryStorage to 2.2.2
+- Updated Waterfall to 0.6.0
+- Updated SystemHeat to 0.3.8
+- Changed nuclear transfer behaviour; if NFE is installed without SystemHeat reactor patches, the NFE nuclear transfer mechanic will be used
+
 1.1.0
 -----
 - Updated DynamicBatteryStorage to 2.2.2
