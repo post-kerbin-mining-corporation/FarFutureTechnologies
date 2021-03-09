@@ -1,3 +1,13 @@
+1.1.1
+-----
+- Updated DynamicBatteryStorage to 2.2.2
+- Updated Waterfall to 0.6.0
+- Updated SystemHeat to 0.3.9
+- Fixed effects to work with Waterfall 0.6.0 (probably improvements to FX coming in the future)
+- Reduced thrust of Frisbee by 1/3, increased Isp by 1/3
+- Fixed Cascade Isp typo (should have been 365k, was 265k)
+- Changed nuclear transfer behaviour; if NFE is installed without SystemHeat reactor patches, the NFE nuclear transfer mechanic will be used
+
 1.1.0
 -----
 - Updated DynamicBatteryStorage to 2.2.2
