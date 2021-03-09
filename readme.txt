@@ -14,7 +14,7 @@ Required:
 - ModuleManager (4.1.4)
 - CryoTanks (1.6.0)
 - DynamicBatteryStorage (2.2.2)
-- SystemHeat (0.3.8)
+- SystemHeat (0.3.9)
 - Waterfall (0.6.0)
 - SpaceDust (0.3.0)
 
