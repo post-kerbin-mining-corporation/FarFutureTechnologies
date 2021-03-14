@@ -1,3 +1,9 @@
+1.1.2
+-----
+- Updated Waterfall to 0.6.1
+- Updated SystemHeat to 0.3.10
+- More Waterfall fixes
+
 1.1.1
 -----
 - Updated DynamicBatteryStorage to 2.2.2

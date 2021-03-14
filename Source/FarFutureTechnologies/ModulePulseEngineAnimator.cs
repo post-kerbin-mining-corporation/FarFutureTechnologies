@@ -97,10 +97,9 @@ namespace FarFutureTechnologies
     {
       if (engineID != "")
       {
-        //Utils.Log($"{engineID} , {this.GetComponents<ModuleEnginesFX>().ToList().Count}, {this.GetComponents<ModuleEnginesFX>().ToList().Find(x => x.engineID == engineID)}");
+
         engine = this.GetComponents<ModuleEnginesFX>().ToList().Find(x => x.engineID == engineID);
-        //Utils.Log($"{engineID} , {this.GetComponents<ModuleWaterfallFX>().ToList().Count}, {this.GetComponents<ModuleWaterfallFX>().ToList().Find(x => x.engineID == engineID)}");
-        waterfallEffect = this.GetComponents<ModuleWaterfallFX>().ToList().Find(x => x.engineID == engineID);
+        waterfallEffect = this.GetComponents<ModuleWaterfallFX>().ToList().Find(x => x.moduleID == engineID);
       }
       else
       {
@@ -137,6 +136,10 @@ namespace FarFutureTechnologies
       }
     }
 
+    void FindWaterfallEffect()
+    {
+     
+    }
     void SetupLight()
     {
       if (lightTransformName != "")
@@ -168,6 +171,8 @@ namespace FarFutureTechnologies
 
     void FixedUpdate()
     {
+      
+
       if (PulsedThrust)
       {
         if (HighLogic.LoadedSceneIsFlight)
@@ -224,6 +229,8 @@ namespace FarFutureTechnologies
     {
       if (HighLogic.LoadedSceneIsFlight)
       {
+        if (waterfallEffect == null) FindWaterfallEffect();
+
         if (!engine)
           return;
 
@@ -303,8 +310,10 @@ namespace FarFutureTechnologies
               }
             }
             part.Effect(engine.runningEffectName, soundIntensityCurve.Evaluate(curveValue));
+
             waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
+
             if (light != null)
               light.intensity = lightIntensityCurve.Evaluate(curveValue);
             emissiveAnimator.SetScalar(lightIntensityCurve.Evaluate(curveValue));
