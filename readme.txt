@@ -1,5 +1,5 @@
 =============================
-FAR FUTURE TECHNOLOGIES 1.1.2
+FAR FUTURE TECHNOLOGIES 1.1.3
 =============================
 
 This is a pack containing far-future but likely possible spacecraft technologies. These might not be possible today, but the physics works out, and might be feasible within the next 100 years.
@@ -9,14 +9,14 @@ DEPENDENCIES
 ============
 
 Required:
-- B9PartSwitch (2.17.0)
+- B9PartSwitch (2.18.0)
 - Community Resource Pack (1.4.2)
 - ModuleManager (4.1.4)
 - CryoTanks (1.6.0)
 - DynamicBatteryStorage (2.2.2)
-- SystemHeat (0.3.10)
-- Waterfall (0.6.1)
-- SpaceDust (0.3.0)
+- SystemHeat (0.4.0)
+- Waterfall (0.6.3)
+- SpaceDust (0.4.0)
 
 Recommended
 - Community Tech Tree (v2.2+)

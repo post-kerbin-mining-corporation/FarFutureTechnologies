@@ -418,11 +418,11 @@ namespace FarFutureTechnologies
       {
 
         HeatOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Running", (SystemPower).ToString("F0"));
-        heatModule.AddFlux(ModuleID, SystemOutletTemperature, SystemPower);
+        heatModule.AddFlux(ModuleID, SystemOutletTemperature, SystemPower, true);
       }
       else
       {
-        heatModule.AddFlux(ModuleID, 0f, 0f);
+        heatModule.AddFlux(ModuleID, 0f, 0f, false);
         HeatOutput = Localizer.Format("#LOC_FFT_ModuleFusionReactor_Field_HeatOutput_Offline");
       }
       if (HighLogic.LoadedSceneIsFlight && Enabled)

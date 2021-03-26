@@ -1,3 +1,12 @@
+1.1.3
+-----
+- Updated B9PartSwitch to 2.18.0
+- Updated Waterfall to 0.6.2
+- Updated SystemHeat to 0.4.0
+- Updated SpaceDust to 0.4.0
+- Small fixes for compatibility with SystemHeat 0.4+
+- Fixed Afterburning mode engines effects with Asimov engine
+
 1.1.2
 -----
 - Updated Waterfall to 0.6.1
