@@ -18,10 +18,10 @@ This is a pack containing far-future but likely possible spacecraft technologies
 ### Required
 These components are required for the mod to function and are bundled as part of any download:
 * [ModuleManager (4.1.4)](https://github.com/sarbian/ModuleManager)
-* [B9PartSwitch (2.17)](https://github.com/blowfishpro/B9PartSwitch)
-* [SpaceDust (0.3.3)](https://github.com/post-kerbin-mining-corporation/SpaceDust)
-* [Waterfall (0.6.0)](https://github.com/post-kerbin-mining-corporation/Waterfall)
-* [SystemHeat (0.3.9)](https://github.com/post-kerbin-mining-corporation/SystemHeat)
+* [B9PartSwitch (2.18)](https://github.com/blowfishpro/B9PartSwitch)
+* [SpaceDust (0.4.0)](https://github.com/post-kerbin-mining-corporation/SpaceDust)
+* [Waterfall (0.6.3)](https://github.com/post-kerbin-mining-corporation/Waterfall)
+* [SystemHeat (0.4.0)](https://github.com/post-kerbin-mining-corporation/SystemHeat)
 * [DeployableEngines (1.3.0)](https://github.com/post-kerbin-mining-corporation/DeployableEngines)
 * [DynamicBatteryStorage (2.2.2)](https://github.com/post-kerbin-mining-corporation/DynamicBatteryStorage)
 * [CryoTanks (1.6.0)](https://github.com/post-kerbin-mining-corporation/CryoTanks)
