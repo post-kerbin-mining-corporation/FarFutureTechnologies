@@ -376,6 +376,7 @@ namespace FarFutureTechnologies
          
           if (CurrentCharge >= ChargeGoal)
           {
+            CurrentPowerConsumption = 0f;
             if (chargeState != ChargeState.Ready)
             {
               SetUIState(ChargeState.Ready);
