@@ -1,3 +1,10 @@
+1.1.4
+-----
+- Updated Waterfall to 0.6.3
+- Updated SystemHeat to 0.4.1
+- Updated SpaceDust to 0.4.1
+- Fixed an issue with reporting of electric charge consumption with ModuleChargeableEngine
+
 1.1.3
 -----
 - Updated B9PartSwitch to 2.18.0
