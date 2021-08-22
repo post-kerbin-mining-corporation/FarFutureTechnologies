@@ -11,6 +11,7 @@
 - Added NTS-501 Fissionables tank: 5m long NSW tank
 - Added NTS-502 Fissionables tank: 5m short NSW tank
 - Increased advanced antimatter tank capacities by 2x (all other specs identical)
+- Added a threshold timer for antimatter detonation - antimatter will now stay stable for 15 (configurable) consecutive physics frames before cooking off, this might help smooth out random instantanous power fluctuations.
 - Fixed localization of nuclear smelter ablator mode
 - Fixed some zeroed entry costs for parts
 - Tweaks to fusion reactor description strings
