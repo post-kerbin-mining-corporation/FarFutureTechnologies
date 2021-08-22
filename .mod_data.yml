@@ -8,7 +8,7 @@ package:
     - changelog.txt
 dependencies:  # Configure dependencies
   ModuleManager:
-    version: 4.1.4
+    version: 4.2.1
     location: s3
   B9PartSwitch:
     version: 2.18.0
@@ -33,7 +33,7 @@ dependencies:  # Configure dependencies
     location: github
     repository: post-kerbin-mining-corporation/Waterfall
   SystemHeat:
-    tag: 0.5.0
+    tag: 0.5.5
     location: github
     repository: post-kerbin-mining-corporation/SystemHeat
   SpaceDust:

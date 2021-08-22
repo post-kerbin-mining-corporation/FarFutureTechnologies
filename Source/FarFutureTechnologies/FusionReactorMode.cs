@@ -39,6 +39,7 @@ namespace FarFutureTechnologies
       node.TryGetValue("PowerGeneration", ref powerGeneration);
 
       ConfigNode[] inNodes = node.GetNodes("INPUT_RESOURCE");
+      ConfigNode[] outNodes = node.GetNodes("OUTPUT_RESOURCE");
 
       inputs = new List<ResourceRatio>();
       for (int i = 0; i < inNodes.Length; i++)
@@ -46,6 +47,13 @@ namespace FarFutureTechnologies
         ResourceRatio p = new ResourceRatio();
         p.Load(inNodes[i]);
         inputs.Add(p);
+      }
+      outputs = new List<ResourceRatio>();
+      for (int i = 0; i < outNodes.Length; i++)
+      {
+        ResourceRatio p = new ResourceRatio();
+        p.Load(outNodes[i]);
+        outputs.Add(p);
       }
     }
 

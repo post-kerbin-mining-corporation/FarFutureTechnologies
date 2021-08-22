@@ -1,19 +1,24 @@
-1.1.5
+1.2.0
 -----
 - Marked for KSP 1.12
-- Updated SystemHeat to 0.5.0
+- Updated SystemHeat to 0.5.5
 - Updated SpaceDust to 0.4.2
-- Updated DynamicBatteryStorage to 2.2.4
+- Updated DynamicBatteryStorage to 2.2.5
 - Updated CryoTanks to 1.6.1
 - Updated DeployableEngines to 1.3.1
 - Updated Waterfall to 0.6.7
+- Added X-43 'Niven' Advanced Nuclear Salt Water Rocket: 5m fission torch drive 
+- Added NTS-501 Fissionables tank: 5m long NSW tank
+- Added NTS-502 Fissionables tank: 5m short NSW tank
 - Increased advanced antimatter tank capacities by 2x (all other specs identical)
-- Fixed localization of nuclear smelter ablator
+- Fixed localization of nuclear smelter ablator mode
+- Fixed some zeroed entry costs for parts
+- Tweaks to fusion reactor description strings
 - Effects cleanup
  - New NSWR plume and sounds
  - Switched from Squad to custom sound handler, should prevent crackling interference with pulse engines
  - Fixed a number of conflicting sound directives on multimode engines
- - New fusion plumes (Cascade, Discovery, Fresnel)
+ - New plumes for Clarke, Asimov, Discovery, Fresnel, Cascade using new Waterfall features like distortion, engine lights
 
 1.1.4
 -----

@@ -249,11 +249,11 @@ namespace FarFutureTechnologies
         if (fuelAmount == 0.0)
         {
           if (offAnimator)
-          offAnimator.SetScalar(1f);
+            offAnimator.SetScalar(1f);
           if (onAnimator)
             onAnimator.SetScalar(0f);
           if (alertAnimator)
-          alertAnimator.SetScalar(0f);
+            alertAnimator.SetScalar(0f);
           ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_None");
           return;
         }
@@ -264,7 +264,7 @@ namespace FarFutureTechnologies
           if (offAnimator)
             offAnimator.SetScalar(1f);
           if (onAnimator)
-          onAnimator.SetScalar(0f);
+            onAnimator.SetScalar(0f);
 
 
           DetonationOccuring = true;
