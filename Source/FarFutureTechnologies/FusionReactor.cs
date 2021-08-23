@@ -190,7 +190,8 @@ namespace FarFutureTechnologies
 
     public override string GetInfo()
     {
-      string msg = Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo", (SystemPower).ToString("F0"), SystemOutletTemperature.ToString("F0"));
+      string msg = Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo", ChargeGoal.ToString("F0") , (ChargeGoal / 1000f).ToString("F0"),
+        (SystemPower).ToString("F0"), SystemOutletTemperature.ToString("F0"));
       foreach (FusionReactorMode mode in modes)
       {
         msg += Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo_Mode",
@@ -511,6 +512,11 @@ namespace FarFutureTechnologies
         {
           CurrentPowerProduced = powerGenerated;
           part.RequestResource(PartResourceLibrary.ElectricityHashcode, -powerToGenerate, ResourceFlowMode.ALL_VESSEL);
+          for (int i = 0; i < modes[currentModeIndex].outputs.Count; i++)
+          {
+            double request = reactorThrottle * modes[currentModeIndex].outputs[i].Ratio * TimeWarp.fixedDeltaTime;
+            double amount = part.RequestResource(PartResourceLibrary.Instance.GetDefinition(modes[currentModeIndex].outputs[i].ResourceName).id, request, modes[currentModeIndex].outputs[i].FlowMode);
+          }
         }
         else
         {

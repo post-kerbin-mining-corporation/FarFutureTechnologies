@@ -48,6 +48,11 @@ namespace FarFutureTechnologies
     [KSPField(isPersistant = false)]
     public string AlertLightAnimatorName = "";
 
+    [KSPField(isPersistant = false)]
+    public int DetonationFrameTimer = 0;
+
+    [KSPField(isPersistant = false)]
+    public int DetonationFrameThreshold = 10;
 
     // PRIVATE
     private double fuelAmount = 0.0;
@@ -249,11 +254,11 @@ namespace FarFutureTechnologies
         if (fuelAmount == 0.0)
         {
           if (offAnimator)
-          offAnimator.SetScalar(1f);
+            offAnimator.SetScalar(1f);
           if (onAnimator)
             onAnimator.SetScalar(0f);
           if (alertAnimator)
-          alertAnimator.SetScalar(0f);
+            alertAnimator.SetScalar(0f);
           ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_None");
           return;
         }
@@ -264,7 +269,7 @@ namespace FarFutureTechnologies
           if (offAnimator)
             offAnimator.SetScalar(1f);
           if (onAnimator)
-          onAnimator.SetScalar(0f);
+            onAnimator.SetScalar(0f);
 
 
           DetonationOccuring = true;
@@ -307,10 +312,12 @@ namespace FarFutureTechnologies
 
             alertAnimator.SetScalar(alertAnimator.GetScalar + TimeWarp.fixedDeltaTime * AlertRate * alertDirection);
           }
+          DetonationFrameTimer++;
           DoDetonation();
         }
         else
         {
+          DetonationFrameTimer = 0;
           if (alertAnimator)
             alertAnimator.SetScalar(0f);
         }
@@ -347,8 +354,11 @@ namespace FarFutureTechnologies
     }
     protected void DoDetonation()
     {
-      double detonatedAmount = part.RequestResource(FuelName, TimeWarp.fixedDeltaTime * DetonationRate);
-      part.AddThermalFlux(detonatedAmount * DetonationKJPerUnit);
+      if (DetonationFrameTimer >= DetonationFrameThreshold)
+      {
+        double detonatedAmount = part.RequestResource(FuelName, TimeWarp.fixedDeltaTime * DetonationRate);
+        part.AddThermalFlux(detonatedAmount * DetonationKJPerUnit);
+      }
     }
 
 

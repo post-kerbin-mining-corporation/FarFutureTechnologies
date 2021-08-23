@@ -25,6 +25,10 @@ namespace FarFutureTechnologies
     [KSPField(isPersistant = false)]
     public float PulseDuration = 1.0f;
 
+    //
+    [KSPField(isPersistant = false)]
+    public string pulseEffectName = "running";
+
     // Whether to apply thrust in pulses or not
     [KSPField(isPersistant = false)]
     public bool PulsedThrust = false;
@@ -225,7 +229,7 @@ namespace FarFutureTechnologies
       }
 
     }
-    void Update()
+    void LateUpdate()
     {
       if (HighLogic.LoadedSceneIsFlight)
       {
@@ -309,7 +313,7 @@ namespace FarFutureTechnologies
                 if (laserAnimatorIndex > laserFX.Count - 1) laserAnimatorIndex = 0;
               }
             }
-            part.Effect(engine.runningEffectName, soundIntensityCurve.Evaluate(curveValue));
+            part.Effect(pulseEffectName, soundIntensityCurve.Evaluate(curveValue));
 
             waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
@@ -332,7 +336,7 @@ namespace FarFutureTechnologies
                 pulseState.speed = 0f;
               }
             pulseProgress = 0f;
-            part.Effect(engine.runningEffectName, 0f);
+            part.Effect(pulseEffectName, 0f);
             waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
             if (light != null)
@@ -355,7 +359,7 @@ namespace FarFutureTechnologies
                 pulseState.speed = 0f;
               }
             pulseProgress = 0f;
-            part.Effect(engine.runningEffectName, soundIntensityCurve.Evaluate(curveValue));
+            part.Effect(pulseEffectName, soundIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
             waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
             if (light != null)
