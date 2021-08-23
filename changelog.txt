@@ -15,6 +15,7 @@
 - Fixed localization of nuclear smelter ablator mode
 - Fixed some zeroed entry costs for parts
 - Tweaks to fusion reactor description strings
+- Fixed boattail title localization for Heinlen NSWR
 - Effects cleanup
  - New NSWR plume and sounds
  - Switched from Squad to custom sound handler, should prevent crackling interference with pulse engines
