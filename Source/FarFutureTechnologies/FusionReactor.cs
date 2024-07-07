@@ -466,8 +466,10 @@ namespace FarFutureTechnologies
       Enabled = true;
     }
 
+    float lastFrameThrottle = 0f;
+
     /// <summary>
-    /// Consumes fuel to maintaina minimum consumption
+    /// Consumes fuel to maintain a minimum consumption
     /// </summary>
     void GeneratePower()
     {
@@ -475,18 +477,29 @@ namespace FarFutureTechnologies
       {
         double shipEC = 0d;
         double shipMaxEC = 0d;
+
         // Determine need for power
         part.GetConnectedResourceTotals(PartResourceLibrary.ElectricityHashcode, out shipEC, out shipMaxEC, true);
 
-        // Power should be the higher of the minimum consumption and the required power.
-        float minGeneration = MinimumReactorPower * modes[currentModeIndex].powerGeneration * TimeWarp.fixedDeltaTime;
-        float idealGeneration = Mathf.Min(modes[currentModeIndex].powerGeneration * TimeWarp.fixedDeltaTime, (float)(shipMaxEC - shipEC));
-        float powerToGenerate = Mathf.Max(minGeneration, idealGeneration);
+        float requestedFramePower = (float)(shipMaxEC - shipEC);
 
-        reactorThrottle = powerToGenerate / (modes[currentModeIndex].powerGeneration * TimeWarp.fixedDeltaTime);
+        float clampedFramePower = Mathf.Clamp(requestedFramePower,
+          modes[currentModeIndex].powerGeneration * TimeWarp.fixedDeltaTime * MinimumReactorPower,
+          modes[currentModeIndex].powerGeneration * TimeWarp.fixedDeltaTime);
+
+
+        Debug.Log($"L1: {requestedFramePower}, {shipEC}, {shipMaxEC} {clampedFramePower}");
+
+
+
+        float requestedReactorThrottle = clampedFramePower / (modes[currentModeIndex].powerGeneration * TimeWarp.fixedDeltaTime);
+        reactorThrottle = Mathf.MoveTowards(reactorThrottle, requestedReactorThrottle, 0.1f);
+
+
         powerGenerated = modes[currentModeIndex].powerGeneration * reactorThrottle;
         fuelConsumption = 0d;
 
+        Debug.Log($"L2: {reactorThrottle}, {powerGenerated}, {modes[currentModeIndex].powerGeneration}, {TimeWarp.fixedDeltaTime}");
 
         bool fuelCheckPassed = true;
         for (int i = 0; i < modes[currentModeIndex].inputs.Count; i++)
@@ -511,7 +524,8 @@ namespace FarFutureTechnologies
         if (fuelCheckPassed)
         {
           CurrentPowerProduced = powerGenerated;
-          part.RequestResource(PartResourceLibrary.ElectricityHashcode, -powerToGenerate, ResourceFlowMode.ALL_VESSEL);
+
+          part.RequestResource(PartResourceLibrary.ElectricityHashcode, Mathf.Clamp(-clampedFramePower,-requestedFramePower,0f), ResourceFlowMode.ALL_VESSEL);
           for (int i = 0; i < modes[currentModeIndex].outputs.Count; i++)
           {
             double request = reactorThrottle * modes[currentModeIndex].outputs[i].Ratio * TimeWarp.fixedDeltaTime;
