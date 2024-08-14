@@ -7,9 +7,9 @@ using KSP.Localization;
 
 namespace FarFutureTechnologies
 {
-  public class ModuleFusionEngine: FusionReactor
+  public class ModuleFusionEngine : FusionReactor
   {
-    
+
     private List<bool> engineOnStates;
     private List<ModuleEnginesFX> engines;
     private MultiModeEngine multiEngine;
@@ -31,7 +31,7 @@ namespace FarFutureTechnologies
       }
 
       base.Start();
-      
+
     }
 
     public override void FixedUpdate()
@@ -39,7 +39,7 @@ namespace FarFutureTechnologies
       base.FixedUpdate();
       if (HighLogic.LoadedSceneIsFlight && engines != null && engines.Count > 0)
       {
-        for (int i= 0; i < engines.Count; i++)
+        for (int i = 0; i < engines.Count; i++)
         {
           if (engines[i].EngineIgnited != engineOnStates[i])
           {
@@ -185,7 +185,7 @@ namespace FarFutureTechnologies
     {
       if (engines[engineIndex] != null)
       {
-        
+
         engineOnStates[engineIndex] = false;
 
         if (engines[engineIndex].EngineIgnited)

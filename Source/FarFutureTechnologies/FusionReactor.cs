@@ -190,7 +190,7 @@ namespace FarFutureTechnologies
 
     public override string GetInfo()
     {
-      string msg = Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo", ChargeGoal.ToString("F0") , (ChargeGoal / 1000f).ToString("F0"),
+      string msg = Localizer.Format("#LOC_FFT_ModuleFusionReactor_PartInfo", ChargeGoal.ToString("F0"), (ChargeGoal / 1000f).ToString("F0"),
         (SystemPower).ToString("F0"), SystemOutletTemperature.ToString("F0"));
       foreach (FusionReactorMode mode in modes)
       {
@@ -229,14 +229,14 @@ namespace FarFutureTechnologies
               GetNodes("MODULE").Single(n => n.GetValue("name") == moduleName);
           OnLoad(node);
         }
-      } 
+      }
       SetupUI();
       SetupAnimations();
       SetupHeat();
       SetupRecharge();
 
       modeLight.material.SetColor("_TintColor", modes[currentModeIndex].modeColor);
-          }
+    }
 
     public virtual void FixedUpdate()
     {
@@ -306,8 +306,6 @@ namespace FarFutureTechnologies
         Fields["currentModeIndex"].guiActive = false;
         Fields["currentModeIndex"].guiActiveEditor = false;
       }
-
-
     }
 
     /// <summary>
@@ -414,7 +412,7 @@ namespace FarFutureTechnologies
     /// </summary>
     void GenerateHeat()
     {
-      
+
       if (HighLogic.LoadedSceneIsFlight && Enabled || HighLogic.LoadedSceneIsEditor)
       {
 
@@ -525,7 +523,7 @@ namespace FarFutureTechnologies
         {
           CurrentPowerProduced = powerGenerated;
 
-          part.RequestResource(PartResourceLibrary.ElectricityHashcode, Mathf.Clamp(-clampedFramePower,-requestedFramePower,0f), ResourceFlowMode.ALL_VESSEL);
+          part.RequestResource(PartResourceLibrary.ElectricityHashcode, Mathf.Clamp(-clampedFramePower, -requestedFramePower, 0f), ResourceFlowMode.ALL_VESSEL);
           for (int i = 0; i < modes[currentModeIndex].outputs.Count; i++)
           {
             double request = reactorThrottle * modes[currentModeIndex].outputs[i].Ratio * TimeWarp.fixedDeltaTime;
@@ -549,7 +547,7 @@ namespace FarFutureTechnologies
     /// </summary>
     void GeneratePowerEditor()
     {
-      
+
       CurrentPowerProduced = modes[currentModeIndex].powerGeneration;
     }
 

@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FarFutureTechnologySettings.cs" />
+    <Compile Include="FarFutureTechnologyGameSettings.cs" />
     <Compile Include="FusionReactorMode.cs" />
     <Compile Include="FusionReactor.cs" />
     <Compile Include="ModuleAntimatterTank.cs" />

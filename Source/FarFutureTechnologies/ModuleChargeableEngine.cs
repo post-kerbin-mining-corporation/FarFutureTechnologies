@@ -121,7 +121,7 @@ namespace FarFutureTechnologies
       }
       SetupAnimations();
       SetupRecharge();
-     
+
     }
 
     void SetupRecharge()
@@ -135,7 +135,8 @@ namespace FarFutureTechnologies
         {
           Charged = true;
           currentState = ChargeState.Ready;
-        } else
+        }
+        else
         {
           currentState = ChargeState.Charging;
         }
@@ -147,13 +148,13 @@ namespace FarFutureTechnologies
             SetUIState(currentState, multiEngine.SecondaryEngine, multiEngine.PrimaryEngine);
 
           multiEngineRunningPrimary = multiEngine.runningPrimary;
-        } 
+        }
 
         else
         {
           SetUIState(currentState, engineStates.First().Key, null);
         }
-        
+
       }
 
     }
@@ -225,12 +226,12 @@ namespace FarFutureTechnologies
         Transform chargeLightParent = part.FindModelTransform(ChargingLightRootTransformName);
         if (!chargeLightParent)
           if (FarFutureTechnologySettings.DebugModules)
-          Utils.Log($"[ModuleChargeableEngine] Couldn't find ChargingLightRootTransformName {ChargingLightRootTransformName}");
-        else
-          foreach (Transform child in chargeLightParent)
-          {
-            chargeLights.Add(child.GetComponent<Renderer>());
-          }
+            Utils.Log($"[ModuleChargeableEngine] Couldn't find ChargingLightRootTransformName {ChargingLightRootTransformName}");
+          else
+            foreach (Transform child in chargeLightParent)
+            {
+              chargeLights.Add(child.GetComponent<Renderer>());
+            }
       }
     }
 
@@ -240,9 +241,9 @@ namespace FarFutureTechnologies
     {
       if (HighLogic.LoadedSceneIsFlight && engineStates != null)
       {
-        
-         DoRecharge();
-        
+
+        DoRecharge();
+
 
         if (multiEngine)
         {
@@ -344,7 +345,7 @@ namespace FarFutureTechnologies
 
     void Update()
     {
-      
+
       if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
       {
         if (Events["EnableCharging"].active == Charging || Events["DisableCharging"].active != Charging)
@@ -373,7 +374,7 @@ namespace FarFutureTechnologies
       {
         if (Charging)
         {
-         
+
           if (CurrentCharge >= ChargeGoal)
           {
             CurrentPowerConsumption = 0f;
@@ -404,7 +405,7 @@ namespace FarFutureTechnologies
               SetUIState(ChargeState.Charging);
             }
           }
-          
+
 
           ChargeStatus = Localizer.Format("#LOC_FFT_ModuleChargeableEngine_Field_ChargeStatus_Normal", (CurrentCharge / ChargeGoal * 100.0f).ToString("F1"));
 
@@ -455,7 +456,7 @@ namespace FarFutureTechnologies
     /// Sets the engine UI to be on or off
     /// </summary>
     /// <param name="state">If set to <c>on</c> state.</param>
-   
+
     void KillEngine(ModuleEnginesFX engine)
     {
       if (engine != null)

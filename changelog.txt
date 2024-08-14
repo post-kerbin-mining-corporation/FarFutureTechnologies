@@ -1,3 +1,18 @@
+1.3.0
+-----
+- Marked for KSP 1.12.5
+- Updated B9PartSwitch to 2.20.0
+- Updated SystemHeat to 0.7.2
+- Updated SpaceDust to 0.5.2
+- Updated DynamicBatteryStorage to 2.3.0
+- Updated CryoTanks to 1.6.6
+- Updated ModuleManager to 4.2.3
+- Added ingame settings to control cost of antimatter in science/career modes. 
+- Decreased the minimum throttle fraction to 0.1% from 5% from chargeup engines to allow better interaction with autopilots
+- Fixed a typo in all Fissionable tanks (#181)
+- Removed ablator refurbish mode from nuclear smelter as it doesn't work and I'll have to rethink it later
+- Increase detonator timer for antimatter to 30 physics ticks from 10
+
 1.2.0
 -----
 - Marked for KSP 1.12

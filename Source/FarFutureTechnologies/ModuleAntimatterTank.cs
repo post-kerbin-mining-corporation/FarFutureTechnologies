@@ -52,7 +52,7 @@ namespace FarFutureTechnologies
     public int DetonationFrameTimer = 0;
 
     [KSPField(isPersistant = false)]
-    public int DetonationFrameThreshold = 10;
+    public int DetonationFrameThreshold = 30;
 
     // PRIVATE
     private double fuelAmount = 0.0;
@@ -174,7 +174,7 @@ namespace FarFutureTechnologies
     /// </summary>
     protected void OnVesselRollout(ShipConstruct node)
     {
-      if (HighLogic.CurrentGame.Mode == Game.Modes.SCIENCE_SANDBOX || HighLogic.CurrentGame.Mode == Game.Modes.CAREER)
+      if (HighLogic.CurrentGame.Mode == Game.Modes.SCIENCE_SANDBOX || HighLogic.CurrentGame.Mode == Game.Modes.CAREER && FarFutureTechnologiesSettings_Antimatter.AntimatterCostsScience)
       {
         if (FarFutureTechnologySettings.DebugModules)
           Utils.Log(String.Format("[ModuleAntimatterTank]: Doing rollout actions"));
@@ -191,11 +191,6 @@ namespace FarFutureTechnologies
           Utils.Log($"[ModuleAntimatterTank]: deleted {amToAdd} units of {FuelName}");
 
         AntimatterManager.Instance.AddTank(this, (float)amToAdd);
-        //if (ResearchAndDevelopment.Instance.Science >= amCost)
-        //{
-
-        //}
-        //ResearchAndDevelopment.Instance.AddScience(-amCost, TransactionReasons.RnDPartPurchase);
       }
     }
 
