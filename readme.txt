@@ -13,7 +13,7 @@ Required:
 - Community Resource Pack (1.4.2)
 - ModuleManager (4.2.3)
 - CryoTanks (1.6.6)
-- DynamicBatteryStorage (2.3.0)
+- DynamicBatteryStorage (2.3.1)
 - SystemHeat (0.7.2)
 - Waterfall (0.6.7)
 - SpaceDust (0.5.2)

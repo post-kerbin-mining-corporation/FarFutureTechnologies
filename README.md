@@ -23,7 +23,7 @@ These components are required for the mod to function and are bundled as part of
 * [Waterfall (0.6.7)](https://github.com/post-kerbin-mining-corporation/Waterfall)
 * [SystemHeat (0.7.2)](https://github.com/post-kerbin-mining-corporation/SystemHeat)
 * [DeployableEngines (1.3.1)](https://github.com/post-kerbin-mining-corporation/DeployableEngines)
-* [DynamicBatteryStorage (2.3.0)](https://github.com/post-kerbin-mining-corporation/DynamicBatteryStorage)
+* [DynamicBatteryStorage (2.3.1)](https://github.com/post-kerbin-mining-corporation/DynamicBatteryStorage)
 * [CryoTanks (1.6.6)](https://github.com/post-kerbin-mining-corporation/CryoTanks)
 
 ## Installation
