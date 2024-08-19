@@ -11,6 +11,7 @@
 - Decreased the minimum throttle fraction to 0.1% from 5% from chargeup engines to allow better interaction with autopilots
 - Fixed a typo in all Fissionable tanks (#181)
 - Fixed 5m Fissionables tanks missing from CTT
+- Fixed z-fighting on 3.75m fusion fuel tank (#183)
 - Fixed minimum harvest threshold on air/exo scoops which will allow harvesting at lower concentrations
 - Removed ablator refurbish mode from nuclear smelter as it doesn't work and I'll have to rethink it later
 - Increase detonator timer for antimatter to 30 physics ticks from 10
