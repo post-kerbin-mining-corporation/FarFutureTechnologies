@@ -65,7 +65,7 @@ namespace FarFutureTechnologies.UI
     {
       
       totalAntimatterLoad += amount;
-      totalScienceCost = FarFutureTechnologySettings.antimatterScienceCostPerUnit * totalAntimatterLoad;
+      totalScienceCost = FarFutureTechnologiesSettings_Antimatter.AntimatterScienceCostPerUnit * totalAntimatterLoad;
 
       scienceText.text = Localizer.Format("#LOC_FFT_AntimatterManager_ScienceText", totalScienceCost.ToString("+F0;-F0;0"));
       antimatterText.text = Localizer.Format("#LOC_FFT_AntimatterManager_AntimatterText", totalAntimatterLoad.ToString("+0;-0;0"));

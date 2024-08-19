@@ -75,7 +75,7 @@ namespace FarFutureTechnologies.UI
           double partAntimatter = 0d;
           double partAntimatterCapacity = 0d;
 
-          double maxPurchaseableAM = ResearchAndDevelopment.Instance.Science * FarFutureTechnologySettings.antimatterScienceCostPerUnit;
+          double maxPurchaseableAM = ResearchAndDevelopment.Instance.Science * FarFutureTechnologiesSettings_Antimatter.AntimatterScienceCostPerUnit;
           // Find tank capacities
           tank.part.GetConnectedResourceTotals(PartResourceLibrary.Instance.GetDefinition(tank.FuelName).id,
             ResourceFlowMode.NO_FLOW, out partAntimatter, out partAntimatterCapacity, true);
@@ -87,8 +87,8 @@ namespace FarFutureTechnologies.UI
 
 
           double antimatterToLoad = Math.Min(maxPurchaseableAM, goalAntimatterToLoad);
-          if (FarFutureTechnologySettings.antimatterScienceCostPerUnit > 0)
-            ResearchAndDevelopment.Instance.AddScience((float)-antimatterToLoad / FarFutureTechnologySettings.antimatterScienceCostPerUnit, TransactionReasons.RnDPartPurchase);
+          if (FarFutureTechnologiesSettings_Antimatter.AntimatterScienceCostPerUnit > 0)
+            ResearchAndDevelopment.Instance.AddScience((float)-antimatterToLoad / FarFutureTechnologiesSettings_Antimatter.AntimatterScienceCostPerUnit, TransactionReasons.RnDPartPurchase);
 
           totalAntimatterLoad -= antimatterToLoad;
          

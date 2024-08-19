@@ -142,7 +142,7 @@ namespace FarFutureTechnologies
 
     void FindWaterfallEffect()
     {
-     
+
     }
     void SetupLight()
     {
@@ -175,7 +175,7 @@ namespace FarFutureTechnologies
 
     void FixedUpdate()
     {
-      
+
 
       if (PulsedThrust)
       {

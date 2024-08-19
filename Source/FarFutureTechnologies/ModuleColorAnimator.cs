@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace FarFutureTechnologies
 {
-  public class ModuleColorAnimator: PartModule, IScalarModule
+  public class ModuleColorAnimator : PartModule, IScalarModule
   {
     [KSPField]
     public float colorScale = 1f;
@@ -50,9 +50,9 @@ namespace FarFutureTechnologies
       get { return animationFraction; }
     }
 
-    public EventData<float,float> OnMoving
+    public EventData<float, float> OnMoving
     {
-      get { return new EventData<float,float>("OnMoving"); }
+      get { return new EventData<float, float>("OnMoving"); }
     }
 
     public EventData<float> OnStop
@@ -60,8 +60,8 @@ namespace FarFutureTechnologies
       get { return new EventData<float>("OnStop"); }
     }
 
-    
-    public void SetScalar(float t )
+
+    public void SetScalar(float t)
     {
       animationGoal = t;
     }
@@ -71,8 +71,8 @@ namespace FarFutureTechnologies
       return true;
     }
 
-    
-   
+
+
     public void SetUIWrite(bool value)
     { }
     public void SetUIRead(bool value)
@@ -104,7 +104,7 @@ namespace FarFutureTechnologies
           foreach (Transform x in xforms)
           {
             Renderer r = x.GetComponent<Renderer>();
-            
+
             if (r != null && r.material.HasProperty(shaderProperty))
               targetRenderers.Add(r);
           }
@@ -113,8 +113,8 @@ namespace FarFutureTechnologies
       if (HighLogic.LoadedSceneIsEditor && targetRenderers != null)
       {
         animationFraction = 0f;
-        Color c = new Color(redCurve.Evaluate(animationFraction) * colorScale, greenCurve.Evaluate(animationFraction)*colorScale, blueCurve.Evaluate(animationFraction) * colorScale, alphaCurve.Evaluate(animationFraction) * colorScale);
-        
+        Color c = new Color(redCurve.Evaluate(animationFraction) * colorScale, greenCurve.Evaluate(animationFraction) * colorScale, blueCurve.Evaluate(animationFraction) * colorScale, alphaCurve.Evaluate(animationFraction) * colorScale);
+
         foreach (Renderer r in targetRenderers)
         {
           r.material.SetColor(shaderProperty, c);
@@ -128,10 +128,10 @@ namespace FarFutureTechnologies
     {
       if (HighLogic.LoadedSceneIsFlight && targetRenderers != null)
       {
-         animationFraction = Mathf.MoveTowards(animationFraction, animationGoal, TimeWarp.deltaTime * animRate);
-        
+        animationFraction = Mathf.MoveTowards(animationFraction, animationGoal, TimeWarp.deltaTime * animRate);
+
         Color c = new Color(redCurve.Evaluate(animationFraction) * colorScale, greenCurve.Evaluate(animationFraction) * colorScale, blueCurve.Evaluate(animationFraction) * colorScale, alphaCurve.Evaluate(animationFraction) * colorScale);
-     
+
         foreach (Renderer r in targetRenderers)
         {
           r.material.SetColor(shaderProperty, c);
