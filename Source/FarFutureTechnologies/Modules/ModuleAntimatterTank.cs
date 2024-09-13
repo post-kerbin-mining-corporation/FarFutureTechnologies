@@ -110,7 +110,6 @@ namespace FarFutureTechnologies
     }
 
 
-    // INTERFACE METHODS
     // Sets the powered/unpowered state
     public void SetPoweredState(bool state)
     {
@@ -145,8 +144,6 @@ namespace FarFutureTechnologies
 
         fuelAmount = GetResourceAmount(FuelName);
         maxFuelAmount = GetMaxResourceAmount(FuelName);
-
-        // Catchup
 
       }
       if (HighLogic.LoadedSceneIsFlight)
@@ -211,29 +208,37 @@ namespace FarFutureTechnologies
 
     public void Update()
     {
-      if (HighLogic.LoadedSceneIsFlight)
+      if (FarFutureTechnologiesSettings_AntimatterContainment.ContainmentEnabled)
       {
+        if (HighLogic.LoadedSceneIsFlight)
+        {
+          // Show the containment status field if there is a cooling cost
+          if (ContainmentCost > 0f)
+          {
 
-        // Show the containment status field if there is a cooling cost
-        if (ContainmentCost > 0f)
+            Fields["ContainmentStatus"].guiActive = true;
+
+            if (Events["Enable"].active == ContainmentEnabled || Events["Disable"].active != ContainmentEnabled)
+            {
+              Events["Disable"].active = ContainmentEnabled;
+              Events["Enable"].active = !ContainmentEnabled;
+            }
+          }
+        }
+        if (HighLogic.LoadedSceneIsEditor)
         {
 
           Fields["ContainmentStatus"].guiActive = true;
-
-          if (Events["Enable"].active == ContainmentEnabled || Events["Disable"].active != ContainmentEnabled)
-          {
-            Events["Disable"].active = ContainmentEnabled;
-            Events["Enable"].active = !ContainmentEnabled;
-          }
+          ContainmentCostCurrent = -1f * ContainmentCost;
+          double max = GetMaxResourceAmount(FuelName);
+          ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Editor", (ContainmentCost * (float)(max)).ToString("F2"));
         }
       }
-      if (HighLogic.LoadedSceneIsEditor)
+      else
       {
-
-        Fields["ContainmentStatus"].guiActive = true;
-        ContainmentCostCurrent = -1f * ContainmentCost;
-        double max = GetMaxResourceAmount(FuelName);
-        ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Editor", (ContainmentCost * (float)(max)).ToString("F2"));
+        Fields["ContainmentStatus"].guiActive = false;
+        Events["Enable"].active = Events["Disable"].active = false;
+        ContainmentCostCurrent = 0f;
       }
     }
 
@@ -241,84 +246,87 @@ namespace FarFutureTechnologies
 
     protected void FixedUpdate()
     {
-      if (HighLogic.LoadedSceneIsFlight)
+      if (FarFutureTechnologiesSettings_AntimatterContainment.ContainmentEnabled)
       {
-        fuelAmount = GetResourceAmount(FuelName);
-
-        // If we have no fuel, no need to do any calculations
-        if (fuelAmount == 0.0)
+        if (HighLogic.LoadedSceneIsFlight)
         {
-          if (offAnimator)
-            offAnimator.SetScalar(1f);
-          if (onAnimator)
-            onAnimator.SetScalar(0f);
-          if (alertAnimator)
-            alertAnimator.SetScalar(0f);
-          ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_None");
-          return;
-        }
+          fuelAmount = GetResourceAmount(FuelName);
 
-        // If the cooling cost is zero, we must boil off
-        if (ContainmentCost == 0f)
-        {
-          if (offAnimator)
-            offAnimator.SetScalar(1f);
-          if (onAnimator)
-            onAnimator.SetScalar(0f);
-
-
-          DetonationOccuring = true;
-          DetonationStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Uncontained", DetonationRate.ToString("F2"));
-        }
-        // else check for available power
-        else
-        {
-          if (!ContainmentEnabled)
+          // If we have no fuel, no need to do any calculations
+          if (fuelAmount == 0.0)
           {
             if (offAnimator)
               offAnimator.SetScalar(1f);
             if (onAnimator)
               onAnimator.SetScalar(0f);
+            if (alertAnimator)
+              alertAnimator.SetScalar(0f);
+            ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_None");
+            return;
+          }
+
+          // If the cooling cost is zero, we must boil off
+          if (ContainmentCost == 0f)
+          {
+            if (offAnimator)
+              offAnimator.SetScalar(1f);
+            if (onAnimator)
+              onAnimator.SetScalar(0f);
+
+
             DetonationOccuring = true;
             DetonationStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Uncontained", DetonationRate.ToString("F2"));
-            ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Disabled");
+          }
+          // else check for available power
+          else
+          {
+            if (!ContainmentEnabled)
+            {
+              if (offAnimator)
+                offAnimator.SetScalar(1f);
+              if (onAnimator)
+                onAnimator.SetScalar(0f);
+              DetonationOccuring = true;
+              DetonationStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_DetonationStatus_Uncontained", DetonationRate.ToString("F2"));
+              ContainmentStatus = Localizer.Format("#LOC_FFT_ModuleAntimatterTank_Field_ContainmentStatus_Disabled");
+            }
+            else
+            {
+              if (offAnimator)
+                offAnimator.SetScalar(0f);
+              if (onAnimator)
+                onAnimator.SetScalar(1f);
+            }
+          }
+
+          ConsumeCharge();
+
+          if (DetonationOccuring)
+          {
+            if (alertAnimator)
+            {
+              if (alertAnimator.GetScalar > 1f)
+              {
+                alertDirection = -1f;
+              }
+              if (alertAnimator.GetScalar < 0f)
+                alertDirection = 1f;
+
+              alertAnimator.SetScalar(alertAnimator.GetScalar + TimeWarp.fixedDeltaTime * AlertRate * alertDirection);
+            }
+            DetonationFrameTimer++;
+            DoDetonation();
           }
           else
           {
-            if (offAnimator)
-              offAnimator.SetScalar(0f);
-            if (onAnimator)
-              onAnimator.SetScalar(1f);
+            DetonationFrameTimer = 0;
+            if (alertAnimator)
+              alertAnimator.SetScalar(0f);
           }
-        }
-
-        ConsumeCharge();
-
-        if (DetonationOccuring)
-        {
-          if (alertAnimator)
+          if (part.vessel.missionTime > 0.0)
           {
-            if (alertAnimator.GetScalar > 1f)
-            {
-              alertDirection = -1f;
-            }
-            if (alertAnimator.GetScalar < 0f)
-              alertDirection = 1f;
-
-            alertAnimator.SetScalar(alertAnimator.GetScalar + TimeWarp.fixedDeltaTime * AlertRate * alertDirection);
+            //LastUpdateTime = part.vessel.missionTime;
           }
-          DetonationFrameTimer++;
-          DoDetonation();
-        }
-        else
-        {
-          DetonationFrameTimer = 0;
-          if (alertAnimator)
-            alertAnimator.SetScalar(0f);
-        }
-        if (part.vessel.missionTime > 0.0)
-        {
-          //LastUpdateTime = part.vessel.missionTime;
         }
       }
     }
@@ -351,8 +359,8 @@ namespace FarFutureTechnologies
     {
       if (DetonationFrameTimer >= DetonationFrameThreshold)
       {
-        double detonatedAmount = part.RequestResource(FuelName, TimeWarp.fixedDeltaTime * DetonationRate);
-        part.AddThermalFlux(detonatedAmount * DetonationKJPerUnit);
+        double detonatedAmount = part.RequestResource(FuelName, (double)(TimeWarp.fixedDeltaTime * DetonationRate) * FarFutureTechnologiesSettings_AntimatterContainment.DetonationRate);
+        part.AddThermalFlux(detonatedAmount * DetonationKJPerUnit * FarFutureTechnologiesSettings_AntimatterContainment.Volatility);
       }
     }
 

@@ -25,9 +25,13 @@ namespace FarFutureTechnologies
     [KSPField(isPersistant = false)]
     public float PulseDuration = 1.0f;
 
-    //
+    // The KSP EFFECTS node to use
     [KSPField(isPersistant = false)]
     public string pulseEffectName = "running";
+
+    // Whether to use pulsed exhaust damage
+    [KSPField(isPersistant = false)]
+    public bool PulsedExhaustDamage = false;
 
     // Whether to apply thrust in pulses or not
     [KSPField(isPersistant = false)]
@@ -49,9 +53,17 @@ namespace FarFutureTechnologies
     [KSPField(isPersistant = false)]
     public string PulseAnimation = "";
 
-    // Transform containing the flare light
+    // Transform containing the pulse vFX
     [KSPField(isPersistant = false)]
-    public string lightTransformName;
+    public string PulseVFXTransformName;
+
+    // Whether to move the pulse VFX 
+    [KSPField(isPersistant = false)]
+    public bool MovePulseVFX = false;
+
+    // Whether to move the pulse VFX 
+    [KSPField(isPersistant = false)]
+    public float PulseVFXDistance = 10f;
 
     // Light intensity along the pulse
     [KSPField(isPersistant = false)]
@@ -59,20 +71,7 @@ namespace FarFutureTechnologies
 
     // FX intensity along the pulse
     [KSPField(isPersistant = false)]
-    public FloatCurve plumeFXIntensityCurve = new FloatCurve();
-    // FX intensity along the pulse
-    [KSPField(isPersistant = false)]
     public FloatCurve soundIntensityCurve = new FloatCurve();
-
-    [KSPField(isPersistant = false)]
-    public string plumeFXControllerID = "throttle";
-    // FX intensity along the pulse
-    [KSPField(isPersistant = false)]
-    public FloatCurve flareFXIntensityCurve = new FloatCurve();
-
-    // 
-    [KSPField(isPersistant = false)]
-    public string flareFXControllerID = "throttle";
 
     // 
     [KSPField(isPersistant = false)]
@@ -86,10 +85,14 @@ namespace FarFutureTechnologies
     private float scaledPulseDuration = 1f;
     private AnimationState[] pulseStates;
     private List<PulseEngineLaserEffect> laserFX;
+    private List<PulseEnginePlumeEffect> plumeFX;
+
+    private ModuleEngineExhaustDamage engineDamage;
     private ModuleColorAnimator emissiveAnimator;
     private ModuleEnginesFX engine;
     private MultiModeEngine multiEngine;
-    private ModuleWaterfallFX waterfallEffect;
+
+    private Transform pulseVFXTransform;
     private Light light;
     private bool pulseFired = false;
     private int ticks = 0;
@@ -101,17 +104,19 @@ namespace FarFutureTechnologies
     {
       if (engineID != "")
       {
-
         engine = this.GetComponents<ModuleEnginesFX>().ToList().Find(x => x.engineID == engineID);
-        waterfallEffect = this.GetComponents<ModuleWaterfallFX>().ToList().Find(x => x.moduleID == engineID);
       }
       else
       {
         engine = this.GetComponents<ModuleEnginesFX>().ToList().First();
-        waterfallEffect = this.GetComponents<ModuleWaterfallFX>().ToList().First();
       }
       savedThrust = engine.maxThrust;
       multiEngine = this.GetComponent<MultiModeEngine>();
+
+      if (PulsedExhaustDamage)
+      {
+        engineDamage = this.GetComponent<ModuleEngineExhaustDamage>();
+      }
 
       emissiveAnimator = this.GetComponents<ModuleColorAnimator>().ToList().Find(x => x.moduleID == emissiveColorAnimatorID);
       // Set up animations
@@ -124,59 +129,70 @@ namespace FarFutureTechnologies
           pulseState.layer = 1;
         }
       }
-      SetupLight();
+      if (PulseVFXTransformName != "")
+      {
+        pulseVFXTransform = part.FindModelTransform(PulseVFXTransformName);
+
+        if (pulseVFXTransform)
+        {
+          SetupLight(pulseVFXTransform);
+        }
+        else
+        {
+          Utils.LogError($"[ModulePulseEngineAnimator] No transform called  {PulseVFXTransformName} was found");
+        }
+      }
 
       /// Reload nodes as needed
-      if (HighLogic.LoadedSceneIsFlight || HighLogic.LoadedSceneIsEditor)
+      if (HighLogic.LoadedSceneIsFlight)
       {
-        if (LaserAnimations && (laserFX == null || laserFX.Count == 0))
+        ConfigNode node = GameDatabase.Instance.GetConfigs("PART").
+            Single(c => part.partInfo.name == c.name).config.
+            GetNodes("MODULE").Single(n => n.GetValue("name") == moduleName && n.GetValue("engineID") == engineID);
+        LoadVFX(node);
+
+      }
+    }
+
+    void SetupLight(Transform parent)
+    {
+      light = parent.gameObject.GetComponent<Light>();
+      light.intensity = 0f;
+      if (light == null)
+      {
+        Utils.LogError($"[ModulePulseEngineAnimator] No light was found on  {parent.name}");
+      }
+    }
+
+    public void LoadVFX(ConfigNode node)
+    {
+      if (LaserAnimations && (laserFX == null || laserFX.Count == 0))
+      {
+        laserFX = new List<PulseEngineLaserEffect>();
+        ConfigNode[] varNodes = node.GetNodes("LASERFX");
+
+        for (int i = 0; i < varNodes.Length; i++)
         {
-
-          ConfigNode node = GameDatabase.Instance.GetConfigs("PART").
-              Single(c => part.partInfo.name == c.name).config.
-              GetNodes("MODULE").Single(n => n.GetValue("name") == moduleName && n.GetValue("engineID") == engineID);
-          OnLoad(node);
+          laserFX.Add(new PulseEngineLaserEffect(varNodes[i]));
         }
+        Utils.Log($"Loaded {laserFX.Count} lasers");
       }
-    }
-
-    void FindWaterfallEffect()
-    {
-
-    }
-    void SetupLight()
-    {
-      if (lightTransformName != "")
+      if (node.GetNodes("PLUMEFX").Length > 0)
       {
-        Transform lightXform = part.FindModelTransform(lightTransformName);
-        if (lightXform)
+        plumeFX = new List<PulseEnginePlumeEffect>();
+        ConfigNode[] varNodes = node.GetNodes("PLUMEFX");
+
+        for (int i = 0; i < varNodes.Length; i++)
         {
-          light = lightXform.gameObject.GetComponent<Light>();
-          light.intensity = 0f;
+          plumeFX.Add(new PulseEnginePlumeEffect(varNodes[i]));
         }
-        if (light == null)
-
-          Debug.LogError($"[ModulePulseEngineAnimator] No light was found on  {lightTransformName}");
-
+        Utils.Log($"Loaded {plumeFX.Count} controlled plumes");
       }
-    }
 
-    public override void OnLoad(ConfigNode node)
-    {
-      base.OnLoad(node);
-      laserFX = new List<PulseEngineLaserEffect>();
-      ConfigNode[] varNodes = node.GetNodes("LASERFX");
-
-      for (int i = 0; i < varNodes.Length; i++)
-      {
-        laserFX.Add(new PulseEngineLaserEffect(varNodes[i]));
-      }
     }
 
     void FixedUpdate()
     {
-
-
       if (PulsedThrust)
       {
         if (HighLogic.LoadedSceneIsFlight)
@@ -227,14 +243,11 @@ namespace FarFutureTechnologies
           }
         }
       }
-
     }
     void LateUpdate()
     {
       if (HighLogic.LoadedSceneIsFlight)
       {
-        if (waterfallEffect == null) FindWaterfallEffect();
-
         if (!engine)
           return;
 
@@ -249,7 +262,6 @@ namespace FarFutureTechnologies
         {
           if (engine.requestedThrottle > 0f && !engine.flameout)
           {
-
             // At start of pulse
             if (pulseProgress == 0f)
             {
@@ -261,7 +273,23 @@ namespace FarFutureTechnologies
                   pulseState.speed = 1.0f / scaledPulseSpeed;
                 }
               }
-              //part.Effect(engine.runningEffectName, 1f);
+              if (MovePulseVFX)
+              {
+                /// Raycast out from the thrustTransform and determine if anything was hit. If so, move the vfx transform to the hit point
+                float moveDistance = PulseVFXDistance;
+                RaycastHit hit = new RaycastHit();
+                if (Physics.Raycast(engine.thrustTransforms[0].position, engine.thrustTransforms[0].forward, out hit, PulseVFXDistance))
+                {
+                  moveDistance = hit.distance;
+                }
+                pulseVFXTransform.localPosition = engine.thrustTransforms[0].localPosition - Vector3.up * moveDistance;
+              }
+
+              if (PulsedExhaustDamage && engineDamage != null)
+              {
+                engineDamage.DoPulseBuildingDamageSpherical(pulseVFXTransform.position);
+                engineDamage.DoPulsePartsDamageSpherical(pulseVFXTransform.position);
+              }
               pulseProgress = pulseProgress + TimeWarp.deltaTime;
               if (laserPulseDone)
               {
@@ -315,8 +343,13 @@ namespace FarFutureTechnologies
             }
             part.Effect(pulseEffectName, soundIntensityCurve.Evaluate(curveValue));
 
-            waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
-            waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
+            if (plumeFX != null)
+            {
+              for (int i = 0; i < plumeFX.Count; i++)
+              {
+                plumeFX[i].Set(this.part, curveValue);
+              }
+            }
 
             if (light != null)
               light.intensity = lightIntensityCurve.Evaluate(curveValue);
@@ -337,8 +370,13 @@ namespace FarFutureTechnologies
               }
             pulseProgress = 0f;
             part.Effect(pulseEffectName, 0f);
-            waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
-            waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
+            if (plumeFX != null)
+            {
+              for (int i = 0; i < plumeFX.Count; i++)
+              {
+                plumeFX[i].Set(this.part, curveValue);
+              }
+            }
             if (light != null)
               light.intensity = lightIntensityCurve.Evaluate(curveValue);
             emissiveAnimator.SetScalar(lightIntensityCurve.Evaluate(curveValue));
@@ -360,8 +398,13 @@ namespace FarFutureTechnologies
               }
             pulseProgress = 0f;
             part.Effect(pulseEffectName, soundIntensityCurve.Evaluate(curveValue));
-            waterfallEffect.SetControllerValue(flareFXControllerID, flareFXIntensityCurve.Evaluate(curveValue));
-            waterfallEffect.SetControllerValue(plumeFXControllerID, plumeFXIntensityCurve.Evaluate(curveValue));
+            if (plumeFX != null)
+            {
+              for (int i = 0; i < plumeFX.Count; i++)
+              {
+                plumeFX[i].Set(this.part, curveValue);
+              }
+            }
             if (light != null)
               light.intensity = lightIntensityCurve.Evaluate(curveValue);
 
@@ -377,7 +420,52 @@ namespace FarFutureTechnologies
     }
   }
 
+  public class PulseEnginePlumeEffect
+  {
+    public string name = "";
+    public string controllerName = "";
+    public string moduleID = "";
+    public FloatCurve fxCurve = new FloatCurve();
 
+    public ModuleWaterfallFX waterfallModule;
+
+    public PulseEnginePlumeEffect()
+    {
+    }
+    /// <summary>
+    /// Construct from confignode
+    /// </summary>
+    /// <param name="node"></param>
+    ///
+    public PulseEnginePlumeEffect(ConfigNode node)
+    {
+      OnLoad(node);
+    }
+
+    public void OnLoad(ConfigNode node)
+    {
+      // Process nodes
+      node.TryGetValue("name", ref name);
+      node.TryGetValue("moduleID", ref moduleID);
+      node.TryGetValue("plumeControllerName", ref controllerName);
+      fxCurve.Load(node.GetNode("plumeIntensityCurve"));
+    }
+    public void Set(Part part, float value)
+    {
+      if (waterfallModule == null)
+      {
+        if (moduleID != "")
+        {
+          waterfallModule = part.GetComponents<ModuleWaterfallFX>().ToList().Find(x => x.moduleID == moduleID);
+        }
+        else
+        {
+          waterfallModule = part.GetComponents<ModuleWaterfallFX>().ToList().First();
+        }
+      }
+      waterfallModule.SetControllerValue(controllerName, fxCurve.Evaluate(value));
+    }
+  }
   public class PulseEngineLaserEffect
   {
     public string name;
