@@ -149,6 +149,7 @@ namespace FarFutureTechnologies
 
     public void Awake()
     {
+      base.Awake();
       if (HighLogic.LoadedSceneIsFlight)
       {
         /// Set up curve defaults 
