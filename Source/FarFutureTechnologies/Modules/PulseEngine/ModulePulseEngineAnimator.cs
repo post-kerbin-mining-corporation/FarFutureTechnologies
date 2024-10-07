@@ -205,86 +205,6 @@ namespace FarFutureTechnologies
         }
       }
 
-      //if (LaserAnimations && (laserFX == null || laserFX.Count == 0))
-      //{
-      //  laserFX = new List<PulseEngineColorAnimatorEffect>();
-      //  ConfigNode[] varNodes = node.GetNodes("LASERFX");
-
-      //  for (int i = 0; i < varNodes.Length; i++)
-      //  {
-      //    PulseEngineColorAnimatorEffect laser = new PulseEngineColorAnimatorEffect(varNodes[i]);          
-      //    laserFX.Add(laser);
-      //  }
-      //  Utils.Log($"Loaded {laserFX.Count} lasers");
-      //}
-      //if (node.GetNodes("PLUMEFX").Length > 0)
-      //{
-      //  plumeFX = new List<PulseEnginePlumeEffect>();
-      //  ConfigNode[] varNodes = node.GetNodes("PLUMEFX");
-
-      //  for (int i = 0; i < varNodes.Length; i++)
-      //  {
-      //    PulseEnginePlumeEffect plume = new PulseEnginePlumeEffect(varNodes[i]);
-      //    plume.part = this.part;
-      //    plumeFX.Add(plume);;
-      //  }
-      //  Utils.Log($"Loaded {plumeFX.Count} controlled plumes");
-      //}
-
-    }
-
-    void NoFixedUpdate()
-    {
-      if (PulsedThrust)
-      {
-        if (HighLogic.LoadedSceneIsFlight)
-        {
-          float totalImpulse = (scaledPulseDuration + scaledPulseInterval) * savedThrust;
-          float momentumPerFrame = totalImpulse / (float)PulseThrustFrameCount;
-          if (engine.EngineIgnited)
-          {
-            if (engine.requestedThrottle > 0f && !engine.flameout)
-            {
-              if (pulseProgress < PulseThrustTime * scaledPulseSpeed)
-              {
-                pulseFired = false;
-                engine.maxThrust = 0f;
-                engine.maxFuelFlow = 0f;
-              }
-              else if (pulseProgress >= PulseThrustTime * scaledPulseSpeed && !pulseFired)
-              {
-
-                engine.maxThrust = momentumPerFrame / TimeWarp.fixedDeltaTime;
-                engine.maxFuelFlow = ((momentumPerFrame / TimeWarp.fixedDeltaTime) / (engine.realIsp * (float)PhysicsGlobals.GravitationalAcceleration));
-                if (FarFutureTechnologySettings.DebugModules)
-                  Utils.Log($"[ModulePulseEngineAnimator]: Pulse fired with impulse of {momentumPerFrame}, thrust {momentumPerFrame / TimeWarp.fixedDeltaTime} {engine.realIsp}, {PhysicsGlobals.GravitationalAcceleration}");
-
-                ticks++;
-                if (ticks >= PulseThrustFrameCount)
-                {
-                  ticks = 0;
-                  pulseFired = true;
-                }
-              }
-              else
-              {
-                engine.maxThrust = 0f;
-                engine.maxFuelFlow = 0f;
-              }
-            }
-            else
-            {
-              engine.maxThrust = savedThrust;
-              engine.maxFuelFlow = ((savedThrust) / (engine.realIsp * (float)PhysicsGlobals.GravitationalAcceleration));
-            }
-          }
-          else
-          {
-            engine.maxThrust = savedThrust;
-            engine.maxFuelFlow = ((savedThrust) / (engine.realIsp * (float)PhysicsGlobals.GravitationalAcceleration));
-          }
-        }
-      }
     }
 
     void LateUpdate()
@@ -370,7 +290,7 @@ namespace FarFutureTechnologies
       {
         if (!pulseEffects[i].isSequenced || pulseEffects[i].isSequenced && pulseSequenceIndex == pulseEffects[i].sequenceID)
         {
-          pulseEffects[i].Pulse();
+          StartCoroutine(pulseEffects[i].Pulse());
         }
       }
     }
@@ -410,7 +330,7 @@ namespace FarFutureTechnologies
       {
         for (int i = 0; i < pulseEffects.Count; i++)
         {
-          if (!pulseEffects[i].isSequenced || pulseEffects[i].isSequenced && pulseSequenceIndex == pulseEffects[i].sequenceID)
+          if (!pulseEffects[i].isSequenced || (pulseEffects[i].isSequenced && pulseSequenceIndex == pulseEffects[i].sequenceID))
           {
             pulseEffects[i].Update(value);
           }
@@ -424,10 +344,6 @@ namespace FarFutureTechnologies
       {
         emissiveAnimator.SetScalar(lightIntensityCurve.Evaluate(value));
       }
-      //if (LaserAnimations && laserFX != null)
-      //{
-      //  laserFX[laserAnimatorIndex].Set(this.part, value);
-      //}
     }
     /// <summary>
     /// Set the normalized time and speed of all animationclips on the part

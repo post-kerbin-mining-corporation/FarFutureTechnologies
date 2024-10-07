@@ -29,7 +29,7 @@ dependencies:  # Configure dependencies
     location: github
     repository: post-kerbin-mining-corporation/CryoTanks
   Waterfall:
-    tag: 0.6.7
+    tag: 0.10.1
     location: github
     repository: post-kerbin-mining-corporation/Waterfall
   SystemHeat:
@@ -37,7 +37,7 @@ dependencies:  # Configure dependencies
     location: github
     repository: post-kerbin-mining-corporation/SystemHeat
   SpaceDust:
-    tag: 0.5.2
+    tag: 0.5.4
     location: github
     repository: post-kerbin-mining-corporation/SpaceDust
 deploy:

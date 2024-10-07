@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -30,7 +31,7 @@ namespace FarFutureTechnologies
         timeIntensityCurve.Load(node.GetNode("timeIntensityCurve"));
       }
     }
-    public virtual void Pulse() { }
+    public virtual IEnumerator Pulse() { yield return 0; }
     public virtual void Update(float time) { }
   }
   public class PulseEngineWaterfallEffect : PulseEngineEffect
@@ -85,8 +86,9 @@ namespace FarFutureTechnologies
     private Quaternion[] rotations;
 
     private bool setupComplete = false;
-    Rigidbody[] rbs;
+    private Rigidbody[] rbs;
     physicalObject[] pos;
+    private float lifeTimer;
 
     public PulseEnginePulseEffect() { }
     public PulseEnginePulseEffect(ConfigNode node, Part hostPart) : base(node, hostPart) { }
@@ -96,7 +98,7 @@ namespace FarFutureTechnologies
       node.TryGetValue("fakeWorldSpace", ref fakeWorldSpace);
     }
 
-    public override void Pulse()
+    public override IEnumerator Pulse()
     {
       if (_waterfallEffect == null)
       {
@@ -125,15 +127,13 @@ namespace FarFutureTechnologies
               rotations[i] = effectTransforms[i].localRotation;
               effectTransforms[i].parent = null;
 
-              rbs[i] = effectTransforms[i].gameObject.AddComponent<Rigidbody>(); // make sure to add it before adding the physicalObject
-              pos[i] = effectTransforms[i].gameObject.AddComponent<physicalObject>(); // KSP will keep track of those and apply all the stuff : krakensbane, floating origin, gravity, drag, etc
+              rbs[i] = effectTransforms[i].gameObject.AddComponent<Rigidbody>();
+              pos[i] = effectTransforms[i].gameObject.AddComponent<physicalObject>();
               rbs[i].useGravity = false;
-              //rb.isKinematic = true;
-              //po.colliderDelay = 0f; // set this to 0 to avoid weird behavior
-              pos[i].origDrag = 1f; // not sure how this works, but set to 0 to prevent drag from being applied. Default value is 1.
-              pos[i].maxDistance = 50000f; // object will be destroyed when this far away from the active vessel
+              pos[i].origDrag = 1f;
+              pos[i].maxDistance = 50000f;
               rbs[i].velocity = part.vessel.rb_velocity;
-            } 
+            }
             setupComplete = true;
           }
           else
@@ -148,7 +148,32 @@ namespace FarFutureTechnologies
               rbs[i].velocity = part.vessel.rb_velocity;
             }
           }
+          yield return 0;
+          for (int i = 0; i < pos.Length; i++)
+          {
+            pos[i].enabled = false;
+          }
         }
+      }
+    }
+
+    IEnumerator CleanupTimer()
+    {
+      while (lifeTimer <= 5f)
+      {
+        lifeTimer += 0.1f;
+        yield return new WaitForSeconds(0.1f);
+      }
+
+      for (int i = 0; i < effectTransforms.Length; i++)
+      {
+        effectTransforms[i].SetParent(parents[i], true);
+        effectTransforms[i].localPosition = positions[i];
+        effectTransforms[i].localRotation = rotations[i];
+        GameObject.Destroy(pos[i]);
+        GameObject.Destroy(rbs[i]);
+
+        setupComplete = false;
       }
     }
   }
