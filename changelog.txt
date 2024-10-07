@@ -20,7 +20,7 @@
  - ST-412 Fusion Fuel Tank: now uses a more unique surface treatment compared to hydrogen tanks
  - ST-824 Fusion Fuel Tank: now uses a more unique surface treatment compared to hydrogen tanks
  - ST-4L3 Fusion Fuel Tank: now uses a more unique surface treatment compared to hydrogen tanks
- - TODO: ST-4L3R Fusion Fuel Tank: now uses a more unique surface treatment compared to hydrogen tanks
+ - ST-4L3R Fusion Fuel Tank: now uses a more unique surface treatment compared to hydrogen tanks
  - A-CY1-5A: Antimatter Storage Container: rebuilt to take up more of the 5m volume and use the new style for the 5m cylinder tanks
 - Fixed AMR-01 Antiproton Storage Ring VABOrganizer bulkhead profile (10m)
 - Improvements to localization
