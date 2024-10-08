@@ -131,9 +131,15 @@ namespace FarFutureTechnologies
     [KSPField(isPersistant = false)]
     public bool testPulseVisibility = false;
 
-    private float forceTick = 0.02f;
-    private float heatTick = 0.02f;
-    private float damageTick = 0.02f;
+    /// <summary>
+    /// AffectOwnVesse
+    /// </summary>
+    [KSPField(isPersistant = false)]
+    public bool affectSelf = true;
+
+    private readonly float forceTick = 0.02f;
+    private readonly float heatTick = 0.02f;
+    private readonly float damageTick = 0.02f;
     private float forceDuration = 0f;
     private float heatDuration = 0f;
     private float damageDuration = 0f;
@@ -347,10 +353,17 @@ namespace FarFutureTechnologies
         for (int i = 0; i < hitColliders.Length; i++)
         {
           Part hitPart = hitColliders[i].GetComponentInParent<Part>();
-          // we don't affect parts on our own vessel
-          if (hitPart != null && hitPart.vessel != this.part.vessel && !hitParts.Contains(hitPart))
+          // we don't affect parts on our own vessel unless asked
+          if (hitPart != null)
           {
-            hitParts.Add(hitPart);
+            if (affectSelf && hitPart != this.part)
+            {
+              hitParts.Add(hitPart);
+            }
+            if (!affectSelf && hitPart.vessel != this.part.vessel && !hitParts.Contains(hitPart))
+            {
+              hitParts.Add(hitPart);
+            }
           }
         }
         for (int i = 0; i < hitParts.Count; i++)
@@ -371,8 +384,13 @@ namespace FarFutureTechnologies
           {
             if (Physics.Raycast(position, hitParts[i].transform.position - position, out RaycastHit hit, distance, everythingMask))
             {
-              heatToApply = 0f;
-              forceToApply = 0f;
+              Part occludingPart = hit.collider.GetComponentInParent<Part>();
+              if (occludingPart != hitParts[i])
+              {
+                heatToApply = 0f;
+                forceToApply = 0f;
+                //Utils.Log($"Did not apply damage to {hitParts[i].name}, occluded by {hit.collider}");
+              }
             }
           }
 
