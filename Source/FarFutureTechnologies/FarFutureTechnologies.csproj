@@ -86,13 +86,15 @@
   <ItemGroup>
     <Compile Include="FarFutureTechnologySettings.cs" />
     <Compile Include="FarFutureTechnologyGameSettings.cs" />
-    <Compile Include="FusionReactorMode.cs" />
-    <Compile Include="FusionReactor.cs" />
-    <Compile Include="ModuleAntimatterTank.cs" />
-    <Compile Include="ModuleColorAnimator.cs" />
-    <Compile Include="ModuleFusionEngine.cs" />
-    <Compile Include="ModuleChargeableEngine.cs" />
-    <Compile Include="ModulePulseEngineAnimator.cs" />
+    <Compile Include="Modules\FusionReactorMode.cs" />
+    <Compile Include="Modules\FusionReactor.cs" />
+    <Compile Include="Modules\ModuleAntimatterTank.cs" />
+    <Compile Include="Modules\ModuleColorAnimator.cs" />
+    <Compile Include="Modules\ModuleEngineExhaustDamage.cs" />
+    <Compile Include="Modules\ModuleFusionEngine.cs" />
+    <Compile Include="Modules\ModuleChargeableEngine.cs" />
+    <Compile Include="Modules\PulseEngine\EnginePulseEffects.cs" />
+    <Compile Include="Modules\PulseEngine\ModulePulseEngineAnimator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\AntimatterManager.cs" />
     <Compile Include="UI\AntimatterWindow.cs" />

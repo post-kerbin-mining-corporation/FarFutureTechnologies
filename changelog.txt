@@ -1,3 +1,62 @@
+1.4.0
+-----
+- Updated SpaceDust to 0.5.4
+- Updated Waterfall to 0.10.1
+- Added new parts:
+ - PW x8 Nuclear Pellet Storage Container: 2x length 5m nuclear targets container
+ - OP 6x2 Nuclear Pulse Unit Tank: Basic 5m nuclear pulse unit container
+ - OP 6x4 Nuclear Pulse Unit Tank: 2x nuclear pulse unit container
+ - OP 6x8 Nuclear Pulse Unit Tank: 4x nuclear pulse unit container
+ - ST-G14NT Fusion Fuel Tank: 5m spherical fusion fuel tank with compact/3.75m/5m attach structures
+ - ST-N0v4 Fusion Fuel Tank: 10m spherical fusion fuel tank with compact/3.75m/5m attach structures
+ - A-CY1-5B Antimatter Storage Container: 2x length advanced antimatter storage container
+ - A-CY1-5C Antimatter Storage Container: 4x length advanced antimatter storage container
+ - A-CY1-5D Antimatter Storage Container: 8x length advanced antimatter storage container
+ - X-12 'Hamilton' Nuclear Pulse Engine: 5m orion style nuclear pulse drive
+ - Plasma RCS systems: high power usage, higher Isp (relatively) systems for future ships
+  - ARC-μ Electrothermal RCS Block: average sized 4, 3, 2 or 1-way high power electric RCS block, Lithium and Hydrogen propellant options. Uses 10 kW per thruster
+  - ARC-L Electrothermal RCS Block: large sized 4, 3, 2 or 1-way high power electric RCS block, Lithium and Hydrogen propellant options. Uses 100 kW per thruster
+- Reworked art for the following tanks
+ - ST-412 Fusion Fuel Tank: now uses a more unique surface treatment compared to hydrogen tanks
+ - ST-824 Fusion Fuel Tank: now uses a more unique surface treatment compared to hydrogen tanks
+ - ST-4L3 Fusion Fuel Tank: now uses a more unique surface treatment compared to hydrogen tanks
+ - ST-4L3R Fusion Fuel Tank: now uses a more unique surface treatment compared to hydrogen tanks
+ - A-CY1-5A: Antimatter Storage Container: rebuilt to take up more of the 5m volume and use the new style for the 5m cylinder tanks
+- Fixed AMR-01 Antiproton Storage Ring VABOrganizer bulkhead profile (10m)
+- Improvements to localization
+ - Update a number of less clear descriptions
+ - Better descriptions for variants throughout
+ - Engines with length switch options that change their performance now show the changes in the part switcher
+- Reworked high energy exhaust damage
+ - Significantly increased the range and rate at which high energy engines (Frisbee, Cascade, Heinlein, Niven, Hamilton) 'damage' parts via heat and force
+ - High energy engines now damage KSC facilities when pointed at them (or are near them in the case of the Hamilton)
+ - Game settings added to toggle engines damaging facilities (Defaults to ON) and the rate they damage them at (defaults to 100%)
+ - Pulse engines can be configured to deliver damage/heat/force pulses 
+- Tuning changes
+ - Cost of LqdHe3 has been changed to 5.5/u from 52.5/u
+ - Cost ratio for fusion fuel tanks have been adjusted to make deeper cryo fuels (Deuterium) more expensive than say, helium
+ - Volumes and masses of fusion fuel tanks have been revised for more consistency between models
+ - Fusion reactors have been rebalanced
+  - Reactors should go through an equivalent sized small tank in ~10y at full power now, instead of ~2y
+  - Reactor minimum power generation has been reduced to 2.5% from 10% (5% for engine integrated reactors)
+  - Engine reactors are now the same fuel efficiency as dedicated reactors
+  - Increased power generation of Ouroboros to 100 kW from 20 kW because it really sucked
+  - Reactor thermal balance revised: all engine reactors are now 35% efficient. D-D dedicated reactors are now 40%, which jumps to 50% when using D-He3.
+ - Antimatter fuel is now significantly denser per unit
+ - Increased the consumption of antimatter by Dirac and Casaba by 1000x
+ - Increased the capacity of the AMR-01 Antiproton Storage Ring by 1000x
+ - Rebalanced the capacity of all advanced antimatter tanks. They're now much more volumetrically efficient and have better mass ratios.
+ - Rebalanced containment costs for antimatter, now 100-80 kw/t
+ - Increased the Frisbee Isp to 2,500,000s and tweaked its propellant ratios so it's now about 1/6th pure annihilation vs 1/100
+ - Fixed a few heat typos in the Frisbee variants config, should now be completely linear
+ - Changed exospheric harvest rates for the scoop to make the minimums useable. In conjunction with the SpaceDust 0.5.4 update this should make exo harvesting much better
+ - Fixed the mass ratio of Fission Particle tanks being 10x worse than it should be
+- Added 3 new Antimatter settings to the ingame FFT settings
+ - Containment Needed: Enables or disables the need to power antimatter tanks. Defaults to ON
+ - Detonation Rate: Scales the leak rate of leaking antimatter tanks. Defaults to 100%
+ - Volatility: Scales the damage rate of leaking antimatter tanks. Defaults to 100%
+- Removed the patch that uses the NFE nuclear transfer mechanics when NFE is installed, everything uses the SystemHeat ones now
+
 1.3.0
 -----
 - Marked for KSP 1.12.5
