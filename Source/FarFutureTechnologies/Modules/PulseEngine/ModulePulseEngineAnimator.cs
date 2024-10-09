@@ -251,7 +251,7 @@ namespace FarFutureTechnologies
           }
           else
           {
-            SetAnimationClips(0f, 0f);
+            SetAnimationDecay();
             SetEffects(0f);
             pulseProgress = 0f;
           }
@@ -261,7 +261,7 @@ namespace FarFutureTechnologies
 
           if (IsRunningEngine())
           {
-            SetAnimationClips(0f, 0f);
+            SetAnimationDecay();
             SetEffects(0f);
             pulseProgress = 0f;
           }
@@ -372,6 +372,20 @@ namespace FarFutureTechnologies
         foreach (AnimationState pulseState in pulseStates)
         {
           pulseState.speed = speed;
+        }
+      }
+    }
+    protected void SetAnimationDecay()
+    {
+      if (PulseAnimation != "" && pulseStates != null)
+      {
+        foreach (AnimationState pulseState in pulseStates)
+        {
+          if (pulseState.normalizedTime >= 1f)
+          {
+            pulseState.speed = 0f;
+          }
+          
         }
       }
     }

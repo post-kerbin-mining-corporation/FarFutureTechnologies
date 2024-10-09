@@ -50,6 +50,7 @@
  - Increased the Frisbee Isp to 2,500,000s and tweaked its propellant ratios so it's now about 1/6th pure annihilation vs 1/100
  - Fixed a few heat typos in the Frisbee variants config, should now be completely linear
  - Changed exospheric harvest rates for the scoop to make the minimums useable. In conjunction with the SpaceDust 0.5.4 update this should make exo harvesting much better
+ - Fixed the mass ratio of Fission Particle tanks being 10x worse than it should be
 - Added 3 new Antimatter settings to the ingame FFT settings
  - Containment Needed: Enables or disables the need to power antimatter tanks. Defaults to ON
  - Detonation Rate: Scales the leak rate of leaking antimatter tanks. Defaults to 100%
