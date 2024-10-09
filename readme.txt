@@ -1,5 +1,5 @@
 =============================
-FAR FUTURE TECHNOLOGIES 1.3.0
+FAR FUTURE TECHNOLOGIES 1.4.0
 =============================
 
 This is a pack containing far-future but likely possible spacecraft technologies. These might not be possible today, but the physics works out, and might be feasible within the next 100 years.
