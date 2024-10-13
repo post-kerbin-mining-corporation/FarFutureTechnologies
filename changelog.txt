@@ -1,3 +1,11 @@
+1.4.1
+-----
+- Updated Waterfall to 0.10.3
+- Fixed the VAB tooltip displays for the new RCS blocks
+- Fixed missing VAB descriptions for the new RCS blocks
+- Fixed an effect that was on at all throttle levels for the Frisbee
+- Tuned the Frisbee effects to add a bit more visual flair to the flare ;)
+
 1.4.0
 -----
 - Updated SpaceDust to 0.5.4
