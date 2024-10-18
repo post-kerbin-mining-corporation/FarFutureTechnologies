@@ -1,3 +1,9 @@
+1.4.2
+-----
+- Fixed Antimatter Costs Science setting only working in Career vs Science mode
+- Fixed an extra F in the Antimatter Loading window and tweaked the decimals displayed
+- Removed antimatter cost from settings config file in case it confuses people
+
 1.4.1
 -----
 - Updated Waterfall to 0.10.3
