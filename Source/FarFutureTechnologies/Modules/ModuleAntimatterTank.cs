@@ -171,14 +171,12 @@ namespace FarFutureTechnologies
     /// </summary>
     protected void OnVesselRollout(ShipConstruct node)
     {
-      if (HighLogic.CurrentGame.Mode == Game.Modes.SCIENCE_SANDBOX || HighLogic.CurrentGame.Mode == Game.Modes.CAREER && FarFutureTechnologiesSettings_Antimatter.AntimatterCostsScience)
+      if ((HighLogic.CurrentGame.Mode == Game.Modes.SCIENCE_SANDBOX || HighLogic.CurrentGame.Mode == Game.Modes.CAREER) && FarFutureTechnologiesSettings_Antimatter.AntimatterCostsScience)
       {
         if (FarFutureTechnologySettings.DebugModules)
           Utils.Log(String.Format("[ModuleAntimatterTank]: Doing rollout actions"));
-        double shipAM = 0d;
-        double shipMaxAM = 0d;
-        // Determine need for power
-        part.GetConnectedResourceTotals(PartResourceLibrary.Instance.GetDefinition(FuelName).id, ResourceFlowMode.NO_FLOW, out shipAM, out shipMaxAM, true);
+
+        part.GetConnectedResourceTotals(PartResourceLibrary.Instance.GetDefinition(FuelName).id, ResourceFlowMode.NO_FLOW, out double shipAM, out double shipMaxAM, true);
 
         double amToAdd = shipAM;
         // Clean out the AM
